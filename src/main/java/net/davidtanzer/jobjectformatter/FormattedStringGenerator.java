@@ -1,6 +1,7 @@
 package net.davidtanzer.jobjectformatter;
 
 import net.davidtanzer.jobjectformatter.formatter.ObjectStringFormatter;
+import net.davidtanzer.jobjectformatter.formatter.SimpleFormatter;
 import net.davidtanzer.jobjectformatter.typeinfo.TypeInfo;
 import net.davidtanzer.jobjectformatter.typeinfo.TypeInfoCache;
 import net.davidtanzer.jobjectformatter.valuesinfo.ObjectValuesInfo;
@@ -10,6 +11,10 @@ public class FormattedStringGenerator {
 	private final TypeInfoCache typeInfoCache;
 	private final ObjectValuesCompiler objectValuesCompiler;
 	private final ObjectStringFormatter toStringFormatter;
+
+	public FormattedStringGenerator() {
+		this(new SimpleFormatter(), new TypeInfoCache(), new ObjectValuesCompiler());
+	}
 
 	public FormattedStringGenerator(final ObjectStringFormatter toStringFormatter) {
 		this(toStringFormatter, new TypeInfoCache(), new ObjectValuesCompiler());

@@ -4,10 +4,13 @@ import net.davidtanzer.jobjectformatter.annotations.AutomaticallyFormatted;
 
 import java.lang.reflect.Method;
 import java.util.HashMap;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.function.Function;
 
 public class TypeInfoCache {
 	private final FieldsFilter fieldsFilter;
-	private HashMap<Class<?>, TypeInfo> cachedTypeInfos = new HashMap<>();
+	private Map<Class<?>, TypeInfo> cachedTypeInfos = new ConcurrentHashMap<>();
 
 	public TypeInfoCache() {
 		this(new FieldsFilter());
@@ -17,16 +20,8 @@ public class TypeInfoCache {
 		this.fieldsFilter = fieldsFilter;
 	}
 
-	public synchronized TypeInfo typeInfoFor(final Class<?> type) {
-		final TypeInfo cachedTypeInfo = cachedTypeInfos.get(type);
-		if(cachedTypeInfo != null) {
-			return cachedTypeInfo;
-		}
-
-		TypeInfo typeInfo = createTypeInfoFrom(type);
-		cachedTypeInfos.put(type, typeInfo);
-
-		return typeInfo;
+	public TypeInfo typeInfoFor(final Class<?> type) {
+		return cachedTypeInfos.computeIfAbsent(type, this::createTypeInfoFrom);
 	}
 
 	private TypeInfo createTypeInfoFrom(final Class<?> type) {

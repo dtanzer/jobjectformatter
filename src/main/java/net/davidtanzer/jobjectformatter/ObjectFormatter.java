@@ -1,13 +1,15 @@
 package net.davidtanzer.jobjectformatter;
 
+import java.util.concurrent.atomic.AtomicReference;
+
 public class ObjectFormatter {
-	private static volatile FormattedStringGenerator generator;
+	private static AtomicReference<FormattedStringGenerator> generator = new AtomicReference<>(new FormattedStringGenerator());
 
 	public static void configureGenerator(final FormattedStringGenerator generator) {
-		ObjectFormatter.generator = generator;
+		ObjectFormatter.generator.set(generator);
 	}
 
 	public static String format(final Object object) {
-		return generator.format(object);
+		return generator.get().format(object);
 	}
 }

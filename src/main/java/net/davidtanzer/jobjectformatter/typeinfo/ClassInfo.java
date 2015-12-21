@@ -37,8 +37,7 @@ public class ClassInfo {
 		if(field.getType().getName().startsWith("java") || primitiveTypes.contains(field.getType())) {
 			transitive = FormattedTransitively.TransitiveInclude.ALLOWED;
 		} else {
-			final TypeInfo typeInfo = typeInfoCache.typeInfoFor(field.getType());
-			if (typeInfo.hasAutomaticallyFormattedToString()) {
+			if (typeInfoCache.hasAnnotatedToString(field.getType())) {
 				transitive = FormattedTransitively.TransitiveInclude.ALLOWED;
 			}
 		}

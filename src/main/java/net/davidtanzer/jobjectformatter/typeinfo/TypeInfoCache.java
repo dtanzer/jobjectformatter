@@ -29,17 +29,24 @@ public class TypeInfoCache {
 			currentType = currentType.getSuperclass();
 		}
 
+		if(hasAnnotatedToString(type)) {
+			builder.typeHasAutomaticallyFormattedToString();
+		}
+		return builder.buildTypeInfo();
+	}
+
+	boolean hasAnnotatedToString(final Class<?> type) {
 		try {
 			Method toStringMethod = type.getMethod("toString");
 			assert toStringMethod != null : "Cannot be null, since we would get a NoSuchMethodException when the method does not exist.";
 
 			if(toStringMethod.isAnnotationPresent(AutomaticallyFormattedToString.class)) {
-				builder.typeHasAutomaticallyFormattedToString();
+				return true;
 			}
 		} catch (NoSuchMethodException e) {
 			ignoreException_BecauseNotAllTypesHaveToString_AndWeDontCare(e);
 		}
-		return builder.buildTypeInfo();
+		return false;
 	}
 
 	private void ignoreException_BecauseNotAllTypesHaveToString_AndWeDontCare(final NoSuchMethodException e) {

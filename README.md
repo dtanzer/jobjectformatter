@@ -1,2 +1,2 @@
-# jobjectformatter
-jObjectFormatter - A toString Builder for Java
+# jObjectFormatter - A toString Builder for Java
+

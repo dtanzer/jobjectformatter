@@ -6,7 +6,16 @@ import java.lang.reflect.Method;
 import java.util.HashMap;
 
 public class TypeInfoCache {
+	private final FieldsFilter fieldsFilter;
 	private HashMap<Class<?>, TypeInfo> cachedTypeInfos = new HashMap<>();
+
+	public TypeInfoCache() {
+		this(new FieldsFilter());
+	}
+
+	public TypeInfoCache(final FieldsFilter fieldsFilter) {
+		this.fieldsFilter = fieldsFilter;
+	}
 
 	public synchronized TypeInfo typeInfoFor(final Class<?> type) {
 		final TypeInfo cachedTypeInfo = cachedTypeInfos.get(type);
@@ -21,7 +30,7 @@ public class TypeInfoCache {
 	}
 
 	private TypeInfo createTypeInfoFrom(final Class<?> type) {
-		TypeInfo.Builder builder = new TypeInfo.Builder(this);
+		TypeInfo.Builder builder = new TypeInfo.Builder(this, fieldsFilter);
 
 		Class<?> currentType = type;
 		while(currentType != null && currentType != Object.class) {

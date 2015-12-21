@@ -17,17 +17,15 @@ public class ClassInfo {
 	private final Class clazz;
 	private final List<FieldInfo> fieldInfos;
 
-	public ClassInfo(final Class<?> clazz, final TypeInfoCache typeInfoCache) {
-		this.clazz = clazz;
+	public ClassInfo(final Class<?> type, final TypeInfoCache typeInfoCache, final FieldsFilter fieldsFilter) {
+		this.clazz = type;
 
 		List<FieldInfo> fieldInfos = new ArrayList<>();
-		for(Field field : clazz.getDeclaredFields()) {
-			if(!field.getName().startsWith("this")) {
-				field.setAccessible(true);
+		for(Field field : fieldsFilter.getFilteredFields(type)) {
+			field.setAccessible(true);
 
-				final FormattedTransitively.TransitiveInclude transitive = includeTransitivelyInFormattedText(field, typeInfoCache);
-				fieldInfos.add(new FieldInfo(field, transitive));
-			}
+			final FormattedTransitively.TransitiveInclude transitive = includeTransitivelyInFormattedText(field, typeInfoCache);
+			fieldInfos.add(new FieldInfo(field, transitive));
 		}
 		this.fieldInfos = Collections.unmodifiableList(fieldInfos);
 	}

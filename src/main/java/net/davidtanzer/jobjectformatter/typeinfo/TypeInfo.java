@@ -18,10 +18,12 @@ public class TypeInfo {
 
 	static class Builder {
 		private final TypeInfoCache typeInfoCache;
+		private final FieldsFilter fieldsFilter;
 		private TypeInfo typeInfo;
 
-		Builder(final TypeInfoCache typeInfoCache) {
+		Builder(final TypeInfoCache typeInfoCache, final FieldsFilter fieldsFilter) {
 			this.typeInfoCache = typeInfoCache;
+			this.fieldsFilter = fieldsFilter;
 			typeInfo = new TypeInfo();
 		}
 
@@ -31,7 +33,7 @@ public class TypeInfo {
 		}
 
 		public Builder addInfoForClass(final Class<?> currentType) {
-			typeInfo.classInfos.add(new ClassInfo(currentType, typeInfoCache));
+			typeInfo.classInfos.add(new ClassInfo(currentType, typeInfoCache, fieldsFilter));
 			return this;
 		}
 

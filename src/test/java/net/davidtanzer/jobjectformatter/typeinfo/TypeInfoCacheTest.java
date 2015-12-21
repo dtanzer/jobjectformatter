@@ -3,10 +3,15 @@ package net.davidtanzer.jobjectformatter.typeinfo;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.lang.reflect.Field;
+import java.util.Arrays;
+
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.*;
 import static org.junit.Assume.assumeThat;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 public class TypeInfoCacheTest {
 	private TypeInfoCache typeInfoCache;
@@ -57,11 +62,28 @@ public class TypeInfoCacheTest {
 	}
 
 	@Test
-	public void usesClassInfoFromCach_IfAvailable() {
+	public void usesClassInfoFromCache_IfAvailable() {
 		final TypeInfo typeInfo1 = typeInfoCache.typeInfoFor(ExtendedObject.class);
 		final TypeInfo typeInfo2 = typeInfoCache.typeInfoFor(ExtendedObject.class);
 
 		assertSame(typeInfo1, typeInfo2);
+	}
+
+	@Test
+	public void usesFieldsFilter_ToActuallyGetTheRelevantFields() {
+		final FieldsFilter fieldsFilter = mock(FieldsFilter.class);
+		typeInfoCache = new TypeInfoCache(fieldsFilter);
+
+		when(fieldsFilter.getFilteredFields(SimpleObject.class)).thenReturn(Arrays.asList(
+				ObjectWithOtherFields.class.getDeclaredFields()
+		));
+
+		final TypeInfo typeInfo = typeInfoCache.typeInfoFor(SimpleObject.class);
+
+		assertThat(typeInfo.classInfos().get(0).fieldInfos(), containsInAnyOrder(
+				hasProperty("name", is("field1")),
+				hasProperty("name", is("field2"))
+		));
 	}
 
 	private class SimpleObject {
@@ -72,5 +94,10 @@ public class TypeInfoCacheTest {
 	private class ExtendedObject extends SimpleObject {
 		private String eFoo;
 		private String eBar;
+	}
+
+	private static class ObjectWithOtherFields {
+		private String field1;
+		private String field2;
 	}
 }

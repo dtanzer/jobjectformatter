@@ -1,9 +1,9 @@
 package net.davidtanzer.jobjectformatter.typeinfo;
 
+import net.davidtanzer.jobjectformatter.annotations.FormattedTransitively;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.lang.reflect.Field;
 import java.util.Arrays;
 
 import static org.hamcrest.CoreMatchers.is;
@@ -70,12 +70,13 @@ public class TypeInfoCacheTest {
 	}
 
 	@Test
-	public void usesFieldsFilter_ToActuallyGetTheRelevantFields() {
+	public void usesFieldsFilter_ToActuallyGetTheRelevantFields() throws NoSuchFieldException {
 		final FieldsFilter fieldsFilter = mock(FieldsFilter.class);
 		typeInfoCache = new TypeInfoCache(fieldsFilter);
 
-		when(fieldsFilter.getFilteredFields(SimpleObject.class)).thenReturn(Arrays.asList(
-				ObjectWithOtherFields.class.getDeclaredFields()
+		when(fieldsFilter.getFilteredFields(SimpleObject.class, typeInfoCache)).thenReturn(Arrays.asList(
+				new FieldInfo(ObjectWithOtherFields.class.getDeclaredField("field1"), FormattedTransitively.TransitiveInclude.ALLOWED),
+				new FieldInfo(ObjectWithOtherFields.class.getDeclaredField("field2"), FormattedTransitively.TransitiveInclude.ALLOWED)
 		));
 
 		final TypeInfo typeInfo = typeInfoCache.typeInfoFor(SimpleObject.class);

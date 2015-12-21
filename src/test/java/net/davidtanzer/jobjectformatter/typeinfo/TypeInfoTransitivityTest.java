@@ -1,6 +1,7 @@
 package net.davidtanzer.jobjectformatter.typeinfo;
 
-import net.davidtanzer.jobjectformatter.annotations.FormattedTransitively;
+import net.davidtanzer.jobjectformatter.annotations.Formatted;
+import net.davidtanzer.jobjectformatter.annotations.Transitive;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -24,11 +25,11 @@ public class TypeInfoTransitivityTest {
 		List<FieldInfo> fieldInfos = info.classInfos().get(0).fieldInfos();
 		assertThat(fieldInfos, hasItem(allOf(
 				hasProperty("name", is("foo")),
-				hasProperty("transitive", is(FormattedTransitively.TransitiveInclude.ALLOWED)))));
+				hasProperty("transitive", is(Transitive.ALLOWED)))));
 
 		assertThat(fieldInfos, hasItem(allOf(
 				hasProperty("name", is("bar")),
-				hasProperty("transitive", is(FormattedTransitively.TransitiveInclude.ALLOWED)))));
+				hasProperty("transitive", is(Transitive.ALLOWED)))));
 	}
 
 	@Test
@@ -38,7 +39,7 @@ public class TypeInfoTransitivityTest {
 		List<FieldInfo> fieldInfos = info.classInfos().get(0).fieldInfos();
 		assertThat(fieldInfos, hasItem(allOf(
 				hasProperty("name", is("so")),
-				hasProperty("transitive", is(FormattedTransitively.TransitiveInclude.DISALLOWED)))));
+				hasProperty("transitive", is(Transitive.DISALLOWED)))));
 	}
 
 	@Test
@@ -48,7 +49,7 @@ public class TypeInfoTransitivityTest {
 		List<FieldInfo> fieldInfos = info.classInfos().get(0).fieldInfos();
 		assertThat(fieldInfos, hasItem(allOf(
 				hasProperty("name", is("notTransitive")),
-				hasProperty("transitive", is(FormattedTransitively.TransitiveInclude.DISALLOWED)))));
+				hasProperty("transitive", is(Transitive.DISALLOWED)))));
 	}
 
 	@Test
@@ -58,20 +59,20 @@ public class TypeInfoTransitivityTest {
 		List<FieldInfo> fieldInfos = info.classInfos().get(0).fieldInfos();
 		assertThat(fieldInfos, hasItem(allOf(
 				hasProperty("name", is("soTransitive")),
-				hasProperty("transitive", is(FormattedTransitively.TransitiveInclude.ALLOWED)))));
+				hasProperty("transitive", is(Transitive.ALLOWED)))));
 	}
 
 	private class SimpleObject {
 		int foo;
 		String bar;
 
-		@FormattedTransitively(FormattedTransitively.TransitiveInclude.DISALLOWED)
+		@Formatted(transitive = Transitive.DISALLOWED)
 		String notTransitive;
 	}
 
 	private class DependentObject {
 		private SimpleObject so;
-		@FormattedTransitively
+		@Formatted
 		private SimpleObject soTransitive;
 	}
 }

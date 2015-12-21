@@ -1,7 +1,7 @@
 package net.davidtanzer.jobjectformatter.typeinfo;
 
-import net.davidtanzer.jobjectformatter.annotations.AutomaticallyFormattedToString;
-import net.davidtanzer.jobjectformatter.annotations.FormattedTransitively;
+import net.davidtanzer.jobjectformatter.annotations.AutomaticallyFormatted;
+import net.davidtanzer.jobjectformatter.annotations.Transitive;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -37,7 +37,7 @@ public class TypeInfoAnnotationsTest {
 		List<FieldInfo> fieldInfos = typeInfo.classInfos().get(0).fieldInfos();
 		assertThat(fieldInfos, hasItem(allOf(
 				hasProperty("name", is("eo")),
-				hasProperty("transitive", is(FormattedTransitively.TransitiveInclude.ALLOWED)))));
+				hasProperty("transitive", is(Transitive.ALLOWED)))));
 	}
 
 	private class SimpleObject {
@@ -50,7 +50,7 @@ public class TypeInfoAnnotationsTest {
 		private String eBar;
 
 		@Override
-		@AutomaticallyFormattedToString
+		@AutomaticallyFormatted
 		public String toString() {
 			return super.toString();
 		}
@@ -61,7 +61,7 @@ public class TypeInfoAnnotationsTest {
 		private ExtendedObject eo = new ExtendedObject();
 
 		@Override
-		@AutomaticallyFormattedToString
+		@AutomaticallyFormatted
 		public String toString() {
 			return super.toString();
 		}

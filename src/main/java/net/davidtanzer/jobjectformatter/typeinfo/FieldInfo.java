@@ -1,14 +1,14 @@
 package net.davidtanzer.jobjectformatter.typeinfo;
 
-import net.davidtanzer.jobjectformatter.annotations.FormattedTransitively;
+import net.davidtanzer.jobjectformatter.annotations.Transitive;
 
 import java.lang.reflect.Field;
 
 public class FieldInfo {
 	private final Field field;
-	private final FormattedTransitively.TransitiveInclude transitive;
+	private final Transitive transitive;
 
-	public FieldInfo(final Field field, final FormattedTransitively.TransitiveInclude transitive) {
+	public FieldInfo(final Field field, final Transitive transitive) {
 		this.field = field;
 		this.transitive = transitive;
 	}
@@ -21,7 +21,7 @@ public class FieldInfo {
 		return field.getType();
 	}
 
-	public FormattedTransitively.TransitiveInclude getTransitive() {
+	public Transitive getTransitive() {
 		return transitive;
 	}
 

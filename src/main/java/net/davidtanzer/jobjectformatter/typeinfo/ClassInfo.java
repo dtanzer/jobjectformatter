@@ -1,8 +1,5 @@
 package net.davidtanzer.jobjectformatter.typeinfo;
 
-import net.davidtanzer.jobjectformatter.annotations.FormattedTransitively;
-
-import java.lang.reflect.Field;
 import java.util.*;
 
 public class ClassInfo {

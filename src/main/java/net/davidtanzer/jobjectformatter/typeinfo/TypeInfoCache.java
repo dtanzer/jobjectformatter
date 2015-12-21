@@ -1,6 +1,6 @@
 package net.davidtanzer.jobjectformatter.typeinfo;
 
-import net.davidtanzer.jobjectformatter.annotations.AutomaticallyFormattedToString;
+import net.davidtanzer.jobjectformatter.annotations.AutomaticallyFormatted;
 
 import java.lang.reflect.Method;
 import java.util.HashMap;
@@ -49,7 +49,7 @@ public class TypeInfoCache {
 			Method toStringMethod = type.getMethod("toString");
 			assert toStringMethod != null : "Cannot be null, since we would get a NoSuchMethodException when the method does not exist.";
 
-			if(toStringMethod.isAnnotationPresent(AutomaticallyFormattedToString.class)) {
+			if(toStringMethod.isAnnotationPresent(AutomaticallyFormatted.class)) {
 				return true;
 			}
 		} catch (NoSuchMethodException e) {

@@ -25,11 +25,11 @@ public class TypeInfoTransitivityTest {
 		List<FieldInfo> fieldInfos = info.classInfos().get(0).fieldInfos();
 		assertThat(fieldInfos, hasItem(allOf(
 				hasProperty("name", is("foo")),
-				hasProperty("transitive", is(Transitive.ALLOWED)))));
+				hasProperty("transitiveBehaviorOfTarget", is(Transitive.ALWAYS)))));
 
 		assertThat(fieldInfos, hasItem(allOf(
 				hasProperty("name", is("bar")),
-				hasProperty("transitive", is(Transitive.ALLOWED)))));
+				hasProperty("transitiveBehaviorOfTarget", is(Transitive.ALWAYS)))));
 	}
 
 	@Test
@@ -39,7 +39,7 @@ public class TypeInfoTransitivityTest {
 		List<FieldInfo> fieldInfos = info.classInfos().get(0).fieldInfos();
 		assertThat(fieldInfos, hasItem(allOf(
 				hasProperty("name", is("so")),
-				hasProperty("transitive", is(Transitive.DISALLOWED)))));
+				hasProperty("transitiveBehaviorOfTarget", is(Transitive.DISALLOWED)))));
 	}
 
 	@Test
@@ -49,7 +49,7 @@ public class TypeInfoTransitivityTest {
 		List<FieldInfo> fieldInfos = info.classInfos().get(0).fieldInfos();
 		assertThat(fieldInfos, hasItem(allOf(
 				hasProperty("name", is("notTransitive")),
-				hasProperty("transitive", is(Transitive.DISALLOWED)))));
+				hasProperty("transitiveBehaviorOfTarget", is(Transitive.DISALLOWED)))));
 	}
 
 	@Test
@@ -59,7 +59,7 @@ public class TypeInfoTransitivityTest {
 		List<FieldInfo> fieldInfos = info.classInfos().get(0).fieldInfos();
 		assertThat(fieldInfos, hasItem(allOf(
 				hasProperty("name", is("soTransitive")),
-				hasProperty("transitive", is(Transitive.ALLOWED)))));
+				hasProperty("transitiveBehaviorOfTarget", is(Transitive.ALLOWED)))));
 	}
 
 	private class SimpleObject {

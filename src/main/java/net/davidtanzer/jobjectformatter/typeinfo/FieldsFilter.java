@@ -1,9 +1,6 @@
 package net.davidtanzer.jobjectformatter.typeinfo;
 
-import net.davidtanzer.jobjectformatter.annotations.Formatted;
-import net.davidtanzer.jobjectformatter.annotations.FormattedField;
-import net.davidtanzer.jobjectformatter.annotations.FormattedType;
-import net.davidtanzer.jobjectformatter.annotations.Transitive;
+import net.davidtanzer.jobjectformatter.annotations.*;
 
 import java.lang.reflect.Field;
 import java.util.*;
@@ -21,23 +18,18 @@ class FieldsFilter {
 	public List<FieldInfo> getFilteredFields(final Class<?> type, final TypeInfoCache typeInfoCache) {
 		final List<FieldInfo> result = new ArrayList<>();
 
-		FormattedType formatted = FormattedType.ALL;
-		if(type.isAnnotationPresent(Formatted.class)) {
-			formatted = type.getAnnotation(Formatted.class).value();
-		}
-
 		for(Field field : type.getDeclaredFields()) {
 			if(!field.getName().startsWith("this")) {
 				field.setAccessible(true);
 
-				final Transitive transitive = includeTransitivelyInFormattedText(field, typeInfoCache);
-				if(formatted.equals(FormattedType.ALL)) {
-					result.add(new FieldInfo(field, transitive));
-				} else if(formatted.equals(FormattedType.ANNOTATED)) {
-					if(field.isAnnotationPresent(FormattedField.class)) {
-						result.add(new FieldInfo(field, transitive));
-					}
+				final Transitive transitiveBehaviorOfTarget = includeTransitivelyInFormattedText(field, typeInfoCache);
+				FormattedFieldType includeField = FormattedFieldType.NEVER;
+				FormattedFieldType includeFieldInTransitive = FormattedFieldType.NEVER;
+				if(field.isAnnotationPresent(FormattedField.class)) {
+					includeField = field.getAnnotation(FormattedField.class).value();
+					includeFieldInTransitive = field.getAnnotation(FormattedField.class).transitive();
 				}
+				result.add(new FieldInfo(field, transitiveBehaviorOfTarget, includeField, includeFieldInTransitive));
 			}
 		}
 
@@ -48,7 +40,7 @@ class FieldsFilter {
 		Transitive transitive;
 
 		if(field.getType().getName().startsWith("java") || primitiveTypes.contains(field.getType())) {
-			transitive = Transitive.ALLOWED;
+			transitive = Transitive.ALWAYS;
 		} else {
 			transitive = typeInfoCache.transitiveBehaviorFor(field.getType());
 		}

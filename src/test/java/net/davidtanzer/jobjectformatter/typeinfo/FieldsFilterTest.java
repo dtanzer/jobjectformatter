@@ -1,9 +1,6 @@
 package net.davidtanzer.jobjectformatter.typeinfo;
 
-import net.davidtanzer.jobjectformatter.annotations.Formatted;
-import net.davidtanzer.jobjectformatter.annotations.FormattedField;
-import net.davidtanzer.jobjectformatter.annotations.FormattedType;
-import net.davidtanzer.jobjectformatter.annotations.Transitive;
+import net.davidtanzer.jobjectformatter.annotations.*;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -50,7 +47,8 @@ public class FieldsFilterTest {
 		List<FieldInfo> fields = fieldsFilter.getFilteredFields(NoAnnotatedFields.class, typeInfoCache);
 		assumeThat(fields, is(not(nullValue())));
 
-		assertThat(fields.size(), is(0));
+		assertThat(fields.size(), is(2));
+		assertThat(fields, everyItem(hasProperty("includeField", is(FormattedFieldType.NEVER))));
 	}
 
 	@Test
@@ -58,8 +56,11 @@ public class FieldsFilterTest {
 		List<FieldInfo> fields = fieldsFilter.getFilteredFields(AnnotatedFields.class, typeInfoCache);
 		assumeThat(fields, is(not(nullValue())));
 
-		assertThat(fields.size(), is(1));
-		assertThat(fields.get(0), hasProperty("name", is("foo")));
+		assertThat(fields.size(), is(2));
+		assertThat(fields.get(0), allOf(
+				hasProperty("name", is("foo")), hasProperty("includeField", is(FormattedFieldType.ALWAYS))));
+		assertThat(fields.get(1), allOf(
+				hasProperty("name", is("bar")), hasProperty("includeField", is(FormattedFieldType.NEVER))));
 	}
 
 	@Test
@@ -69,7 +70,7 @@ public class FieldsFilterTest {
 		assumeThat(fields.size(), is(1));
 		assumeThat(fields.get(0), hasProperty("name", is("noAnnotations")));
 
-		assertThat(fields.get(0), hasProperty("transitive", is(Transitive.ALWAYS)));
+		assertThat(fields.get(0), hasProperty("transitiveBehaviorOfTarget", is(Transitive.ALWAYS)));
 	}
 
 	@Test
@@ -81,7 +82,7 @@ public class FieldsFilterTest {
 		assumeThat(fields.size(), is(1));
 		assumeThat(fields.get(0), hasProperty("name", is("typeTransitive")));
 
-		assertThat(fields.get(0), hasProperty("transitive", is(Transitive.ALWAYS)));
+		assertThat(fields.get(0), hasProperty("transitiveBehaviorOfTarget", is(Transitive.ALWAYS)));
 	}
 
 	@Test
@@ -93,7 +94,7 @@ public class FieldsFilterTest {
 		assumeThat(fields.size(), is(1));
 		assumeThat(fields.get(0), hasProperty("name", is("noAnnotations")));
 
-		assertThat(fields.get(0), hasProperty("transitive", is(Transitive.ALWAYS)));
+		assertThat(fields.get(0), hasProperty("transitiveBehaviorOfTarget", is(Transitive.ALWAYS)));
 	}
 
 	private class NoAnnotations {

@@ -1,6 +1,7 @@
 package net.davidtanzer.jobjectformatter.typeinfo;
 
 import net.davidtanzer.jobjectformatter.annotations.Formatted;
+import net.davidtanzer.jobjectformatter.annotations.FormattedFieldType;
 import net.davidtanzer.jobjectformatter.annotations.Transitive;
 import org.junit.Before;
 import org.junit.Test;
@@ -75,9 +76,11 @@ public class TypeInfoCacheTest {
 		final FieldsFilter fieldsFilter = mock(FieldsFilter.class);
 		typeInfoCache = new TypeInfoCache(fieldsFilter);
 
+		final FormattedFieldType includeField = FormattedFieldType.ALWAYS;
+		final FormattedFieldType includeFieldInTransitive = FormattedFieldType.ALWAYS;
 		when(fieldsFilter.getFilteredFields(SimpleObject.class, typeInfoCache)).thenReturn(Arrays.asList(
-				new FieldInfo(ObjectWithOtherFields.class.getDeclaredField("field1"), Transitive.ALLOWED),
-				new FieldInfo(ObjectWithOtherFields.class.getDeclaredField("field2"), Transitive.ALLOWED)
+				new FieldInfo(ObjectWithOtherFields.class.getDeclaredField("field1"), Transitive.ALLOWED, includeField, includeFieldInTransitive),
+				new FieldInfo(ObjectWithOtherFields.class.getDeclaredField("field2"), Transitive.ALLOWED, includeField, includeFieldInTransitive)
 		));
 
 		final TypeInfo typeInfo = typeInfoCache.typeInfoFor(SimpleObject.class);

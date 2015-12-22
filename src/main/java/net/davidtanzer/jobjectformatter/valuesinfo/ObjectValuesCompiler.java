@@ -1,6 +1,5 @@
 package net.davidtanzer.jobjectformatter.valuesinfo;
 
-import net.davidtanzer.jobjectformatter.annotations.Transitive;
 import net.davidtanzer.jobjectformatter.typeinfo.ClassInfo;
 import net.davidtanzer.jobjectformatter.typeinfo.FieldInfo;
 import net.davidtanzer.jobjectformatter.typeinfo.TypeInfo;
@@ -23,7 +22,7 @@ public class ObjectValuesCompiler {
 		for(FieldInfo fieldInfo : classInfo.fieldInfos()) {
 			Object fieldValue = fieldInfo.getFieldValue(object);
 			String formattedFieldValue = "";
-			switch (fieldInfo.getTransitive()) {
+			switch (fieldInfo.getTransitiveBehaviorOfTarget()) {
 				case ALWAYS:
 					formattedFieldValue = String.valueOf(fieldValue);
 					break;
@@ -38,7 +37,7 @@ public class ObjectValuesCompiler {
 					}
 					break;
 				default:
-					throw new IllegalStateException("Illegal value for transitive behavior: "+fieldInfo.getTransitive());
+					throw new IllegalStateException("Illegal value for transitive behavior: "+fieldInfo.getTransitiveBehaviorOfTarget());
 			}
 
 			builder.addFieldValue(fieldInfo.getName(), formattedFieldValue, fieldInfo.getType());

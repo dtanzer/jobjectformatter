@@ -1,9 +1,6 @@
 package net.davidtanzer.jobjectformatter.valuesinfo;
 
-import net.davidtanzer.jobjectformatter.annotations.Formatted;
-import net.davidtanzer.jobjectformatter.annotations.FormattedField;
-import net.davidtanzer.jobjectformatter.annotations.FormattedType;
-import net.davidtanzer.jobjectformatter.annotations.Transitive;
+import net.davidtanzer.jobjectformatter.annotations.*;
 import net.davidtanzer.jobjectformatter.typeinfo.TypeInfo;
 import net.davidtanzer.jobjectformatter.typeinfo.TypeInfoCache;
 import org.junit.Before;
@@ -77,6 +74,19 @@ public class ObjectValuesCompilerTest {
 	}
 
 	@Test
+	public void includesAnnotatedTransitiveValues_WhenTransitivityIsSetToAnnotated() {
+		final TypeInfo typeInfo = new TypeInfoCache().typeInfoFor(ContainingObjectAnnotatedTransitive.class);
+		final ObjectValuesInfo info = objectValuesCompiler.compileToStringInfo(typeInfo, new ContainingObjectAnnotatedTransitive());
+
+		assumeThat(info.getValuesByClass().get(0).getGroupName(), is("ContainingObjectAnnotatedTransitive"));
+
+		final GroupedValuesInfo classValuesInfo = info.getValuesByClass().get(0);
+		assertThat(classValuesInfo.getValues().get(0).getValue(), instanceOf(ObjectValuesInfo.class));
+		final ObjectValuesInfo innerValuesInfo = (ObjectValuesInfo) classValuesInfo.getValues().get(0).getValue();
+		assertThat(innerValuesInfo.getAllValues(), contains(hasProperty("propertyName", is("prop1"))));
+	}
+
+	@Test
 	public void stringDoesNotContainAnyFields_WhenClassIsAnnotatedAsFormattedAnnotated_ButHasNoAnnotatedFields() {
 		final TypeInfo typeInfo = new TypeInfoCache().typeInfoFor(FormattedObjectWithoutFields.class);
 		final ObjectValuesInfo info = objectValuesCompiler.compileToStringInfo(typeInfo, new FormattedObjectWithoutFields());
@@ -121,11 +131,12 @@ public class ObjectValuesCompilerTest {
 	}
 
 	private class SimpleContainedObject {
+		@FormattedField(transitive = FormattedFieldType.DEFAULT)
 		String prop1 = "contained property 1";
 		String prop2 = "contained property 2";
 
 		@Override
-		@Formatted
+		@Formatted(transitive = Transitive.DISALLOWED)
 		public String toString() {
 			return "result of toString";
 		}
@@ -138,6 +149,11 @@ public class ObjectValuesCompilerTest {
 
 	private class ContainingObjectAlwaysTransitive {
 		@Formatted(transitive = Transitive.ALWAYS)
+		SimpleContainedObject containedObject = new SimpleContainedObject();
+	}
+
+	private class ContainingObjectAnnotatedTransitive {
+		@Formatted(transitive = Transitive.ALLOWED)
 		SimpleContainedObject containedObject = new SimpleContainedObject();
 	}
 

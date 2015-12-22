@@ -8,7 +8,7 @@ import net.davidtanzer.jobjectformatter.annotations.Transitive;
 import java.lang.reflect.Field;
 import java.util.*;
 
-public class FieldsFilter {
+class FieldsFilter {
 	private static final Set<Class<?>> primitiveTypes = new HashSet<Class<?>>() {{
 		add(boolean.class);
 		add(short.class);
@@ -44,14 +44,13 @@ public class FieldsFilter {
 		return result;
 	}
 
-	protected Transitive includeTransitivelyInFormattedText(final Field field, final TypeInfoCache typeInfoCache) {
-		Transitive transitive = Transitive.DISALLOWED;
+	private Transitive includeTransitivelyInFormattedText(final Field field, final TypeInfoCache typeInfoCache) {
+		Transitive transitive;
+
 		if(field.getType().getName().startsWith("java") || primitiveTypes.contains(field.getType())) {
 			transitive = Transitive.ALLOWED;
 		} else {
-			if (typeInfoCache.hasAnnotatedToString(field.getType())) {
-				transitive = Transitive.ALLOWED;
-			}
+			transitive = typeInfoCache.transitiveBehaviorFor(field.getType());
 		}
 
 		if(field.isAnnotationPresent(Formatted.class)) {

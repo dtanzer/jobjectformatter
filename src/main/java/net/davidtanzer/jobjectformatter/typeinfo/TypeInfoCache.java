@@ -1,12 +1,11 @@
 package net.davidtanzer.jobjectformatter.typeinfo;
 
-import net.davidtanzer.jobjectformatter.annotations.AutomaticallyFormatted;
+import net.davidtanzer.jobjectformatter.annotations.Formatted;
+import net.davidtanzer.jobjectformatter.annotations.Transitive;
 
 import java.lang.reflect.Method;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.function.Function;
 
 public class TypeInfoCache {
 	private final FieldsFilter fieldsFilter;
@@ -33,24 +32,27 @@ public class TypeInfoCache {
 			currentType = currentType.getSuperclass();
 		}
 
-		if(hasAnnotatedToString(type)) {
-			builder.typeHasAutomaticallyFormattedToString();
-		}
 		return builder.buildTypeInfo();
 	}
 
-	boolean hasAnnotatedToString(final Class<?> type) {
+	Transitive transitiveBehaviorFor(final Class<?> type) {
+		assert type != null : "Parameter \"type\" must not be null.";
+
 		try {
+			if(type.isAnnotationPresent(Formatted.class)) {
+				return type.getAnnotation(Formatted.class).transitive();
+			}
+
 			Method toStringMethod = type.getMethod("toString");
 			assert toStringMethod != null : "Cannot be null, since we would get a NoSuchMethodException when the method does not exist.";
 
-			if(toStringMethod.isAnnotationPresent(AutomaticallyFormatted.class)) {
-				return true;
+			if(toStringMethod.isAnnotationPresent(Formatted.class)) {
+				return toStringMethod.getAnnotation(Formatted.class).transitive();
 			}
 		} catch (NoSuchMethodException e) {
 			ignoreException_BecauseNotAllTypesHaveToString_AndWeDontCare(e);
 		}
-		return false;
+		return Transitive.DISALLOWED;
 	}
 
 	private void ignoreException_BecauseNotAllTypesHaveToString_AndWeDontCare(final NoSuchMethodException e) {

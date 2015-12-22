@@ -1,5 +1,6 @@
 package net.davidtanzer.jobjectformatter.typeinfo;
 
+import net.davidtanzer.jobjectformatter.annotations.Formatted;
 import net.davidtanzer.jobjectformatter.annotations.Transitive;
 import org.junit.Before;
 import org.junit.Test;
@@ -87,6 +88,34 @@ public class TypeInfoCacheTest {
 		));
 	}
 
+	@Test
+	public void transitiveBehaviorForUnannotatedClass_IsDisallowed() {
+		final Transitive transitive = typeInfoCache.transitiveBehaviorFor(SimpleObject.class);
+
+		assertThat(transitive, is(Transitive.DISALLOWED));
+	}
+
+	@Test
+	public void transitiveBehaviorForAnnotatedClass_IsDeterminedByAnnotationValue() {
+		final Transitive transitive = typeInfoCache.transitiveBehaviorFor(TransitiveAnnotatedClass.class);
+
+		assertThat(transitive, is(Transitive.ALWAYS));
+	}
+
+	@Test
+	public void transitiveBehaviorForAnnotatedToString_IsDeterminedByAnnotationValue() {
+		final Transitive transitive = typeInfoCache.transitiveBehaviorFor(TransitiveAnnotatedToString.class);
+
+		assertThat(transitive, is(Transitive.ALWAYS));
+	}
+
+	@Test
+	public void transitiveBehaviorForAnnotatedClass_IsMoreImportantThanAnnotationOnClass() {
+		final Transitive transitive = typeInfoCache.transitiveBehaviorFor(TransitiveAnnotatedBoth.class);
+
+		assertThat(transitive, is(Transitive.DISALLOWED));
+	}
+
 	private class SimpleObject {
 		private String foo;
 		private String bar;
@@ -100,5 +129,26 @@ public class TypeInfoCacheTest {
 	private static class ObjectWithOtherFields {
 		private String field1;
 		private String field2;
+	}
+
+	@Formatted(transitive = Transitive.ALWAYS)
+	private class TransitiveAnnotatedClass {
+	}
+
+	private class TransitiveAnnotatedToString {
+		@Override
+		@Formatted(transitive = Transitive.ALWAYS)
+		public String toString() {
+			return super.toString();
+		}
+	}
+
+	@Formatted(transitive = Transitive.DISALLOWED)
+	private class TransitiveAnnotatedBoth {
+		@Override
+		@Formatted(transitive = Transitive.ALWAYS)
+		public String toString() {
+			return super.toString();
+		}
 	}
 }

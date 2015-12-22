@@ -6,14 +6,9 @@ import java.util.List;
 
 public class TypeInfo {
 	private List<ClassInfo> classInfos = new ArrayList<>();
-	private boolean hasAutomaticallyFormattedToString = false;
 
 	public List<ClassInfo> classInfos() {
 		return classInfos;
-	}
-
-	public boolean hasAutomaticallyFormattedToString() {
-		return hasAutomaticallyFormattedToString;
 	}
 
 	static class Builder {
@@ -34,11 +29,6 @@ public class TypeInfo {
 
 		public Builder addInfoForClass(final Class<?> currentType) {
 			typeInfo.classInfos.add(new ClassInfo(currentType, typeInfoCache, fieldsFilter));
-			return this;
-		}
-
-		public Builder typeHasAutomaticallyFormattedToString() {
-			typeInfo.hasAutomaticallyFormattedToString = true;
 			return this;
 		}
 	}

@@ -5,7 +5,6 @@ import net.davidtanzer.jobjectformatter.valuesinfo.ObjectValuesInfo;
 import net.davidtanzer.jobjectformatter.valuesinfo.ValueInfo;
 
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 public class JsonObjectStringFormatter extends AbstractObjectStringFormatter {
@@ -36,12 +35,12 @@ public class JsonObjectStringFormatter extends AbstractObjectStringFormatter {
 	}
 
 	@Override
-	protected void startFormattedString(final StringBuilder result) {
+	protected void startFormattedString(final StringBuilder result, final ObjectValuesInfo info) {
 		result.append("{");
 	}
 
 	@Override
-	protected void endFormattedString(final StringBuilder result) {
+	protected void endFormattedString(final StringBuilder result, final ObjectValuesInfo info) {
 		result.append("}");
 	}
 

@@ -12,7 +12,7 @@ public abstract class AbstractObjectStringFormatter implements ObjectStringForma
 		StringBuilder result = new StringBuilder();
 		boolean first = true;
 
-		startFormattedString(result);
+		startFormattedString(result, info);
 		for(GroupedValuesInfo groupedValuesInfo : info.getValuesByClass()) {
 			if(!first) {
 				result.append(getGroupsSeparator());
@@ -24,7 +24,7 @@ public abstract class AbstractObjectStringFormatter implements ObjectStringForma
 
 			first = false;
 		}
-		endFormattedString(result);
+		endFormattedString(result, info);
 		return result.toString();
 	}
 
@@ -39,13 +39,13 @@ public abstract class AbstractObjectStringFormatter implements ObjectStringForma
 		}
 	}
 
-	protected abstract void startFormattedString(StringBuilder result);
+	protected void startFormattedString(StringBuilder result, final ObjectValuesInfo info) {}
 
-	protected abstract void endFormattedString(StringBuilder result);
+	protected void endFormattedString(StringBuilder result, final ObjectValuesInfo info) {}
 
-	protected abstract void startValueGroup(StringBuilder result, GroupedValuesInfo groupedValuesInfo);
+	protected void startValueGroup(StringBuilder result, GroupedValuesInfo groupedValuesInfo) {}
 
-	protected abstract void endValueGroup(StringBuilder result);
+	protected void endValueGroup(StringBuilder result) {}
 
 	private String getValueSeparator() {
 		return ", ";

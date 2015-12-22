@@ -8,6 +8,6 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ ElementType.FIELD, ElementType.METHOD, ElementType.TYPE })
 public @interface Formatted {
-	FormattedType value() default FormattedType.ALL;
+	FormattedType value() default FormattedType.ANNOTATED;
 	Transitive transitive() default Transitive.ALLOWED;
 }

@@ -1,5 +1,5 @@
 package net.davidtanzer.jobjectformatter.annotations;
 
 public enum FormattedFieldType {
-	ALWAYS, VERBOSE, NEVER
+	DEFAULT, VERBOSE, NEVER
 }

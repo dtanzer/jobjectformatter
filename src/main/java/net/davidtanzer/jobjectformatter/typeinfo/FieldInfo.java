@@ -52,7 +52,7 @@ public class FieldInfo {
 		try {
 			return field.get(object);
 		} catch (IllegalAccessException e) {
-			throw new IllegalStateException("Could not determine field value", e);
+			throw new IllegalStateException("Could not determine field getValue", e);
 		}
 	}
 }

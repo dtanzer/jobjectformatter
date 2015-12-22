@@ -8,6 +8,6 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.FIELD)
 public @interface FormattedField {
-	FormattedFieldType value() default FormattedFieldType.ALWAYS;
+	FormattedFieldType value() default FormattedFieldType.DEFAULT;
 	FormattedFieldType transitive() default FormattedFieldType.NEVER;
 }

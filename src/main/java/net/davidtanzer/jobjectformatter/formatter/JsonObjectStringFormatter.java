@@ -24,11 +24,11 @@ public class JsonObjectStringFormatter extends AbstractObjectStringFormatter {
 
 	@Override
 	protected void appendSingleValue(final StringBuilder result, final ValueInfo value) {
-		result.append("\"").append(value.propertyName()).append("\": ");
+		result.append("\"").append(value.getPropertyName()).append("\": ");
 		if(!unescapedTypes.contains(value.getFieldClass())) {
 			result.append("\"");
 		}
-		result.append(value.value());
+		result.append(value.getValue());
 		if(!unescapedTypes.contains(value.getFieldClass())) {
 			result.append("\"");
 		}

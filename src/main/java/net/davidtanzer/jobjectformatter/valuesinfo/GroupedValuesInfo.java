@@ -36,7 +36,7 @@ public class GroupedValuesInfo {
 			return this;
 		}
 
-		public Builder addFieldValue(final String name, final String formattedFieldValue, final Class<?> fieldClass) {
+		public Builder addFieldValue(final String name, final Object formattedFieldValue, final Class<?> fieldClass) {
 			byClassValuesInfo.values.add(new ValueInfo(name, formattedFieldValue, fieldClass));
 			return this;
 		}

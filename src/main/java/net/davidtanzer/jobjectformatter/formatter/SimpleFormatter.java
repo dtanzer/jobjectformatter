@@ -16,6 +16,6 @@ public class SimpleFormatter extends AbstractObjectStringFormatter {
 
 	@Override
 	protected void appendSingleValue(final StringBuilder result, final ValueInfo value) {
-		result.append(value.propertyName()).append("=").append(value.value());
+		result.append(value.getPropertyName()).append("=").append(value.getValue());
 	}
 }

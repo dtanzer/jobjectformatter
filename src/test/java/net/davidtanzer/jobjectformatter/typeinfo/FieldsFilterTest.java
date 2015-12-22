@@ -58,7 +58,7 @@ public class FieldsFilterTest {
 
 		assertThat(fields.size(), is(2));
 		assertThat(fields.get(0), allOf(
-				hasProperty("name", is("foo")), hasProperty("includeField", is(FormattedFieldType.ALWAYS))));
+				hasProperty("name", is("foo")), hasProperty("includeField", is(FormattedFieldType.DEFAULT))));
 		assertThat(fields.get(1), allOf(
 				hasProperty("name", is("bar")), hasProperty("includeField", is(FormattedFieldType.NEVER))));
 	}

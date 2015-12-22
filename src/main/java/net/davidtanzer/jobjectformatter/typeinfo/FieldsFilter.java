@@ -47,7 +47,7 @@ class FieldsFilter {
 
 		if(field.isAnnotationPresent(Formatted.class)) {
 			final Formatted[] annotations = field.getAnnotationsByType(Formatted.class);
-			assert annotations.length == 1 : "Cannot really be any other value, since we have checked that the annotation is there. Or can it?";
+			assert annotations.length == 1 : "Cannot really be any other getValue, since we have checked that the annotation is there. Or can it?";
 
 			transitive = annotations[0].transitive();
 		}

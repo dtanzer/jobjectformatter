@@ -2,20 +2,20 @@ package net.davidtanzer.jobjectformatter.valuesinfo;
 
 public class ValueInfo {
 	private final String propertyName;
-	private final String value;
+	private final Object value;
 	private final Class<?> fieldClass;
 
-	public ValueInfo(final String propertyName, final String value, final Class<?> fieldClass) {
+	public ValueInfo(final String propertyName, final Object value, final Class<?> fieldClass) {
 		this.propertyName = propertyName;
 		this.value = value;
 		this.fieldClass = fieldClass;
 	}
 
-	public String propertyName() {
+	public String getPropertyName() {
 		return propertyName;
 	}
 
-	public String value() {
+	public Object getValue() {
 		return value;
 	}
 
@@ -46,8 +46,8 @@ public class ValueInfo {
 	@Override
 	public String toString() {
 		return "ValueInfo{" +
-				"propertyName='" + propertyName + '\'' +
-				", value='" + value + '\'' +
+				"getPropertyName='" + propertyName + '\'' +
+				", getValue='" + value + '\'' +
 				'}';
 	}
 }

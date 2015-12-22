@@ -2,6 +2,7 @@ package net.davidtanzer.jobjectformatter.typeinfo;
 
 import net.davidtanzer.jobjectformatter.annotations.Formatted;
 import net.davidtanzer.jobjectformatter.annotations.FormattedFieldType;
+import net.davidtanzer.jobjectformatter.annotations.FormattedType;
 import net.davidtanzer.jobjectformatter.annotations.Transitive;
 import org.junit.Before;
 import org.junit.Test;
@@ -76,8 +77,8 @@ public class TypeInfoCacheTest {
 		final FieldsFilter fieldsFilter = mock(FieldsFilter.class);
 		typeInfoCache = new TypeInfoCache(fieldsFilter);
 
-		final FormattedFieldType includeField = FormattedFieldType.ALWAYS;
-		final FormattedFieldType includeFieldInTransitive = FormattedFieldType.ALWAYS;
+		final FormattedFieldType includeField = FormattedFieldType.DEFAULT;
+		final FormattedFieldType includeFieldInTransitive = FormattedFieldType.DEFAULT;
 		when(fieldsFilter.getFilteredFields(SimpleObject.class, typeInfoCache)).thenReturn(Arrays.asList(
 				new FieldInfo(ObjectWithOtherFields.class.getDeclaredField("field1"), Transitive.ALLOWED, includeField, includeFieldInTransitive),
 				new FieldInfo(ObjectWithOtherFields.class.getDeclaredField("field2"), Transitive.ALLOWED, includeField, includeFieldInTransitive)
@@ -119,6 +120,14 @@ public class TypeInfoCacheTest {
 		assertThat(transitive, is(Transitive.DISALLOWED));
 	}
 
+	@Test
+	public void typeInfoHasInformationFromTheFormattedAnnotationOnClass() {
+		final TypeInfo typeInfo = typeInfoCache.typeInfoFor(TransitiveAnnotatedBoth.class);
+
+		assertThat(typeInfo.getTransitiveBehavior(), is(Transitive.DISALLOWED));
+		assertThat(typeInfo.getFormattingBehavior(), is(FormattedType.NONE));
+	}
+
 	private class SimpleObject {
 		private String foo;
 		private String bar;
@@ -146,7 +155,7 @@ public class TypeInfoCacheTest {
 		}
 	}
 
-	@Formatted(transitive = Transitive.DISALLOWED)
+	@Formatted(transitive = Transitive.DISALLOWED, value = FormattedType.NONE)
 	private class TransitiveAnnotatedBoth {
 		@Override
 		@Formatted(transitive = Transitive.ALWAYS)

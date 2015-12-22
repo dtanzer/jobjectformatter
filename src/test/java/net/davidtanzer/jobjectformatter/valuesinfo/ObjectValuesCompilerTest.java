@@ -5,11 +5,11 @@ import net.davidtanzer.jobjectformatter.typeinfo.TypeInfoCache;
 import org.junit.Before;
 import org.junit.Test;
 
-import static org.hamcrest.CoreMatchers.anything;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.Matchers.*;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertThat;
 import static org.junit.Assume.assumeThat;
+import static org.mockito.Mockito.mock;
 
 public class ObjectValuesCompilerTest {
 	private ObjectValuesCompiler objectValuesCompiler;
@@ -47,6 +47,20 @@ public class ObjectValuesCompilerTest {
 		));
 	}
 
+	@Test
+	public void abbreviatesTransitiveObject_WhenTransitivityIsNotAllowed() {
+		final TypeInfo typeInfo = new TypeInfoCache().typeInfoFor(ContainingObject.class);
+
+		final ObjectValuesInfo info = objectValuesCompiler.compileToStringInfo(typeInfo, new ContainingObject());
+
+		assumeThat(info.getValuesByClass().get(0).getGroupName(), is("ContainingObject"));
+
+		final GroupedValuesInfo classValuesInfo = info.getValuesByClass().get(0);
+		assertThat(classValuesInfo.getValues(), contains(
+				is(new ValueInfo("containedObject", "[not null]", SimpleContainedObject.class))
+		));
+	}
+
 	private class SimpleObject {
 		String foo="foo val";
 		String bar="bar val";
@@ -55,5 +69,13 @@ public class ObjectValuesCompilerTest {
 	private class ExtendedObject extends SimpleObject {
 		String eFoo="eFoo val";
 		String eBar="eBar val";
+	}
+
+	private class SimpleContainedObject {
+		String prop = "contained property";
+	}
+
+	private class ContainingObject {
+		SimpleContainedObject containedObject = new SimpleContainedObject();
 	}
 }

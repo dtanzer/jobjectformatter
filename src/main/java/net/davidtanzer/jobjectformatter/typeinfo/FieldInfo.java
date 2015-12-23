@@ -1,19 +1,19 @@
 package net.davidtanzer.jobjectformatter.typeinfo;
 
 import net.davidtanzer.jobjectformatter.annotations.FormattedFieldType;
-import net.davidtanzer.jobjectformatter.annotations.Transitive;
+import net.davidtanzer.jobjectformatter.annotations.TransitiveInclude;
 
 import java.lang.reflect.Field;
 
 public class FieldInfo {
 	private final Field field;
-	private final Transitive transitiveBehaviorOfTarget;
+	private final TransitiveInclude transitiveIncludeOfTarget;
 	private final FormattedFieldType includeFieldInTransitive;
 	private final FormattedFieldType includeField;
 
-	public FieldInfo(final Field field, final Transitive transitiveBehaviorOfTarget, final FormattedFieldType includeField, final FormattedFieldType includeFieldInTransitive) {
+	public FieldInfo(final Field field, final TransitiveInclude transitiveIncludeOfTarget, final FormattedFieldType includeField, final FormattedFieldType includeFieldInTransitive) {
 		this.field = field;
-		this.transitiveBehaviorOfTarget = transitiveBehaviorOfTarget;
+		this.transitiveIncludeOfTarget = transitiveIncludeOfTarget;
 		this.includeFieldInTransitive = includeFieldInTransitive;
 		this.includeField = includeField;
 	}
@@ -26,8 +26,8 @@ public class FieldInfo {
 		return field.getType();
 	}
 
-	public Transitive getTransitiveBehaviorOfTarget() {
-		return transitiveBehaviorOfTarget;
+	public TransitiveInclude getTransitiveIncludeOfTarget() {
+		return transitiveIncludeOfTarget;
 	}
 
 	public FormattedFieldType getIncludeField() {
@@ -42,7 +42,7 @@ public class FieldInfo {
 	public String toString() {
 		return "FieldInfo{" +
 				"field=" + field.getName() +
-				", transitiveBehaviorOfTarget=" + transitiveBehaviorOfTarget +
+				", transitiveIncludeOfTarget=" + transitiveIncludeOfTarget +
 				", includeFieldInTransitive=" + includeFieldInTransitive +
 				", includeField=" + includeField +
 				'}';

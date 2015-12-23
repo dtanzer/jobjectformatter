@@ -1,8 +1,8 @@
 package net.davidtanzer.jobjectformatter.typeinfo;
 
 import net.davidtanzer.jobjectformatter.annotations.Formatted;
-import net.davidtanzer.jobjectformatter.annotations.FormattedType;
-import net.davidtanzer.jobjectformatter.annotations.Transitive;
+import net.davidtanzer.jobjectformatter.annotations.FormattedInclude;
+import net.davidtanzer.jobjectformatter.annotations.TransitiveInclude;
 
 import java.lang.reflect.Method;
 import java.util.Map;
@@ -25,8 +25,8 @@ public class TypeInfoCache {
 		return cachedTypeInfos.computeIfAbsent(type, this::createTypeInfoFrom);
 	}
 
-	public TypeInfo typeInfoFor(final Class<?> type, final Transitive transitiveBehavior) {
-		return typeInfoFor(type).withTransitiveBehavior(transitiveBehavior);
+	public TypeInfo typeInfoFor(final Class<?> type, final TransitiveInclude transitiveIncludeBehavior) {
+		return typeInfoFor(type).withTransitiveBehavior(transitiveIncludeBehavior);
 	}
 
 	private TypeInfo createTypeInfoFrom(final Class<?> type) {
@@ -38,16 +38,16 @@ public class TypeInfoCache {
 			currentType = currentType.getSuperclass();
 		}
 
-		builder.withFormattingBehavior(formattingBehaviorFor(type), transitiveBehaviorFor(type));
+		builder.withFormattingBehavior(formattingBehaviorFor(type), transitiveIncludeFor(type));
 		return builder.buildTypeInfo();
 	}
 
-	private FormattedType formattingBehaviorFor(final Class<?> type) {
-		return behaviorFor(type, f -> f.value(), FormattedType.ALL);
+	private FormattedInclude formattingBehaviorFor(final Class<?> type) {
+		return behaviorFor(type, f -> f.value(), FormattedInclude.ALL_FIELDS);
 	}
 
-	Transitive transitiveBehaviorFor(final Class<?> type) {
-		return behaviorFor(type, f -> f.transitive(), Transitive.DISALLOWED);
+	TransitiveInclude transitiveIncludeFor(final Class<?> type) {
+		return behaviorFor(type, f -> f.transitive(), TransitiveInclude.NO_FIELDS);
 	}
 
 	public <T> T behaviorFor(final Class<?> type, final Function<Formatted, T> mappingFunction, final T defaultValue) {

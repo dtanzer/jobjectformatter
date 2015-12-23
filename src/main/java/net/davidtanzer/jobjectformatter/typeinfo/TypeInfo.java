@@ -1,7 +1,7 @@
 package net.davidtanzer.jobjectformatter.typeinfo;
 
-import net.davidtanzer.jobjectformatter.annotations.FormattedType;
-import net.davidtanzer.jobjectformatter.annotations.Transitive;
+import net.davidtanzer.jobjectformatter.annotations.FormattedInclude;
+import net.davidtanzer.jobjectformatter.annotations.TransitiveInclude;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -9,12 +9,12 @@ import java.util.List;
 
 public class TypeInfo {
 	private final List<ClassInfo> classInfos;
-	private final Transitive transitiveBehavior;
-	private final FormattedType formattingBehavior;
+	private final TransitiveInclude transitiveInclude;
+	private final FormattedInclude formattingBehavior;
 
-	private TypeInfo(final List<ClassInfo> classInfos, final Transitive transitiveBehavior, final FormattedType formattingBehavior) {
+	private TypeInfo(final List<ClassInfo> classInfos, final TransitiveInclude transitiveInclude, final FormattedInclude formattingBehavior) {
 		this.classInfos = classInfos;
-		this.transitiveBehavior = transitiveBehavior;
+		this.transitiveInclude = transitiveInclude;
 		this.formattingBehavior = formattingBehavior;
 	}
 
@@ -22,23 +22,23 @@ public class TypeInfo {
 		return classInfos;
 	}
 
-	public Transitive getTransitiveBehavior() {
-		return transitiveBehavior;
+	public TransitiveInclude getTransitiveInclude() {
+		return transitiveInclude;
 	}
 
-	public FormattedType getFormattingBehavior() {
+	public FormattedInclude getFormattingBehavior() {
 		return formattingBehavior;
 	}
 
-	TypeInfo withTransitiveBehavior(final Transitive transitiveBehavior) {
-		return new TypeInfo(this.classInfos, transitiveBehavior, this.formattingBehavior);
+	TypeInfo withTransitiveBehavior(final TransitiveInclude transitiveInclude) {
+		return new TypeInfo(this.classInfos, transitiveInclude, this.formattingBehavior);
 	}
 
 	static class Builder {
 		private final TypeInfoCache typeInfoCache;
 		private final FieldsFilter fieldsFilter;
-		private FormattedType formattingBehavior;
-		private Transitive transitiveBehavior;
+		private FormattedInclude formattingBehavior;
+		private TransitiveInclude transitiveInclude;
 		private List<ClassInfo> classInfos = new ArrayList<>();
 
 		Builder(final TypeInfoCache typeInfoCache, final FieldsFilter fieldsFilter) {
@@ -47,12 +47,12 @@ public class TypeInfo {
 		}
 
 		public TypeInfo buildTypeInfo() {
-			return new TypeInfo(Collections.unmodifiableList(this.classInfos), this.transitiveBehavior, this.formattingBehavior);
+			return new TypeInfo(Collections.unmodifiableList(this.classInfos), this.transitiveInclude, this.formattingBehavior);
 		}
 
-		public Builder withFormattingBehavior(final FormattedType formattingBehavior, final Transitive transitiveBehavior) {
+		public Builder withFormattingBehavior(final FormattedInclude formattingBehavior, final TransitiveInclude transitiveInclude) {
 			this.formattingBehavior = formattingBehavior;
-			this.transitiveBehavior = transitiveBehavior;
+			this.transitiveInclude = transitiveInclude;
 			return this;
 		}
 

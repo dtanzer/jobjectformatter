@@ -1,7 +1,7 @@
 package net.davidtanzer.jobjectformatter.valuesinfo;
 
 import net.davidtanzer.jobjectformatter.annotations.FormattedFieldType;
-import net.davidtanzer.jobjectformatter.annotations.Transitive;
+import net.davidtanzer.jobjectformatter.annotations.TransitiveInclude;
 import net.davidtanzer.jobjectformatter.typeinfo.ClassInfo;
 import net.davidtanzer.jobjectformatter.typeinfo.FieldInfo;
 import net.davidtanzer.jobjectformatter.typeinfo.TypeInfo;
@@ -49,15 +49,15 @@ public class ObjectValuesCompiler {
 		if(includeInTransitive.test(fieldInfo.getIncludeFieldInTransitive())) {
 			Object formattedFieldValue = formatFieldValue(object, fieldInfo);
 			switch (typeInfo.getFormattingBehavior()) {
-				case ALL:
+				case ALL_FIELDS:
 					builder.addFieldValue(fieldInfo.getName(), formattedFieldValue, fieldInfo.getType());
 					break;
-				case ANNOTATED:
+				case ANNOTATED_FIELDS:
 					if (fieldInfo.getIncludeField().equals(FormattedFieldType.DEFAULT)) {
 						builder.addFieldValue(fieldInfo.getName(), formattedFieldValue, fieldInfo.getType());
 					}
 					break;
-				case NONE:
+				case NO_FIELDS:
 					break;
 				default:
 					throw new IllegalStateException("Unexpected formatting behavior type: " + typeInfo.getFormattingBehavior());
@@ -68,13 +68,13 @@ public class ObjectValuesCompiler {
 	private Object formatFieldValue(final Object object, final FieldInfo fieldInfo) {
 		Object fieldValue = fieldInfo.getFieldValue(object);
 		Object formattedFieldValue;
-		switch (fieldInfo.getTransitiveBehaviorOfTarget()) {
-			case ALWAYS:
+		switch (fieldInfo.getTransitiveIncludeOfTarget()) {
+			case ALL_FIELDS:
 				formattedFieldValue = fieldValue;
 				break;
-			case ALLOWED:
+			case ANNOTADED_FIELDS:
 				if(hasFormattedAnnotation(fieldValue, fieldInfo)) {
-					TypeInfo transitiveTypeInfo = typeInfoCache.typeInfoFor(fieldValue.getClass(), fieldInfo.getTransitiveBehaviorOfTarget());
+					TypeInfo transitiveTypeInfo = typeInfoCache.typeInfoFor(fieldValue.getClass(), fieldInfo.getTransitiveIncludeOfTarget());
 					ObjectValuesInfo objectValuesInfo = this.compileToStringInfo(
 							transitiveTypeInfo, fieldValue, transitive -> transitive.equals(FormattedFieldType.DEFAULT));
 					if(objectValuesInfo.getAllValues().isEmpty()) {
@@ -86,7 +86,7 @@ public class ObjectValuesCompiler {
 					formattedFieldValue = fieldValue;
 				}
 				break;
-			case DISALLOWED:
+			case NO_FIELDS:
 				if(fieldValue == null) {
 					formattedFieldValue = null;
 				} else {
@@ -94,14 +94,14 @@ public class ObjectValuesCompiler {
 				}
 				break;
 			default:
-				throw new IllegalStateException("Illegal getValue for transitive behavior: "+fieldInfo.getTransitiveBehaviorOfTarget());
+				throw new IllegalStateException("Illegal getValue for transitive behavior: "+fieldInfo.getTransitiveIncludeOfTarget());
 		}
 		return formattedFieldValue;
 	}
 
 	private Boolean hasFormattedAnnotation(final Object fieldValue, final FieldInfo fieldInfo) {
 		return typeInfoCache.behaviorFor(fieldValue.getClass(), (f) -> true, false)
-				|| fieldInfo.getTransitiveBehaviorOfTarget().equals(Transitive.ALLOWED)
-				|| fieldInfo.getTransitiveBehaviorOfTarget().equals(Transitive.ALWAYS);
+				|| fieldInfo.getTransitiveIncludeOfTarget().equals(TransitiveInclude.ANNOTADED_FIELDS)
+				|| fieldInfo.getTransitiveIncludeOfTarget().equals(TransitiveInclude.ALL_FIELDS);
 	}
 }

@@ -70,31 +70,31 @@ public class FieldsFilterTest {
 		assumeThat(fields.size(), is(1));
 		assumeThat(fields.get(0), hasProperty("name", is("noAnnotations")));
 
-		assertThat(fields.get(0), hasProperty("transitiveBehaviorOfTarget", is(Transitive.ALWAYS)));
+		assertThat(fields.get(0), hasProperty("transitiveIncludeOfTarget", is(TransitiveInclude.ALL_FIELDS)));
 	}
 
 	@Test
 	public void fieldsNotAnnotated_HaveTransitiveBehaviorDeterminedByTypeInfoCache() {
-		when(typeInfoCache.transitiveBehaviorFor(any())).thenReturn(Transitive.ALWAYS);
+		when(typeInfoCache.transitiveIncludeFor(any())).thenReturn(TransitiveInclude.ALL_FIELDS);
 
 		List<FieldInfo> fields = fieldsFilter.getFilteredFields(FieldTypeTransitive.class, typeInfoCache);
 		assumeThat(fields, is(not(nullValue())));
 		assumeThat(fields.size(), is(1));
 		assumeThat(fields.get(0), hasProperty("name", is("typeTransitive")));
 
-		assertThat(fields.get(0), hasProperty("transitiveBehaviorOfTarget", is(Transitive.ALWAYS)));
+		assertThat(fields.get(0), hasProperty("transitiveIncludeOfTarget", is(TransitiveInclude.ALL_FIELDS)));
 	}
 
 	@Test
 	public void transitiveAnnotationOnFields_IsMoreImportantThanBehaviorSpecifiedByTypeInfoCache() {
-		when(typeInfoCache.transitiveBehaviorFor(any())).thenReturn(Transitive.ALLOWED);
+		when(typeInfoCache.transitiveIncludeFor(any())).thenReturn(TransitiveInclude.ANNOTADED_FIELDS);
 
 		List<FieldInfo> fields = fieldsFilter.getFilteredFields(FieldTransitive.class, typeInfoCache);
 		assumeThat(fields, is(not(nullValue())));
 		assumeThat(fields.size(), is(1));
 		assumeThat(fields.get(0), hasProperty("name", is("noAnnotations")));
 
-		assertThat(fields.get(0), hasProperty("transitiveBehaviorOfTarget", is(Transitive.ALWAYS)));
+		assertThat(fields.get(0), hasProperty("transitiveIncludeOfTarget", is(TransitiveInclude.ALL_FIELDS)));
 	}
 
 	private class NoAnnotations {
@@ -102,13 +102,13 @@ public class FieldsFilterTest {
 		private String bar;
 	}
 
-	@Formatted(FormattedType.ANNOTATED)
+	@Formatted(FormattedInclude.ANNOTATED_FIELDS)
 	private class NoAnnotatedFields {
 		private int foo;
 		private String bar;
 	}
 
-	@Formatted(FormattedType.ANNOTATED)
+	@Formatted(FormattedInclude.ANNOTATED_FIELDS)
 	private class AnnotatedFields {
 		@FormattedField
 		private int foo;
@@ -120,11 +120,11 @@ public class FieldsFilterTest {
 	}
 
 	private class FieldTransitive {
-		@Formatted(transitive = Transitive.ALWAYS)
+		@Formatted(transitive = TransitiveInclude.ALL_FIELDS)
 		private NoAnnotations noAnnotations;
 	}
 
-	@Formatted(transitive = Transitive.ALWAYS)
+	@Formatted(transitive = TransitiveInclude.ALL_FIELDS)
 	private class TypeTransitive {
 	}
 

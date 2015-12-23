@@ -3,7 +3,7 @@ package net.davidtanzer.jobjectformatter.formatter;
 import net.davidtanzer.jobjectformatter.annotations.Formatted;
 import net.davidtanzer.jobjectformatter.annotations.FormattedField;
 import net.davidtanzer.jobjectformatter.annotations.FormattedFieldType;
-import net.davidtanzer.jobjectformatter.annotations.Transitive;
+import net.davidtanzer.jobjectformatter.annotations.TransitiveInclude;
 import net.davidtanzer.jobjectformatter.typeinfo.TypeInfo;
 import net.davidtanzer.jobjectformatter.typeinfo.TypeInfoCache;
 import net.davidtanzer.jobjectformatter.valuesinfo.ObjectValuesCompiler;
@@ -66,7 +66,7 @@ public class AbstractObjectStringFormatterTest {
 
 	public class ContainingObject {
 		private String foobar = "foobar value";
-		@Formatted(transitive = Transitive.ALLOWED)
+		@Formatted(transitive = TransitiveInclude.ANNOTADED_FIELDS)
 		private ContainedObject containedObject = new ContainedObject();
 	}
 }

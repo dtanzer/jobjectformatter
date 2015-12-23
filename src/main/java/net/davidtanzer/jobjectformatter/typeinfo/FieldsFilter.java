@@ -22,36 +22,36 @@ class FieldsFilter {
 			if(!field.getName().startsWith("this")) {
 				field.setAccessible(true);
 
-				final Transitive transitiveBehaviorOfTarget = includeTransitivelyInFormattedText(field, typeInfoCache);
+				final TransitiveInclude transitiveIncludeOfTarget = includeTransitivelyInFormattedText(field, typeInfoCache);
 				FormattedFieldType includeField = FormattedFieldType.NEVER;
 				FormattedFieldType includeFieldInTransitive = FormattedFieldType.NEVER;
 				if(field.isAnnotationPresent(FormattedField.class)) {
 					includeField = field.getAnnotation(FormattedField.class).value();
 					includeFieldInTransitive = field.getAnnotation(FormattedField.class).transitive();
 				}
-				result.add(new FieldInfo(field, transitiveBehaviorOfTarget, includeField, includeFieldInTransitive));
+				result.add(new FieldInfo(field, transitiveIncludeOfTarget, includeField, includeFieldInTransitive));
 			}
 		}
 
 		return result;
 	}
 
-	private Transitive includeTransitivelyInFormattedText(final Field field, final TypeInfoCache typeInfoCache) {
-		Transitive transitive;
+	private TransitiveInclude includeTransitivelyInFormattedText(final Field field, final TypeInfoCache typeInfoCache) {
+		TransitiveInclude transitiveInclude;
 
 		if(field.getType().getName().startsWith("java") || primitiveTypes.contains(field.getType())) {
-			transitive = Transitive.ALWAYS;
+			transitiveInclude = TransitiveInclude.ALL_FIELDS;
 		} else {
-			transitive = typeInfoCache.transitiveBehaviorFor(field.getType());
+			transitiveInclude = typeInfoCache.transitiveIncludeFor(field.getType());
 		}
 
 		if(field.isAnnotationPresent(Formatted.class)) {
 			final Formatted[] annotations = field.getAnnotationsByType(Formatted.class);
 			assert annotations.length == 1 : "Cannot really be any other getValue, since we have checked that the annotation is there. Or can it?";
 
-			transitive = annotations[0].transitive();
+			transitiveInclude = annotations[0].transitive();
 		}
-		return transitive;
+		return transitiveInclude;
 	}
 
 }

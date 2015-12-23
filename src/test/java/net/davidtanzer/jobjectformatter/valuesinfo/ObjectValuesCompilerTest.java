@@ -150,24 +150,24 @@ public class ObjectValuesCompilerTest {
 		String prop2 = "contained property 2";
 
 		@Override
-		@Formatted(transitive = Transitive.DISALLOWED)
+		@Formatted(transitive = TransitiveInclude.NO_FIELDS)
 		public String toString() {
 			return "result of toString";
 		}
 	}
 
-	@Formatted(FormattedType.ALL)
+	@Formatted(FormattedInclude.ALL_FIELDS)
 	private class ContainingObject {
 		SimpleContainedObject containedObject = new SimpleContainedObject();
 	}
 
 	private class ContainingObjectAlwaysTransitive {
-		@Formatted(transitive = Transitive.ALWAYS)
+		@Formatted(transitive = TransitiveInclude.ALL_FIELDS)
 		SimpleContainedObject containedObject = new SimpleContainedObject();
 	}
 
 	private class ContainingObjectAnnotatedTransitive {
-		@Formatted(transitive = Transitive.ALLOWED)
+		@Formatted(transitive = TransitiveInclude.ANNOTADED_FIELDS)
 		SimpleContainedObject containedObject = new SimpleContainedObject();
 	}
 
@@ -178,7 +178,7 @@ public class ObjectValuesCompilerTest {
 	}
 
 	private class ContainingObjectAnnotatedTransitiveOnly {
-		@Formatted(transitive = Transitive.ALLOWED)
+		@Formatted(transitive = TransitiveInclude.ANNOTADED_FIELDS)
 		SimpleUnAnnotatedContainedObject containedObject = new SimpleUnAnnotatedContainedObject();
 	}
 
@@ -187,7 +187,7 @@ public class ObjectValuesCompilerTest {
 		private String foo = "foo";
 	}
 
-	@Formatted(FormattedType.ALL)
+	@Formatted(FormattedInclude.ALL_FIELDS)
 	private class FormattedAllObjectWithFields {
 		private String foo = "foo";
 		@FormattedField

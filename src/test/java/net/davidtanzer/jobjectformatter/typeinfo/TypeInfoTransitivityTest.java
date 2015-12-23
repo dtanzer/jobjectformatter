@@ -1,7 +1,7 @@
 package net.davidtanzer.jobjectformatter.typeinfo;
 
 import net.davidtanzer.jobjectformatter.annotations.Formatted;
-import net.davidtanzer.jobjectformatter.annotations.Transitive;
+import net.davidtanzer.jobjectformatter.annotations.TransitiveInclude;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -25,11 +25,11 @@ public class TypeInfoTransitivityTest {
 		List<FieldInfo> fieldInfos = info.classInfos().get(0).fieldInfos();
 		assertThat(fieldInfos, hasItem(allOf(
 				hasProperty("name", is("foo")),
-				hasProperty("transitiveBehaviorOfTarget", is(Transitive.ALWAYS)))));
+				hasProperty("transitiveIncludeOfTarget", is(TransitiveInclude.ALL_FIELDS)))));
 
 		assertThat(fieldInfos, hasItem(allOf(
 				hasProperty("name", is("bar")),
-				hasProperty("transitiveBehaviorOfTarget", is(Transitive.ALWAYS)))));
+				hasProperty("transitiveIncludeOfTarget", is(TransitiveInclude.ALL_FIELDS)))));
 	}
 
 	@Test
@@ -39,7 +39,7 @@ public class TypeInfoTransitivityTest {
 		List<FieldInfo> fieldInfos = info.classInfos().get(0).fieldInfos();
 		assertThat(fieldInfos, hasItem(allOf(
 				hasProperty("name", is("so")),
-				hasProperty("transitiveBehaviorOfTarget", is(Transitive.DISALLOWED)))));
+				hasProperty("transitiveIncludeOfTarget", is(TransitiveInclude.NO_FIELDS)))));
 	}
 
 	@Test
@@ -49,7 +49,7 @@ public class TypeInfoTransitivityTest {
 		List<FieldInfo> fieldInfos = info.classInfos().get(0).fieldInfos();
 		assertThat(fieldInfos, hasItem(allOf(
 				hasProperty("name", is("notTransitive")),
-				hasProperty("transitiveBehaviorOfTarget", is(Transitive.DISALLOWED)))));
+				hasProperty("transitiveIncludeOfTarget", is(TransitiveInclude.NO_FIELDS)))));
 	}
 
 	@Test
@@ -59,14 +59,14 @@ public class TypeInfoTransitivityTest {
 		List<FieldInfo> fieldInfos = info.classInfos().get(0).fieldInfos();
 		assertThat(fieldInfos, hasItem(allOf(
 				hasProperty("name", is("soTransitive")),
-				hasProperty("transitiveBehaviorOfTarget", is(Transitive.ALLOWED)))));
+				hasProperty("transitiveIncludeOfTarget", is(TransitiveInclude.ANNOTADED_FIELDS)))));
 	}
 
 	private class SimpleObject {
 		int foo;
 		String bar;
 
-		@Formatted(transitive = Transitive.DISALLOWED)
+		@Formatted(transitive = TransitiveInclude.NO_FIELDS)
 		String notTransitive;
 	}
 

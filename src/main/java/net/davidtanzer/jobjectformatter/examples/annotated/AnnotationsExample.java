@@ -26,7 +26,7 @@ public class AnnotationsExample {
 		}
 
 		@Override
-		@Formatted(value = FormattedType.ALL, transitive = Transitive.DISALLOWED)
+		@Formatted(value = FormattedInclude.ALL_FIELDS, transitive = TransitiveInclude.NO_FIELDS)
 		public String toString() {
 			return ObjectFormatter.format(this);
 		}
@@ -36,7 +36,7 @@ public class AnnotationsExample {
 		@FormattedField(transitive = FormattedFieldType.DEFAULT)
 		private String street;
 		private String streetNo;
-		@Formatted(transitive = Transitive.ALLOWED)
+		@Formatted(transitive = TransitiveInclude.ANNOTADED_FIELDS)
 		private Person owner;
 
 		public Address(final String street, final String streetNo) {
@@ -49,7 +49,7 @@ public class AnnotationsExample {
 		}
 
 		@Override
-		@Formatted(value=FormattedType.ALL, transitive = Transitive.ALLOWED)
+		@Formatted(value= FormattedInclude.ALL_FIELDS, transitive = TransitiveInclude.ANNOTADED_FIELDS)
 		public String toString() {
 			return ObjectFormatter.format(this);
 		}

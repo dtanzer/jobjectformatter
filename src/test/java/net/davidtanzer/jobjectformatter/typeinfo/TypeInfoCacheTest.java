@@ -2,8 +2,8 @@ package net.davidtanzer.jobjectformatter.typeinfo;
 
 import net.davidtanzer.jobjectformatter.annotations.Formatted;
 import net.davidtanzer.jobjectformatter.annotations.FormattedFieldType;
-import net.davidtanzer.jobjectformatter.annotations.FormattedType;
-import net.davidtanzer.jobjectformatter.annotations.Transitive;
+import net.davidtanzer.jobjectformatter.annotations.FormattedInclude;
+import net.davidtanzer.jobjectformatter.annotations.TransitiveInclude;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -80,8 +80,8 @@ public class TypeInfoCacheTest {
 		final FormattedFieldType includeField = FormattedFieldType.DEFAULT;
 		final FormattedFieldType includeFieldInTransitive = FormattedFieldType.DEFAULT;
 		when(fieldsFilter.getFilteredFields(SimpleObject.class, typeInfoCache)).thenReturn(Arrays.asList(
-				new FieldInfo(ObjectWithOtherFields.class.getDeclaredField("field1"), Transitive.ALLOWED, includeField, includeFieldInTransitive),
-				new FieldInfo(ObjectWithOtherFields.class.getDeclaredField("field2"), Transitive.ALLOWED, includeField, includeFieldInTransitive)
+				new FieldInfo(ObjectWithOtherFields.class.getDeclaredField("field1"), TransitiveInclude.ANNOTADED_FIELDS, includeField, includeFieldInTransitive),
+				new FieldInfo(ObjectWithOtherFields.class.getDeclaredField("field2"), TransitiveInclude.ANNOTADED_FIELDS, includeField, includeFieldInTransitive)
 		));
 
 		final TypeInfo typeInfo = typeInfoCache.typeInfoFor(SimpleObject.class);
@@ -94,38 +94,38 @@ public class TypeInfoCacheTest {
 
 	@Test
 	public void transitiveBehaviorForUnannotatedClass_IsDisallowed() {
-		final Transitive transitive = typeInfoCache.transitiveBehaviorFor(SimpleObject.class);
+		final TransitiveInclude transitiveInclude = typeInfoCache.transitiveIncludeFor(SimpleObject.class);
 
-		assertThat(transitive, is(Transitive.DISALLOWED));
+		assertThat(transitiveInclude, is(TransitiveInclude.NO_FIELDS));
 	}
 
 	@Test
 	public void transitiveBehaviorForAnnotatedClass_IsDeterminedByAnnotationValue() {
-		final Transitive transitive = typeInfoCache.transitiveBehaviorFor(TransitiveAnnotatedClass.class);
+		final TransitiveInclude transitiveInclude = typeInfoCache.transitiveIncludeFor(TransitiveAnnotatedClass.class);
 
-		assertThat(transitive, is(Transitive.ALWAYS));
+		assertThat(transitiveInclude, is(TransitiveInclude.ALL_FIELDS));
 	}
 
 	@Test
 	public void transitiveBehaviorForAnnotatedToString_IsDeterminedByAnnotationValue() {
-		final Transitive transitive = typeInfoCache.transitiveBehaviorFor(TransitiveAnnotatedToString.class);
+		final TransitiveInclude transitiveInclude = typeInfoCache.transitiveIncludeFor(TransitiveAnnotatedToString.class);
 
-		assertThat(transitive, is(Transitive.ALWAYS));
+		assertThat(transitiveInclude, is(TransitiveInclude.ALL_FIELDS));
 	}
 
 	@Test
 	public void transitiveBehaviorForAnnotatedClass_IsMoreImportantThanAnnotationOnClass() {
-		final Transitive transitive = typeInfoCache.transitiveBehaviorFor(TransitiveAnnotatedBoth.class);
+		final TransitiveInclude transitiveInclude = typeInfoCache.transitiveIncludeFor(TransitiveAnnotatedBoth.class);
 
-		assertThat(transitive, is(Transitive.DISALLOWED));
+		assertThat(transitiveInclude, is(TransitiveInclude.NO_FIELDS));
 	}
 
 	@Test
 	public void typeInfoHasInformationFromTheFormattedAnnotationOnClass() {
 		final TypeInfo typeInfo = typeInfoCache.typeInfoFor(TransitiveAnnotatedBoth.class);
 
-		assertThat(typeInfo.getTransitiveBehavior(), is(Transitive.DISALLOWED));
-		assertThat(typeInfo.getFormattingBehavior(), is(FormattedType.NONE));
+		assertThat(typeInfo.getTransitiveInclude(), is(TransitiveInclude.NO_FIELDS));
+		assertThat(typeInfo.getFormattingBehavior(), is(FormattedInclude.NO_FIELDS));
 	}
 
 	private class SimpleObject {
@@ -143,22 +143,22 @@ public class TypeInfoCacheTest {
 		private String field2;
 	}
 
-	@Formatted(transitive = Transitive.ALWAYS)
+	@Formatted(transitive = TransitiveInclude.ALL_FIELDS)
 	private class TransitiveAnnotatedClass {
 	}
 
 	private class TransitiveAnnotatedToString {
 		@Override
-		@Formatted(transitive = Transitive.ALWAYS)
+		@Formatted(transitive = TransitiveInclude.ALL_FIELDS)
 		public String toString() {
 			return super.toString();
 		}
 	}
 
-	@Formatted(transitive = Transitive.DISALLOWED, value = FormattedType.NONE)
+	@Formatted(transitive = TransitiveInclude.NO_FIELDS, value = FormattedInclude.NO_FIELDS)
 	private class TransitiveAnnotatedBoth {
 		@Override
-		@Formatted(transitive = Transitive.ALWAYS)
+		@Formatted(transitive = TransitiveInclude.ALL_FIELDS)
 		public String toString() {
 			return super.toString();
 		}

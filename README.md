@@ -6,9 +6,9 @@ behavior for transitive objects.
 
 Stay in touch and get news about jObjectFormatter: Follow [David Tanzer (@dtanzer)](https://twitter.com/dtanzer) on Twitter.
 
-* [Getting Started](#wiki-Getting Started)
+* [Getting Started](#GettingStarted)
 
-## <a name="Getting Started"> Getting Started
+## <a name="GettingStarted"> Getting Started
 
 You really only need to do two things to get started: Add jObjectFormatter to your project, and then implement your 
 ```toString()``` methods like this:

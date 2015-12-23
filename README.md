@@ -21,11 +21,13 @@ You really only need to do two things to get started: Add jObjectFormatter to yo
 ### Add jObjectFormatter to your project
 
 **Gradle**
+
     compile 'net.davidtanzer:jobjectformatter:0.1.0'
 
 **Maven**
-    <dependency>
-      <groupId>net.davidtanzer</groupId>
-      <artifactId>jobjectformatter</artifactId>
-      <version>0.1.0</version>
-    </dependency>
+
+    &lt;dependency&gt;
+      &lt;groupId&gt;net.davidtanzer&lt;/groupId&gt;
+      &lt;artifactId&gt;jobjectformatter&lt;/artifactId&gt;
+      &lt;version&gt;0.1.0&lt;/version&gt;
+    &lt;/dependency&gt;

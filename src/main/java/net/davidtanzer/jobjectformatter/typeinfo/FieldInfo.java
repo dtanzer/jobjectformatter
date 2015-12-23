@@ -41,7 +41,7 @@ public class FieldInfo {
 	@Override
 	public String toString() {
 		return "FieldInfo{" +
-				"field=" + field +
+				"field=" + field.getName() +
 				", transitiveBehaviorOfTarget=" + transitiveBehaviorOfTarget +
 				", includeFieldInTransitive=" + includeFieldInTransitive +
 				", includeField=" + includeField +

@@ -70,18 +70,20 @@ public class ObjectValuesCompiler {
 		Object formattedFieldValue;
 		switch (fieldInfo.getTransitiveBehaviorOfTarget()) {
 			case ALWAYS:
-				formattedFieldValue = String.valueOf(fieldValue);
+				formattedFieldValue = fieldValue;
 				break;
 			case ALLOWED:
-				if(hasFormattedAnnotation(fieldValue)) {
-					ObjectValuesInfo objectValuesInfo = this.compileToStringInfo(typeInfoCache.typeInfoFor(fieldValue.getClass()), fieldValue);
+				if(hasFormattedAnnotation(fieldValue, fieldInfo)) {
+					TypeInfo transitiveTypeInfo = typeInfoCache.typeInfoFor(fieldValue.getClass(), fieldInfo.getTransitiveBehaviorOfTarget());
+					ObjectValuesInfo objectValuesInfo = this.compileToStringInfo(
+							transitiveTypeInfo, fieldValue, transitive -> transitive.equals(FormattedFieldType.DEFAULT));
 					if(objectValuesInfo.getAllValues().isEmpty()) {
 						formattedFieldValue = "[not null]";
 					} else {
 						formattedFieldValue = objectValuesInfo;
 					}
 				} else {
-					formattedFieldValue = String.valueOf(fieldValue);
+					formattedFieldValue = fieldValue;
 				}
 				break;
 			case DISALLOWED:
@@ -97,7 +99,9 @@ public class ObjectValuesCompiler {
 		return formattedFieldValue;
 	}
 
-	private Boolean hasFormattedAnnotation(final Object fieldValue) {
-		return typeInfoCache.behaviorFor(fieldValue.getClass(), (f) -> true, false);
+	private Boolean hasFormattedAnnotation(final Object fieldValue, final FieldInfo fieldInfo) {
+		return typeInfoCache.behaviorFor(fieldValue.getClass(), (f) -> true, false)
+				|| fieldInfo.getTransitiveBehaviorOfTarget().equals(Transitive.ALLOWED)
+				|| fieldInfo.getTransitiveBehaviorOfTarget().equals(Transitive.ALWAYS);
 	}
 }

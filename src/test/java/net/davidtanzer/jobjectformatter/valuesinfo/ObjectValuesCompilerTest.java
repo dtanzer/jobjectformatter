@@ -63,13 +63,14 @@ public class ObjectValuesCompilerTest {
 	@Test
 	public void includesTransitiveObjectFully_WhenTransitivityIsSetToAlways() {
 		final TypeInfo typeInfo = new TypeInfoCache().typeInfoFor(ContainingObjectAlwaysTransitive.class);
-		final ObjectValuesInfo info = objectValuesCompiler.compileToStringInfo(typeInfo, new ContainingObjectAlwaysTransitive());
+		ContainingObjectAlwaysTransitive object = new ContainingObjectAlwaysTransitive();
+		final ObjectValuesInfo info = objectValuesCompiler.compileToStringInfo(typeInfo, object);
 
 		assumeThat(info.getValuesByClass().get(0).getGroupName(), is("ContainingObjectAlwaysTransitive"));
 
 		final GroupedValuesInfo classValuesInfo = info.getValuesByClass().get(0);
 		assertThat(classValuesInfo.getValues(), contains(
-				is(new ValueInfo("containedObject", "result of toString", SimpleContainedObject.class))
+				is(new ValueInfo("containedObject", object.containedObject, SimpleContainedObject.class))
 		));
 	}
 
@@ -79,6 +80,19 @@ public class ObjectValuesCompilerTest {
 		final ObjectValuesInfo info = objectValuesCompiler.compileToStringInfo(typeInfo, new ContainingObjectAnnotatedTransitive());
 
 		assumeThat(info.getValuesByClass().get(0).getGroupName(), is("ContainingObjectAnnotatedTransitive"));
+
+		final GroupedValuesInfo classValuesInfo = info.getValuesByClass().get(0);
+		assertThat(classValuesInfo.getValues().get(0).getValue(), instanceOf(ObjectValuesInfo.class));
+		final ObjectValuesInfo innerValuesInfo = (ObjectValuesInfo) classValuesInfo.getValues().get(0).getValue();
+		assertThat(innerValuesInfo.getAllValues(), contains(hasProperty("propertyName", is("prop1"))));
+	}
+
+	@Test
+	public void includesAnnotatedTransitiveValues_WhenTransitivityIsSetToAnnotated_ByContainingClassOnly() {
+		final TypeInfo typeInfo = new TypeInfoCache().typeInfoFor(ContainingObjectAnnotatedTransitiveOnly.class);
+		final ObjectValuesInfo info = objectValuesCompiler.compileToStringInfo(typeInfo, new ContainingObjectAnnotatedTransitiveOnly());
+
+		assumeThat(info.getValuesByClass().get(0).getGroupName(), is("ContainingObjectAnnotatedTransitiveOnly"));
 
 		final GroupedValuesInfo classValuesInfo = info.getValuesByClass().get(0);
 		assertThat(classValuesInfo.getValues().get(0).getValue(), instanceOf(ObjectValuesInfo.class));
@@ -155,6 +169,17 @@ public class ObjectValuesCompilerTest {
 	private class ContainingObjectAnnotatedTransitive {
 		@Formatted(transitive = Transitive.ALLOWED)
 		SimpleContainedObject containedObject = new SimpleContainedObject();
+	}
+
+	private class SimpleUnAnnotatedContainedObject {
+		@FormattedField(transitive = FormattedFieldType.DEFAULT)
+		String prop1 = "contained property 1";
+		String prop2 = "contained property 2";
+	}
+
+	private class ContainingObjectAnnotatedTransitiveOnly {
+		@Formatted(transitive = Transitive.ALLOWED)
+		SimpleUnAnnotatedContainedObject containedObject = new SimpleUnAnnotatedContainedObject();
 	}
 
 	@Formatted

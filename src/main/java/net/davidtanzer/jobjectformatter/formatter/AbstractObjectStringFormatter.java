@@ -34,7 +34,11 @@ public abstract class AbstractObjectStringFormatter implements ObjectStringForma
 			if(!first) {
 				result.append(getValueSeparator());
 			}
-			appendSingleValue(result, value);
+			if(value.getValue() instanceof ObjectValuesInfo) {
+				appendSingleValue(result, new ValueInfo(value.getPropertyName(), format((ObjectValuesInfo) value.getValue()), value.getFieldClass()));
+			} else {
+				appendSingleValue(result, value);
+			}
 			first = false;
 		}
 	}

@@ -25,6 +25,10 @@ public class TypeInfoCache {
 		return cachedTypeInfos.computeIfAbsent(type, this::createTypeInfoFrom);
 	}
 
+	public TypeInfo typeInfoFor(final Class<?> type, final Transitive transitiveBehavior) {
+		return typeInfoFor(type).withTransitiveBehavior(transitiveBehavior);
+	}
+
 	private TypeInfo createTypeInfoFrom(final Class<?> type) {
 		TypeInfo.Builder builder = new TypeInfo.Builder(this, fieldsFilter);
 

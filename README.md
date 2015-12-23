@@ -20,6 +20,9 @@ You really only need to do two things to get started: Add jObjectFormatter to yo
 
 ### Add jObjectFormatter to Your Project
 
+jObjectFormatter is available on Maven Central. So if you are using a build tool that supports maven dependencies and
+if you have already configured the central repository correctly, you only have to add the dependency to your project:
+
 **Gradle**
 
     compile 'net.davidtanzer:jobjectformatter:0.1.0'

@@ -4,9 +4,11 @@ import net.davidtanzer.jobjectformatter.ObjectFormatter;
 
 public class SimpleExample {
 	public static void main(String[] args) {
-		Person person = new Person("Jane", "Doe", new Address("Evergreen Terrace", "12b"));
+		Address address = new Address("Evergreen Terrace", "12b");
+		Person person = new Person("Jane", "Doe", address);
 
-		System.out.println("Person: " + person);
+		System.out.println("person.toString() -> " + person);
+		System.out.println("address.toString() -> " + address);
 	}
 
 	private static class Person {

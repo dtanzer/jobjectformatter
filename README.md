@@ -18,7 +18,7 @@ You really only need to do two things to get started: Add jObjectFormatter to yo
         return ObjectFormatter.format(this);
     }
 
-### Add jObjectFormatter to your project
+### Add jObjectFormatter to Your Project
 
 **Gradle**
 
@@ -31,3 +31,54 @@ You really only need to do two things to get started: Add jObjectFormatter to yo
       <artifactId>jobjectformatter</artifactId>
       <version>0.1.0</version>
     </dependency>
+
+### Implement toString to Use jObjectFormatter
+
+Say you have a class ```Person``` and a class ```Address```, where a person has an address. You just have to implement
+toString to use jObjectFormatter, which will take care of the rest.
+
+    private static class Person {
+        private String firstName;
+        private String lastName;
+        private Address address;
+
+        public Person(final String firstName, final String lastName, final Address address) {
+            this.firstName = firstName;
+            this.lastName = lastName;
+            this.address = address;
+        }
+
+        @Override
+        public String toString() {
+            return ObjectFormatter.format(this);
+        }
+    }
+
+    private static class Address {
+        private String street;
+        private String streetNo;
+
+        public Address(final String street, final String streetNo) {
+            this.street = street;
+            this.streetNo = streetNo;
+        }
+
+        @Override
+        public String toString() {
+            return ObjectFormatter.format(this);
+        }
+    }
+
+In it's default configuration, jObjectFormatter will use a very simple toString style. Let's try to print a person and
+an address:
+
+    Address address = new Address("Evergreen Terrace", "12b");
+    Person person = new Person("Jane", "Doe", address);
+
+The output of your toString from above will look like this:
+
+    person.toString() -> { firstName=Jane, lastName=Doe, address=[not null] }
+    address.toString() -> { street=Evergreen Terrace, streetNo=12b }
+
+As you can see, jObjectFormatter does not transitively print objects in it's default configuration. Also, the string
+formatter from the default configuration does not print the class name or group values.

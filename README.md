@@ -4,9 +4,15 @@ jObjectFormatter is a library for implementing toString at runtime. It is easy t
 flexible. You can decide which fields to include in toString using Java annotations - And you can configure a different
 behavior for transitive objects.
 
-Stay in touch and get news about jObjectFormatter: Follow [David Tanzer (@dtanzer)](https://twitter.com/dtanzer) on Twitter.
+Stay in touch and get news about jObjectFormatter: Follow [David Tanzer (@dtanzer)](https://twitter.com/dtanzer) on Twitter.  
+If you tweet about jObjectFormatter, please use the hash tag [#jObjectFormatter](https://twitter.com/search?f=tweets&q=%23jObjectFormatter).
 
 * [Getting Started](#GettingStarted)
+* [Why jObjectFormatter](#WhyJObjectFormatter)
+* [Configuring jObjectFormatter](#ConfiguringJObjectFormatter)
+* [Formatting Options (Annotations)](#FormattingOptions)
+* [Transitive Objects](#TransitiveObjects)
+* [Contributing](#Contributing)
 
 ## <a name="GettingStarted"> Getting Started
 
@@ -85,3 +91,23 @@ The output of your toString from above will look like this:
 
 As you can see, jObjectFormatter does not transitively print objects in it's default configuration. Also, the string
 formatter from the default configuration does not print the class name or group values.
+
+## <a name="WhyJObjectFormatter"> Why jObjectFormatter
+
+TBD
+
+## <a name="ConfiguringJObjectFormatter"> Configuring jObjectFormatter
+
+TBD
+
+## <a name="FormattingOptions"> Formatting Options (Annotations)
+
+TBD
+
+## <a name="TransitiveObjects"> Transitive Objects
+
+TBD
+
+## <a name="Contributing"> Contributing
+
+TBD

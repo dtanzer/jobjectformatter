@@ -20,7 +20,7 @@ public class FormattedStringGenerator {
 		this(toStringFormatter, new TypeInfoCache(), new ObjectValuesCompiler());
 	}
 
-	FormattedStringGenerator(final ObjectStringFormatter objectStringFormatter, final TypeInfoCache typeInfoCache, final ObjectValuesCompiler objectValuesCompiler) {
+	public FormattedStringGenerator(final ObjectStringFormatter objectStringFormatter, final TypeInfoCache typeInfoCache, final ObjectValuesCompiler objectValuesCompiler) {
 		if(objectStringFormatter == null) {
 			throw new IllegalArgumentException("Parameter objectStringFormatter must not be null!");
 		}

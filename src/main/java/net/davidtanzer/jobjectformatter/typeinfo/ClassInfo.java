@@ -6,7 +6,7 @@ public class ClassInfo {
 	private final Class clazz;
 	private final List<FieldInfo> fieldInfos;
 
-	public ClassInfo(final Class<?> type, final TypeInfoCache typeInfoCache, final FieldsFilter fieldsFilter) {
+	ClassInfo(final Class<?> type, final TypeInfoCache typeInfoCache, final FieldsFilter fieldsFilter) {
 		this.clazz = type;
 
 		List<FieldInfo> fieldInfos = fieldsFilter.getFilteredFields(type, typeInfoCache);

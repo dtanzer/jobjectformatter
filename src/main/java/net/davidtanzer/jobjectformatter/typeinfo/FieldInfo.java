@@ -11,7 +11,7 @@ public class FieldInfo {
 	private final FormattedFieldType includeFieldInTransitive;
 	private final FormattedFieldType includeField;
 
-	public FieldInfo(final Field field, final TransitiveInclude transitiveIncludeOfTarget, final FormattedFieldType includeField, final FormattedFieldType includeFieldInTransitive) {
+	FieldInfo(final Field field, final TransitiveInclude transitiveIncludeOfTarget, final FormattedFieldType includeField, final FormattedFieldType includeFieldInTransitive) {
 		this.field = field;
 		this.transitiveIncludeOfTarget = transitiveIncludeOfTarget;
 		this.includeFieldInTransitive = includeFieldInTransitive;

@@ -48,55 +48,18 @@ public class ObjectValuesCompiler {
 	private void formatFieldValueIfNecessary(final TypeInfo typeInfo, final Object object, final GroupedValuesInfo.Builder builder, final FieldInfo fieldInfo, final Predicate<FormattedFieldType> includeInTransitive) {
 		if(includeInTransitive.test(fieldInfo.getIncludeFieldInTransitive())) {
 			Object formattedFieldValue = formatFieldValue(object, fieldInfo);
-			switch (typeInfo.getFormattingBehavior()) {
-				case ALL_FIELDS:
-					builder.addFieldValue(fieldInfo.getName(), formattedFieldValue, fieldInfo.getType());
-					break;
-				case ANNOTATED_FIELDS:
-					if (fieldInfo.getIncludeField().equals(FormattedFieldType.DEFAULT)) {
-						builder.addFieldValue(fieldInfo.getName(), formattedFieldValue, fieldInfo.getType());
-					}
-					break;
-				case NO_FIELDS:
-					break;
-				default:
-					throw new IllegalStateException("Unexpected formatting behavior type: " + typeInfo.getFormattingBehavior());
-			}
+			typeInfo.getFormattingBehavior().addFieldValueTo(builder, fieldInfo, formattedFieldValue);
 		}
 	}
 
 	private Object formatFieldValue(final Object object, final FieldInfo fieldInfo) {
 		Object fieldValue = fieldInfo.getFieldValue(object);
-		Object formattedFieldValue;
-		switch (fieldInfo.getTransitiveIncludeOfTarget()) {
-			case ALL_FIELDS:
-				formattedFieldValue = fieldValue;
-				break;
-			case ANNOTADED_FIELDS:
-				if(hasFormattedAnnotation(fieldValue, fieldInfo)) {
-					TypeInfo transitiveTypeInfo = typeInfoCache.typeInfoFor(fieldValue.getClass(), fieldInfo.getTransitiveIncludeOfTarget());
-					ObjectValuesInfo objectValuesInfo = this.compileToStringInfo(
-							transitiveTypeInfo, fieldValue, transitive -> transitive.equals(FormattedFieldType.DEFAULT));
-					if(objectValuesInfo.getAllValues().isEmpty()) {
-						formattedFieldValue = "[not null]";
-					} else {
-						formattedFieldValue = objectValuesInfo;
-					}
-				} else {
-					formattedFieldValue = fieldValue;
-				}
-				break;
-			case NO_FIELDS:
-				if(fieldValue == null) {
-					formattedFieldValue = null;
-				} else {
-					formattedFieldValue = "[not null]";
-				}
-				break;
-			default:
-				throw new IllegalStateException("Illegal getValue for transitive behavior: "+fieldInfo.getTransitiveIncludeOfTarget());
-		}
-		return formattedFieldValue;
+
+		Boolean hasFormattedAnnotation = hasFormattedAnnotation(fieldValue, fieldInfo);
+		ObjectValuesInfo transitiveValues = this.compileToStringInfo(
+				typeInfoCache.typeInfoFor(fieldValue.getClass(), fieldInfo.getTransitiveIncludeOfTarget()), fieldValue, transitive -> transitive.equals(FormattedFieldType.DEFAULT));
+
+		return fieldInfo.getTransitiveIncludeOfTarget().transitiveFieldValue(fieldValue, hasFormattedAnnotation, transitiveValues);
 	}
 
 	private Boolean hasFormattedAnnotation(final Object fieldValue, final FieldInfo fieldInfo) {

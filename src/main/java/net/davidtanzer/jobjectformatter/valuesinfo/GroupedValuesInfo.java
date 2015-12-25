@@ -5,10 +5,12 @@ import java.util.Collections;
 import java.util.List;
 
 public class GroupedValuesInfo {
-	private String groupName;
-	private List<ValueInfo> values = new ArrayList<>();
+	private final String groupName;
+	private final List<ValueInfo> values;
 
-	private GroupedValuesInfo() {
+	private GroupedValuesInfo(final String groupName, final List<ValueInfo> values) {
+		this.groupName = groupName;
+		this.values = values;
 	}
 
 	public String getGroupName() {
@@ -20,24 +22,20 @@ public class GroupedValuesInfo {
 	}
 
 	public static class Builder {
-		private final GroupedValuesInfo byClassValuesInfo;
-
-		public Builder() {
-			byClassValuesInfo = new GroupedValuesInfo();
-		}
+		private String groupName;
+		private final List<ValueInfo> values = new ArrayList<>();
 
 		public GroupedValuesInfo buildByClassValuesInfo() {
-			byClassValuesInfo.values = Collections.unmodifiableList(byClassValuesInfo.values);
-			return byClassValuesInfo;
+			return new GroupedValuesInfo(groupName, Collections.unmodifiableList(values));
 		}
 
 		public Builder setClassName(final String className) {
-			byClassValuesInfo.groupName = className;
+			this.groupName = className;
 			return this;
 		}
 
 		public Builder addFieldValue(final String name, final Object formattedFieldValue, final Class<?> fieldClass) {
-			byClassValuesInfo.values.add(new ValueInfo(name, formattedFieldValue, fieldClass));
+			values.add(new ValueInfo(name, formattedFieldValue, fieldClass));
 			return this;
 		}
 	}

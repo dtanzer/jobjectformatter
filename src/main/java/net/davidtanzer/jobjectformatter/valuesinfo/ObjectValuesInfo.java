@@ -5,10 +5,12 @@ import java.util.Collections;
 import java.util.List;
 
 public class ObjectValuesInfo {
-	private List<GroupedValuesInfo> valuesByClass = new ArrayList<>();
-	private List<ValueInfo> allValues = new ArrayList<>();
+	private final List<GroupedValuesInfo> valuesByClass;
+	private final List<ValueInfo> allValues;
 
-	private ObjectValuesInfo() {
+	private ObjectValuesInfo(final List<GroupedValuesInfo> valuesByClass, final List<ValueInfo> allValues) {
+		this.valuesByClass = valuesByClass;
+		this.allValues = allValues;
 	}
 
 	public List<GroupedValuesInfo> getValuesByClass() {
@@ -20,21 +22,18 @@ public class ObjectValuesInfo {
 	}
 
 	public static class Builder {
-		private final ObjectValuesInfo objectValuesInfo;
-
-		public Builder() {
-			objectValuesInfo = new ObjectValuesInfo();
-		}
+		private final List<GroupedValuesInfo> valuesByClass = new ArrayList<>();
+		private final List<ValueInfo> allValues = new ArrayList<>();
 
 		public ObjectValuesInfo buildToStringInfo() {
-			objectValuesInfo.valuesByClass = Collections.unmodifiableList(objectValuesInfo.valuesByClass);
-			objectValuesInfo.allValues = Collections.unmodifiableList(objectValuesInfo.allValues);
-			return objectValuesInfo;
+			return new ObjectValuesInfo(
+					Collections.unmodifiableList(valuesByClass),
+					Collections.unmodifiableList(allValues));
 		}
 
 		public Builder addClassValues(final GroupedValuesInfo groupedValuesInfo) {
-			objectValuesInfo.valuesByClass.add(groupedValuesInfo);
-			objectValuesInfo.allValues.addAll(groupedValuesInfo.getValues());
+			valuesByClass.add(groupedValuesInfo);
+			allValues.addAll(groupedValuesInfo.getValues());
 			return this;
 		}
 	}

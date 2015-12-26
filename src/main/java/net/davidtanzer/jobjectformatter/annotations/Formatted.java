@@ -20,9 +20,24 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+/**
+ * Annotation that indicates how a class or a transitive object should be formatted.
+ *
+ */
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ ElementType.FIELD, ElementType.METHOD, ElementType.TYPE })
 public @interface Formatted {
-	FormattedInclude value() default FormattedInclude.ANNOTATED_FIELDS;
+	/**
+	 * Determines how objects of this class or transitive object should be formatted when passed directly to "format".
+	 *
+	 * @return The {@link net.davidtanzer.jobjectformatter.annotations.FormattedInclude} value for the class or transitive object.
+	 */
+	FormattedInclude value() default FormattedInclude.ALL_FIELDS;
+
+	/**
+	 * Determines how objects of this class or transitive object should be formatted when the object is formatted transitively from another object.
+	 *
+	 * @return The @see "TransitiveInclude" value for the class or transitive object.
+	 */
 	TransitiveInclude transitive() default TransitiveInclude.ANNOTADED_FIELDS;
 }

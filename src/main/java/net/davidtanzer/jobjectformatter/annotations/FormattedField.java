@@ -20,9 +20,23 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+/**
+ * Annotation that indicates if a field should be included in the formatted string (when formatting the object directly or transitively via another object).
+ */
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.FIELD)
 public @interface FormattedField {
+	/**
+	 * Determines whether this field should be included in the formatted string when formatting the object directly.
+	 *
+	 * @return The @See "FormattedFieldType" for formatting this field directly.
+	 */
 	FormattedFieldType value() default FormattedFieldType.DEFAULT;
+
+	/**
+	 * Determines whether this field should be included in the formatted string when formatting the object transitively via another object.
+	 *
+	 * @return The @see "FormattedFieldType" for formatting this field transitively.
+	 */
 	FormattedFieldType transitive() default FormattedFieldType.NEVER;
 }

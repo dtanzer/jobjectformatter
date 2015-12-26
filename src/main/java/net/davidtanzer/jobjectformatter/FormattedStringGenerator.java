@@ -22,6 +22,15 @@ import net.davidtanzer.jobjectformatter.typeinfo.TypeInfoCache;
 import net.davidtanzer.jobjectformatter.valuesinfo.ObjectValuesInfo;
 import net.davidtanzer.jobjectformatter.valuesinfo.ObjectValuesCompiler;
 
+/**
+ *
+ * <strong>FormattedStringGenerator</strong>
+ * <ul>
+ *     <li>Retrieves type information from type info cache when generating to string.</li>
+ *     <li>Uses info compiler to compile values from object and type info.</li>
+ *     <li>Uses to string formatter to format the to string info.</li>
+ * </ul>
+ */
 public class FormattedStringGenerator {
 	private final TypeInfoCache typeInfoCache;
 	private final ObjectValuesCompiler objectValuesCompiler;

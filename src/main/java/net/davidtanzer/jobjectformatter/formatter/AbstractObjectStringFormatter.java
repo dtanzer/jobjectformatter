@@ -21,6 +21,14 @@ import net.davidtanzer.jobjectformatter.valuesinfo.ValueInfo;
 
 import java.util.List;
 
+/**
+ *
+ * <strong>AbstractObjectStringFormatter</strong>
+ * <ul>
+ *     <li>Adds property value for simple property.</li>
+ *     <li>Adds property value for transitive property.</li>
+ * </ul>
+ */
 public abstract class AbstractObjectStringFormatter implements ObjectStringFormatter {
 	@Override
 	public String format(final ObjectValuesInfo info) {

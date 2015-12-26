@@ -24,6 +24,31 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Function;
 
+/**
+ *
+ * <strong>TypeInfoCache</strong>
+ * <ul>
+ *     <li>Adds class info_ for every class in the hierarchy.</li>
+ *     <li>Class infos of type info_ are in the correct order.</li>
+ *     <li>Class info_ contains all fields from the class.</li>
+ *     <li>Class info_ does not contain fields from other classes.</li>
+ *     <li>Uses class info from cache_ if available.</li>
+ *     <li>Uses fields filter_ to actually get the relevant fields.</li>
+ *     <li>Transitive behavior for unannotated class_ is disallowed.</li>
+ *     <li>Transitive behavior for annotated class_ is determined by annotation value.</li>
+ *     <li>Transitive behavior for annotated to string_ is determined by annotation value.</li>
+ *     <li>Transitive behavior for annotated class_ is more important than annotation on class.</li>
+ *     <li>Type info has information from the formatted annotation on class.</li>
+ * </ul>
+ *
+ * <strong>TypeInfoTransitivity</strong>
+ * <ul>
+ *     <li>All type infos from java packages are transitive.</li>
+ *     <li>Type infos for other dependencies are not transitive by default.</li>
+ *     <li>Type infos from java packages_ can be set to non transitive_ by annotation.</li>
+ *     <li>Type infos from other packages_ can be set to transitive_ by annotation.</li>
+ * </ul>
+ */
 public class TypeInfoCache {
 	private final FieldsFilter fieldsFilter;
 	private Map<Class<?>, TypeInfo> cachedTypeInfos = new ConcurrentHashMap<>();

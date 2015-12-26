@@ -22,6 +22,13 @@ import net.davidtanzer.jobjectformatter.valuesinfo.ValueInfo;
 import java.util.HashSet;
 import java.util.Set;
 
+/**
+ *
+ * <strong>JsonObjectStringFormatter</strong>
+ * <ul>
+ *     <li>Formats grouped by classes correctly.</li>
+ * </ul>
+ */
 public class JsonObjectStringFormatter extends AbstractObjectStringFormatter {
 	private static final Set<Class<?>> unescapedTypes = new HashSet<Class<?>>() {{
 		add(Integer.class);

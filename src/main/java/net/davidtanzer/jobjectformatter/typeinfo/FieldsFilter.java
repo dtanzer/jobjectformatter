@@ -20,6 +20,19 @@ import net.davidtanzer.jobjectformatter.annotations.*;
 import java.lang.reflect.Field;
 import java.util.*;
 
+/**
+ *
+ * <strong>FieldsFilter</strong>
+ * <ul>
+ *     <li>Always returns a non null collection.</li>
+ *     <li>Includes all fields if no annotations are present.</li>
+ *     <li>Includes no fields_ when formatted annotated annotation is on class_ and no fields are annotated.</li>
+ *     <li>Includes annotated fields_ when formatted annotated annotation is on class.</li>
+ *     <li>Fields annotated with formatted_ have transitive behavior from annotation.</li>
+ *     <li>Fields not annotated_ have transitive behavior determined by type info cache.</li>
+ *     <li>Transitive annotation on fields_ is more important than behavior specified by type info cache.</li>
+ * </ul>
+ */
 class FieldsFilter {
 	private static final Set<Class<?>> primitiveTypes = new HashSet<Class<?>>() {{
 		add(boolean.class);

@@ -24,6 +24,21 @@ import net.davidtanzer.jobjectformatter.typeinfo.TypeInfoCache;
 
 import java.util.function.Predicate;
 
+/**
+ *
+ * <strong>ObjectValuesCompiler</strong>
+ * <ul>
+ *     <li>Adds value entry for every class info.</li>
+ *     <li>Adds values for all fields to class value info.</li>
+ *     <li>Abbreviates transitive object_ when transitivity is not allowed.</li>
+ *     <li>Includes transitive object fully_ when transitivity is set to always.</li>
+ *     <li>Includes annotated transitive values_ when transitivity is set to annotated.</li>
+ *     <li>Includes annotated transitive values_ when transitivity is set to annotated_ by containing class only.</li>
+ *     <li>String does not contain any fields_ when class is annotated as formatted annotated_ but has no annotated fields.</li>
+ *     <li>String contains all fields_ when class is annotated as formatted all.</li>
+ *     <li>String contains annotated fields_ when class is annotated as formatted annotated_ and has annotated fields.</li>
+ * </ul>
+ */
 public class ObjectValuesCompiler {
 	private final TypeInfoCache typeInfoCache;
 

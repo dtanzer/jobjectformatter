@@ -17,6 +17,13 @@ package net.davidtanzer.jobjectformatter;
 
 import java.util.concurrent.atomic.AtomicReference;
 
+/**
+ *
+ * <strong>ObjectFormatter</strong>
+ * <ul>
+ *     <li>To string of class produces nice output.</li>
+ * </ul>
+ */
 public class ObjectFormatter {
 	private static AtomicReference<FormattedStringGenerator> generator = new AtomicReference<>(new FormattedStringGenerator());
 

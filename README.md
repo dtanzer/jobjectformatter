@@ -1,5 +1,7 @@
 # jObjectFormatter - A toString Builder for Java
 
+![Build Status](https://travis-ci.org/dtanzer/jobjectformatter.svg?branch=master)
+
 jObjectFormatter is a library for implementing toString at runtime. It is easy to use, yet fully configurable and very
 flexible. You can decide which fields to include in toString using Java annotations - And you can configure a different
 behavior for transitive objects.

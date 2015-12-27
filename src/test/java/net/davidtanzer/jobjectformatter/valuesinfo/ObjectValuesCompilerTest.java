@@ -197,7 +197,7 @@ public class ObjectValuesCompilerTest {
 		SimpleUnAnnotatedContainedObject containedObject = new SimpleUnAnnotatedContainedObject();
 	}
 
-	@Formatted
+	@Formatted(value = FormattedInclude.ANNOTATED_FIELDS)
 	private class FormattedObjectWithoutFields {
 		private String foo = "foo";
 	}
@@ -209,7 +209,7 @@ public class ObjectValuesCompilerTest {
 		private String bar = "bar";
 	}
 
-	@Formatted
+	@Formatted(FormattedInclude.ANNOTATED_FIELDS)
 	private class FormattedAnnotatedObjectWithFields {
 		private String foo = "foo";
 		@FormattedField

@@ -1,7 +1,7 @@
 #!/bin/sh
 cd src/test/java
 agiledox | awk '\
-match($0, /^(\w+):$/, a) {print " * <strong>" a[1] "</strong>\n * <ul>"}
+match($0, /^(\w+):$/, a) {print " * <strong>" a[1] "</strong> functionality (extracted from the tests by agiledox):\n * <ul>"}
 match($0, /^$/, a) {print " * </ul>\n"}
 match($0, /^ - (.*)$/, a) {print " *     <li>" a[1] "</li>"}
 '

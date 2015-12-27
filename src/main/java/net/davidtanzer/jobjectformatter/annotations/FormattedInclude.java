@@ -18,13 +18,29 @@ package net.davidtanzer.jobjectformatter.annotations;
 import net.davidtanzer.jobjectformatter.typeinfo.FieldInfo;
 import net.davidtanzer.jobjectformatter.valuesinfo.GroupedValuesInfo;
 
+/**
+ * With FormattedInclude, you can configure which types of fields (all, annotated or none) to include in the formatted output
+ * using the {@link net.davidtanzer.jobjectformatter.annotations.Formatted} annotation.
+ *
+ * @see net.davidtanzer.jobjectformatter.annotations.Formatted
+ */
 public enum FormattedInclude {
+	/**
+	 * Include all fields in the formatted output.
+	 */
 	ALL_FIELDS {
 		@Override
 		public void addFieldValueTo(final GroupedValuesInfo.Builder builder, final FieldInfo fieldInfo, final Object formattedFieldValue) {
 			builder.addFieldValue(fieldInfo.getName(), formattedFieldValue, fieldInfo.getType());
 		}
 	},
+	/**
+	 * Include only fields in the formatted output where the field has the {@link net.davidtanzer.jobjectformatter.annotations.FormattedField}
+	 * annotation and is configured to be included.
+	 *
+	 * @see net.davidtanzer.jobjectformatter.annotations.FormattedField
+	 * @see net.davidtanzer.jobjectformatter.annotations.FormattedFieldType
+	 */
 	ANNOTATED_FIELDS {
 		@Override
 		public void addFieldValueTo(final GroupedValuesInfo.Builder builder, final FieldInfo fieldInfo, final Object formattedFieldValue) {
@@ -33,11 +49,21 @@ public enum FormattedInclude {
 			}
 		}
 	},
+	/**
+	 * Do not include any fields in the formatted output.
+	 */
 	NO_FIELDS {
 		@Override
 		public void addFieldValueTo(final GroupedValuesInfo.Builder builder, final FieldInfo fieldInfo, final Object formattedFieldValue) {
 		}
 	};
 
+	/**
+	 * Implements the behavior how the field value should be added based on the value of this enum.
+	 *
+	 * @param builder The {@link net.davidtanzer.jobjectformatter.valuesinfo.GroupedValuesInfo.Builder} where the caller collects the values.
+	 * @param fieldInfo The {@link net.davidtanzer.jobjectformatter.typeinfo.FieldInfo} of the current filed.
+	 * @param formattedFieldValue The value of the field in the current object (already formatted).
+	 */
 	public abstract void addFieldValueTo(final GroupedValuesInfo.Builder builder, final FieldInfo fieldInfo, final Object formattedFieldValue);
 }

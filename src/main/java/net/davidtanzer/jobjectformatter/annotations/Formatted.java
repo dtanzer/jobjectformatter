@@ -31,13 +31,15 @@ public @interface Formatted {
 	 * Determines how objects of this class or transitive object should be formatted when passed directly to "format".
 	 *
 	 * @return The {@link net.davidtanzer.jobjectformatter.annotations.FormattedInclude} value for the class or transitive object.
+	 * @see net.davidtanzer.jobjectformatter.annotations.FormattedInclude
 	 */
 	FormattedInclude value() default FormattedInclude.ALL_FIELDS;
 
 	/**
 	 * Determines how objects of this class or transitive object should be formatted when the object is formatted transitively from another object.
 	 *
-	 * @return The @see "TransitiveInclude" value for the class or transitive object.
+	 * @return The {@link net.davidtanzer.jobjectformatter.annotations.TransitiveInclude} value for the class or transitive object.
+	 * @see net.davidtanzer.jobjectformatter.annotations.TransitiveInclude
 	 */
 	TransitiveInclude transitive() default TransitiveInclude.ANNOTADED_FIELDS;
 }

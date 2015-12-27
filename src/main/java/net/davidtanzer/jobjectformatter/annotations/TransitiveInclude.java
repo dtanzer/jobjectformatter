@@ -17,7 +17,30 @@ package net.davidtanzer.jobjectformatter.annotations;
 
 import net.davidtanzer.jobjectformatter.valuesinfo.ObjectValuesInfo;
 
+/**
+ * With TransitiveInclude, you can configure which types of fields (all, annotated or none) to include in the formatted output
+ * using the {@link net.davidtanzer.jobjectformatter.annotations.Formatted} annotation.
+ *
+ * @see net.davidtanzer.jobjectformatter.annotations.Formatted
+ */
 public enum TransitiveInclude {
+	/**
+	 * Include all fields in the formatted output.
+	 */
+	ALL_FIELDS {
+		@Override
+		public Object transitiveFieldValue(final Object fieldValue, final boolean hasFormattedAnnotation, final ObjectValuesInfo transitiveValues) {
+			return fieldValue;
+		}
+	},
+
+	/**
+	 * Include only fields in the formatted output where the field has the {@link net.davidtanzer.jobjectformatter.annotations.FormattedField}
+	 * annotation and is configured to be included.
+	 *
+	 * @see net.davidtanzer.jobjectformatter.annotations.FormattedField
+	 * @see net.davidtanzer.jobjectformatter.annotations.FormattedFieldType
+	 */
 	ANNOTADED_FIELDS {
 		@Override
 		public Object transitiveFieldValue(final Object fieldValue, final boolean hasFormattedAnnotation, final ObjectValuesInfo transitiveValues) {
@@ -33,6 +56,9 @@ public enum TransitiveInclude {
 		}
 	},
 
+	/**
+	 * Do not include any fields in the formatted output.
+	 */
 	NO_FIELDS {
 		@Override
 		public Object transitiveFieldValue(final Object fieldValue, final boolean hasFormattedAnnotation, final ObjectValuesInfo transitiveValues) {
@@ -42,14 +68,15 @@ public enum TransitiveInclude {
 				return "[not null]";
 			}
 		}
-	},
-
-	ALL_FIELDS {
-		@Override
-		public Object transitiveFieldValue(final Object fieldValue, final boolean hasFormattedAnnotation, final ObjectValuesInfo transitiveValues) {
-			return fieldValue;
-		}
 	};
 
+	/**
+	 * Get the transitive field value (already formatted) of the field based on the value of this enum.
+	 *
+	 * @param fieldValue The value of the current field.
+	 * @param hasFormattedAnnotation true when the field or the referenced class has the formatted annotation.
+	 * @param transitiveValues An {@link net.davidtanzer.jobjectformatter.valuesinfo.ObjectValuesInfo} that contains all relevant values from the transitive object.
+	 * @return The formatted field value that will be passed to the {@link net.davidtanzer.jobjectformatter.formatter.ObjectStringFormatter}
+	 */
 	public abstract Object transitiveFieldValue(final Object fieldValue, final boolean hasFormattedAnnotation, final ObjectValuesInfo transitiveValues);
 }

@@ -29,14 +29,16 @@ public @interface FormattedField {
 	/**
 	 * Determines whether this field should be included in the formatted string when formatting the object directly.
 	 *
-	 * @return The @See "FormattedFieldType" for formatting this field directly.
+	 * @return The {@link net.davidtanzer.jobjectformatter.annotations.FormattedFieldType} for formatting this field directly.
+	 * @see net.davidtanzer.jobjectformatter.annotations.FormattedFieldType
 	 */
 	FormattedFieldType value() default FormattedFieldType.DEFAULT;
 
 	/**
 	 * Determines whether this field should be included in the formatted string when formatting the object transitively via another object.
 	 *
-	 * @return The @see "FormattedFieldType" for formatting this field transitively.
+	 * @return The {@link net.davidtanzer.jobjectformatter.annotations.FormattedFieldType} for formatting this field transitively.
+	 * @see net.davidtanzer.jobjectformatter.annotations.FormattedFieldType
 	 */
 	FormattedFieldType transitive() default FormattedFieldType.NEVER;
 }

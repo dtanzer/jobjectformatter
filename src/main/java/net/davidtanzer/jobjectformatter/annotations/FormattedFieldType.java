@@ -15,6 +15,23 @@
  */
 package net.davidtanzer.jobjectformatter.annotations;
 
+/**
+ * With FormattedFieldType, you can configure when a field is included in the formatted output using the
+ * {@link net.davidtanzer.jobjectformatter.annotations.FormattedField} annotation.
+ *
+ * @see net.davidtanzer.jobjectformatter.annotations.FormattedField
+ */
 public enum FormattedFieldType {
-	DEFAULT, VERBOSE, NEVER
+	/**
+	 * Include the field in the formatted output.
+	 */
+	DEFAULT,
+	/**
+	 * Include the field in the formatted output, but only when the output is set to "verbose".
+	 */
+	VERBOSE,
+	/**
+	 * Do not include the field in the formatted output.
+	 */
+	NEVER
 }

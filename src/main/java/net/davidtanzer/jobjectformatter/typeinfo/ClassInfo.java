@@ -17,6 +17,9 @@ package net.davidtanzer.jobjectformatter.typeinfo;
 
 import java.util.*;
 
+/**
+ * Type information about one of the super classes of an object.
+ */
 public class ClassInfo {
 	private final Class clazz;
 	private final List<FieldInfo> fieldInfos;
@@ -28,10 +31,17 @@ public class ClassInfo {
 		this.fieldInfos = Collections.unmodifiableList(fieldInfos);
 	}
 
+	/**
+	 * Get the class about which this objects stores type information.
+	 */
 	public Class getClazz() {
 		return clazz;
 	}
 
+	/**
+	 * Get information about all the relevant fields of the class returned from {@link net.davidtanzer.jobjectformatter.typeinfo.ClassInfo#getClazz}.
+	 * @see net.davidtanzer.jobjectformatter.typeinfo.FieldInfo
+	 */
 	public List<FieldInfo> fieldInfos() {
 		return fieldInfos;
 	}

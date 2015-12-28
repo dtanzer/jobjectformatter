@@ -26,9 +26,17 @@ import net.davidtanzer.jobjectformatter.valuesinfo.ObjectValuesInfo;
 import net.davidtanzer.jobjectformatter.valuesinfo.ValueInfo;
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.InOrder;
 
+import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.Matchers.containsString;
+import static org.hamcrest.Matchers.hasProperty;
 import static org.junit.Assert.*;
+import static org.mockito.Matchers.any;
+import static org.mockito.Matchers.argThat;
+import static org.mockito.Mockito.inOrder;
+import static org.mockito.Mockito.spy;
+import static org.mockito.Mockito.verify;
 
 public class AbstractObjectStringFormatterTest {
 	private AbstractObjectStringFormatter formatter;
@@ -54,7 +62,74 @@ public class AbstractObjectStringFormatterTest {
 	}
 
 	@Test
-	public void addsPropertyValueForSimpleProperty() {
+	public void callsStartFormattedStringAtTheBeginningOfProcessing() {
+		final AbstractObjectStringFormatter formatterSpy = spy(formatter);
+
+		final TypeInfo typeInfo = new TypeInfoCache().typeInfoFor(ContainedObject.class);
+		final ObjectValuesInfo info = new ObjectValuesCompiler().compileToStringInfo(typeInfo, new ContainedObject());
+		formatterSpy.format(info);
+
+		verify(formatterSpy).startFormattedString(any(), any());
+	}
+
+	@Test
+	public void passesTheOriginalValuesInfoObjectToStartFormattedString() {
+		final AbstractObjectStringFormatter formatterSpy = spy(formatter);
+
+		final TypeInfo typeInfo = new TypeInfoCache().typeInfoFor(ContainedObject.class);
+		final ObjectValuesInfo info = new ObjectValuesCompiler().compileToStringInfo(typeInfo, new ContainedObject());
+		formatterSpy.format(info);
+
+		verify(formatterSpy).startFormattedString(any(), argThat(is(info)));
+	}
+
+	@Test
+	public void callsEndFormattedStringAfterProcessingEverythingInObjectValueInfo() {
+		final AbstractObjectStringFormatter formatterSpy = spy(formatter);
+
+		final TypeInfo typeInfo = new TypeInfoCache().typeInfoFor(ContainedObject.class);
+		final ObjectValuesInfo info = new ObjectValuesCompiler().compileToStringInfo(typeInfo, new ContainedObject());
+		formatterSpy.format(info);
+
+		verify(formatterSpy).endFormattedString(any(), argThat(is(info)));
+	}
+
+	@Test
+	public void callsStartValueGroupForEveryValueGroupInTheObjectInfoWhenValueGroupingIsEnabled() {
+		final AbstractObjectStringFormatter formatterSpy = spy(formatter);
+
+		final TypeInfo typeInfo = new TypeInfoCache().typeInfoFor(ContainedObject.class);
+		final ObjectValuesInfo info = new ObjectValuesCompiler().compileToStringInfo(typeInfo, new ContainedObject());
+		formatterSpy.format(info);
+
+		verify(formatterSpy).startValueGroup(any(), argThat(hasProperty("groupName", is("ContainedObject"))));
+	}
+
+	@Test
+	public void callsEndValueGroupAfterEveryValueGroupInTheObjectWhenValueGroupingIsEnabled() {
+		final AbstractObjectStringFormatter formatterSpy = spy(formatter);
+
+		final TypeInfo typeInfo = new TypeInfoCache().typeInfoFor(ContainedObject.class);
+		final ObjectValuesInfo info = new ObjectValuesCompiler().compileToStringInfo(typeInfo, new ContainedObject());
+		formatterSpy.format(info);
+
+		verify(formatterSpy).endValueGroup(any());
+	}
+
+	@Test
+	public void callsAppendSingleValueForEveryValueFromTheObjectValuesInfo() {
+		final AbstractObjectStringFormatter formatterSpy = spy(formatter);
+
+		final TypeInfo typeInfo = new TypeInfoCache().typeInfoFor(ContainedObject.class);
+		final ObjectValuesInfo info = new ObjectValuesCompiler().compileToStringInfo(typeInfo, new ContainedObject());
+		formatterSpy.format(info);
+
+		verify(formatterSpy).appendSingleValue(any(), argThat(hasProperty("propertyName", is("foo"))));
+		verify(formatterSpy).appendSingleValue(any(), argThat(hasProperty("propertyName", is("bar"))));
+	}
+
+	@Test
+	public void addsToStringValueForSimpleProperty() {
 		final TypeInfo typeInfo = new TypeInfoCache().typeInfoFor(ContainingObject.class);
 		final ObjectValuesInfo info = new ObjectValuesCompiler().compileToStringInfo(typeInfo, new ContainingObject());
 
@@ -64,7 +139,7 @@ public class AbstractObjectStringFormatterTest {
 	}
 
 	@Test
-	public void addsPropertyValueForTransitiveProperty() {
+	public void addsFormattedPropertyValueForTransitiveProperty() {
 		final TypeInfo typeInfo = new TypeInfoCache().typeInfoFor(ContainingObject.class);
 		final ObjectValuesInfo info = new ObjectValuesCompiler().compileToStringInfo(typeInfo, new ContainingObject());
 

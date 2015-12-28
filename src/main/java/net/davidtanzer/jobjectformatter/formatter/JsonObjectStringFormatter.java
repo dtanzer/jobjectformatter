@@ -23,6 +23,12 @@ import java.util.HashSet;
 import java.util.Set;
 
 /**
+ * A formatter that formates objects using a JSON-like syntax.
+ *
+ * Example output:
+ * <pre>
+{"Person": {"firstName": "Jane", "lastName": "Doe", "address": "[not null]"}}
+ * </pre>
  *
  * <strong>JsonObjectStringFormatter</strong>
  * <ul>

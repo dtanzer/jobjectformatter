@@ -18,6 +18,14 @@ package net.davidtanzer.jobjectformatter.formatter;
 import net.davidtanzer.jobjectformatter.valuesinfo.ObjectValuesInfo;
 import net.davidtanzer.jobjectformatter.valuesinfo.ValueInfo;
 
+/**
+ * A formatter that is not configurable and has a very simple output - Used as default formatter when no other formatter is configured.
+ *
+ * Example output:
+ * <pre>
+{ firstName=Jane, lastName=Doe, address=[not null] }
+ * </pre>
+ */
 public class SimpleFormatter extends AbstractObjectStringFormatter {
 	@Override
 	protected void startFormattedString(final StringBuilder result, final ObjectValuesInfo info) {

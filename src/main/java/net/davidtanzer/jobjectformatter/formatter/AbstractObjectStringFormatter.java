@@ -26,9 +26,19 @@ import java.util.List;
  *
  * <strong>AbstractObjectStringFormatter</strong> functionality (extracted from the tests by agiledox):
  * <ul>
- *     <li>Adds property value for simple property.</li>
- *     <li>Adds property value for transitive property.</li>
+ *     <li>Calls <code>startFormattedString</code> at the beginning of processing.</li>
+ *     <li>Passes the original values info object to <code>startFormattedString</code>.</li>
+ *     <li>Calls <code>endFormattedString</code> after processing everything in <code>objectValuesInfo</code>.</li>
+ *     <li>Calls <code>startValueGroup</code> for every value group in the object info when value grouping is enabled.</li>
+ *     <li>Calls <code>endValueGroup</code> after every value group in the object when value grouping is enabled.</li>
+ *     <li>Calls <code>appendSingleValue</code> for every value from the object values info.</li>
+ *     <li>Adds to string value for simple property.</li>
+ *     <li>Adds formatted property value for transitive property.</li>
  * </ul>
+ *
+ * @see net.davidtanzer.jobjectformatter.valuesinfo.ObjectValuesInfo
+ * @see net.davidtanzer.jobjectformatter.valuesinfo.GroupedValuesInfo
+ * @see net.davidtanzer.jobjectformatter.valuesinfo.ValueInfo
  */
 public abstract class AbstractObjectStringFormatter implements ObjectStringFormatter {
 	/**
@@ -78,21 +88,72 @@ public abstract class AbstractObjectStringFormatter implements ObjectStringForma
 		}
 	}
 
+	/**
+	 * The abstract formatter calls this method before it does any processing (Override to define the start of the formatted string).
+	 *
+	 * @param result The string builder where the formatter collects the formatted string.
+	 * @param info All compiled information about the object to be formatted.
+	 * @see net.davidtanzer.jobjectformatter.valuesinfo.ObjectValuesInfo
+	 */
 	protected void startFormattedString(StringBuilder result, final ObjectValuesInfo info) {}
 
+	/**
+	 * The abstract formatter calls this method after it is finished with processing (Override to define the end of the formatted string).
+	 *
+	 * @param result The string builder where the formatter collects the formatted string.
+	 * @param info All compiled information about the object to be formatted.
+	 * @see net.davidtanzer.jobjectformatter.valuesinfo.ObjectValuesInfo
+	 */
 	protected void endFormattedString(StringBuilder result, final ObjectValuesInfo info) {}
 
+	/**
+	 * The abstract formatter calls this method before processing any value group (When value grouping is enabled; Override to define the start of a value group in the formatted string).
+	 *
+	 * @param result The string builder where the formatter collects the formatted string.
+	 * @param groupedValuesInfo Information about the value group the formatter is starting.
+	 * @see net.davidtanzer.jobjectformatter.valuesinfo.GroupedValuesInfo
+	 */
 	protected void startValueGroup(StringBuilder result, GroupedValuesInfo groupedValuesInfo) {}
 
+	/**
+	 * The abstract formatter calls this method after processing any value group (When value grouping is enabled; Override to define the start of a value group in the formatted string).
+	 *
+	 * @param result The string builder where the formatter collects the formatted string.
+	 */
 	protected void endValueGroup(StringBuilder result) {}
 
+	/**
+	 * The abstract formatter calls this method for every value that should be added to the result.
+	 *
+	 * In this method, you should add the value to the result (with the correct formatting). An implementation could be
+	 * as simple as this:
+	 *
+	 * <pre>
+{@literal @}Override
+protected void appendSingleValue(final StringBuilder result, final ValueInfo value) {
+    result.append(value.getPropertyName()).append("=").append(value.getValue());
+}
+	 * </pre>
+	 * @param result The string builder where the formatter collects the formatted string.
+	 * @param value Information about the value that should be added to the result.
+	 */
+	protected abstract void appendSingleValue(StringBuilder result, ValueInfo value);
+
+	/**
+	 * Get the separator that the formatter will print between two values.
+	 *
+	 * @return The string to separate two values
+	 */
 	private String getValueSeparator() {
 		return ", ";
 	}
 
+	/**
+	 * Get the separator that the formatter will print between two value groups.
+	 *
+	 * @return The string to separate two value groups
+	 */
 	protected String getGroupsSeparator() {
 		return getValueSeparator();
 	}
-
-	protected abstract void appendSingleValue(StringBuilder result, ValueInfo value);
 }

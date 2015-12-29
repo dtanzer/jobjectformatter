@@ -40,7 +40,7 @@ public class FieldsFilterTest {
 
 	@Test
 	public void alwaysReturnsANonNullCollection() {
-		List<FieldInfo> fields = fieldsFilter.getFilteredFields(NoAnnotations.class, typeInfoCache);
+		List<PropertyInfo> fields = fieldsFilter.getFilteredFields(NoAnnotations.class, typeInfoCache);
 
 		assertThat(fields, is(not(nullValue())));
 	}
@@ -48,7 +48,7 @@ public class FieldsFilterTest {
 
 	@Test
 	public void includesAllFieldsIfNoAnnotationsArePresent() {
-		List<FieldInfo> fields = fieldsFilter.getFilteredFields(NoAnnotations.class, typeInfoCache);
+		List<PropertyInfo> fields = fieldsFilter.getFilteredFields(NoAnnotations.class, typeInfoCache);
 		assumeThat(fields, is(not(nullValue())));
 
 		assertThat(fields.size(), is(2));
@@ -59,7 +59,7 @@ public class FieldsFilterTest {
 
 	@Test
 	public void includesNoFields_WhenFormattedAnnotatedAnnotationIsOnClass_AndNoFieldsAreAnnotated() {
-		List<FieldInfo> fields = fieldsFilter.getFilteredFields(NoAnnotatedFields.class, typeInfoCache);
+		List<PropertyInfo> fields = fieldsFilter.getFilteredFields(NoAnnotatedFields.class, typeInfoCache);
 		assumeThat(fields, is(not(nullValue())));
 
 		assertThat(fields.size(), is(2));
@@ -68,7 +68,7 @@ public class FieldsFilterTest {
 
 	@Test
 	public void includesAnnotatedFields_WhenFormattedAnnotatedAnnotationIsOnClass() {
-		List<FieldInfo> fields = fieldsFilter.getFilteredFields(AnnotatedFields.class, typeInfoCache);
+		List<PropertyInfo> fields = fieldsFilter.getFilteredFields(AnnotatedFields.class, typeInfoCache);
 		assumeThat(fields, is(not(nullValue())));
 
 		assertThat(fields.size(), is(2));
@@ -80,7 +80,7 @@ public class FieldsFilterTest {
 
 	@Test
 	public void fieldsAnnotatedWithFormatted_HaveTransitiveBehaviorFromAnnotation() {
-		List<FieldInfo> fields = fieldsFilter.getFilteredFields(FieldTransitive.class, typeInfoCache);
+		List<PropertyInfo> fields = fieldsFilter.getFilteredFields(FieldTransitive.class, typeInfoCache);
 		assumeThat(fields, is(not(nullValue())));
 		assumeThat(fields.size(), is(1));
 		assumeThat(fields.get(0), hasProperty("name", is("noAnnotations")));
@@ -92,7 +92,7 @@ public class FieldsFilterTest {
 	public void fieldsNotAnnotated_HaveTransitiveBehaviorDeterminedByTypeInfoCache() {
 		when(typeInfoCache.transitiveIncludeFor(any())).thenReturn(TransitiveInclude.ALL_FIELDS);
 
-		List<FieldInfo> fields = fieldsFilter.getFilteredFields(FieldTypeTransitive.class, typeInfoCache);
+		List<PropertyInfo> fields = fieldsFilter.getFilteredFields(FieldTypeTransitive.class, typeInfoCache);
 		assumeThat(fields, is(not(nullValue())));
 		assumeThat(fields.size(), is(1));
 		assumeThat(fields.get(0), hasProperty("name", is("typeTransitive")));
@@ -104,7 +104,7 @@ public class FieldsFilterTest {
 	public void transitiveAnnotationOnFields_IsMoreImportantThanBehaviorSpecifiedByTypeInfoCache() {
 		when(typeInfoCache.transitiveIncludeFor(any())).thenReturn(TransitiveInclude.ANNOTADED_FIELDS);
 
-		List<FieldInfo> fields = fieldsFilter.getFilteredFields(FieldTransitive.class, typeInfoCache);
+		List<PropertyInfo> fields = fieldsFilter.getFilteredFields(FieldTransitive.class, typeInfoCache);
 		assumeThat(fields, is(not(nullValue())));
 		assumeThat(fields.size(), is(1));
 		assumeThat(fields.get(0), hasProperty("name", is("noAnnotations")));

@@ -22,13 +22,13 @@ import java.util.*;
  */
 public class ClassInfo {
 	private final Class clazz;
-	private final List<FieldInfo> fieldInfos;
+	private final List<PropertyInfo> propertyInfos;
 
 	ClassInfo(final Class<?> type, final TypeInfoCache typeInfoCache, final FieldsFilter fieldsFilter) {
 		this.clazz = type;
 
-		List<FieldInfo> fieldInfos = fieldsFilter.getFilteredFields(type, typeInfoCache);
-		this.fieldInfos = Collections.unmodifiableList(fieldInfos);
+		List<PropertyInfo> propertyInfos = fieldsFilter.getFilteredFields(type, typeInfoCache);
+		this.propertyInfos = Collections.unmodifiableList(propertyInfos);
 	}
 
 	/**
@@ -40,17 +40,17 @@ public class ClassInfo {
 
 	/**
 	 * Get information about all the relevant fields of the class returned from {@link net.davidtanzer.jobjectformatter.typeinfo.ClassInfo#getClazz}.
-	 * @see net.davidtanzer.jobjectformatter.typeinfo.FieldInfo
+	 * @see PropertyInfo
 	 */
-	public List<FieldInfo> fieldInfos() {
-		return fieldInfos;
+	public List<PropertyInfo> fieldInfos() {
+		return propertyInfos;
 	}
 
 	@Override
 	public String toString() {
 		return "ClassInfo{" +
 				"clazz=" + clazz.getName() +
-				", fieldInfos=" + fieldInfos +
+				", fieldInfos=" + propertyInfos +
 				'}';
 	}
 }

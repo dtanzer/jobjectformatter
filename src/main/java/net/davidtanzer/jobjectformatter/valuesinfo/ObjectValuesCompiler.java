@@ -18,7 +18,7 @@ package net.davidtanzer.jobjectformatter.valuesinfo;
 import net.davidtanzer.jobjectformatter.annotations.FormattedFieldType;
 import net.davidtanzer.jobjectformatter.annotations.TransitiveInclude;
 import net.davidtanzer.jobjectformatter.typeinfo.ClassInfo;
-import net.davidtanzer.jobjectformatter.typeinfo.FieldInfo;
+import net.davidtanzer.jobjectformatter.typeinfo.PropertyInfo;
 import net.davidtanzer.jobjectformatter.typeinfo.TypeInfo;
 import net.davidtanzer.jobjectformatter.typeinfo.TypeInfoCache;
 
@@ -68,33 +68,33 @@ public class ObjectValuesCompiler {
 		GroupedValuesInfo.Builder builder = new GroupedValuesInfo.Builder();
 		builder.setClassName(classInfo.getClazz().getSimpleName());
 
-		for(FieldInfo fieldInfo : classInfo.fieldInfos()) {
-			formatFieldValueIfNecessary(typeInfo, object, builder, fieldInfo, includeInTransitive);
+		for(PropertyInfo propertyInfo : classInfo.fieldInfos()) {
+			formatFieldValueIfNecessary(typeInfo, object, builder, propertyInfo, includeInTransitive);
 		}
 
 		return builder.buildByClassValuesInfo();
 	}
 
-	private void formatFieldValueIfNecessary(final TypeInfo typeInfo, final Object object, final GroupedValuesInfo.Builder builder, final FieldInfo fieldInfo, final Predicate<FormattedFieldType> includeInTransitive) {
-		if(includeInTransitive.test(fieldInfo.getIncludeFieldInTransitive())) {
-			Object formattedFieldValue = formatFieldValue(object, fieldInfo);
-			typeInfo.getFormattingBehavior().addFieldValueTo(builder, fieldInfo, formattedFieldValue);
+	private void formatFieldValueIfNecessary(final TypeInfo typeInfo, final Object object, final GroupedValuesInfo.Builder builder, final PropertyInfo propertyInfo, final Predicate<FormattedFieldType> includeInTransitive) {
+		if(includeInTransitive.test(propertyInfo.getIncludeFieldInTransitive())) {
+			Object formattedFieldValue = formatFieldValue(object, propertyInfo);
+			typeInfo.getFormattedInclude().addFieldValueTo(builder, propertyInfo, formattedFieldValue);
 		}
 	}
 
-	private Object formatFieldValue(final Object object, final FieldInfo fieldInfo) {
-		Object fieldValue = fieldInfo.getFieldValue(object);
+	private Object formatFieldValue(final Object object, final PropertyInfo propertyInfo) {
+		Object fieldValue = propertyInfo.getPropertyValue(object);
 
-		Boolean hasFormattedAnnotation = hasFormattedAnnotation(fieldValue, fieldInfo);
+		Boolean hasFormattedAnnotation = hasFormattedAnnotation(fieldValue, propertyInfo);
 		ObjectValuesInfo transitiveValues = this.compileToStringInfo(
-				typeInfoCache.typeInfoFor(fieldValue.getClass(), fieldInfo.getTransitiveIncludeOfTarget()), fieldValue, transitive -> transitive.equals(FormattedFieldType.DEFAULT));
+				typeInfoCache.typeInfoFor(fieldValue.getClass(), propertyInfo.getTransitiveIncludeOfTarget()), fieldValue, transitive -> transitive.equals(FormattedFieldType.DEFAULT));
 
-		return fieldInfo.getTransitiveIncludeOfTarget().transitiveFieldValue(fieldValue, hasFormattedAnnotation, transitiveValues);
+		return propertyInfo.getTransitiveIncludeOfTarget().transitiveFieldValue(fieldValue, hasFormattedAnnotation, transitiveValues);
 	}
 
-	private Boolean hasFormattedAnnotation(final Object fieldValue, final FieldInfo fieldInfo) {
+	private Boolean hasFormattedAnnotation(final Object fieldValue, final PropertyInfo propertyInfo) {
 		return typeInfoCache.behaviorFor(fieldValue.getClass(), (f) -> true, false)
-				|| fieldInfo.getTransitiveIncludeOfTarget().equals(TransitiveInclude.ANNOTADED_FIELDS)
-				|| fieldInfo.getTransitiveIncludeOfTarget().equals(TransitiveInclude.ALL_FIELDS);
+				|| propertyInfo.getTransitiveIncludeOfTarget().equals(TransitiveInclude.ANNOTADED_FIELDS)
+				|| propertyInfo.getTransitiveIncludeOfTarget().equals(TransitiveInclude.ALL_FIELDS);
 	}
 }

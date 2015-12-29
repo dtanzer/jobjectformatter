@@ -43,8 +43,8 @@ class FieldsFilter {
 		add(double.class);
 	}};
 
-	public List<FieldInfo> getFilteredFields(final Class<?> type, final TypeInfoCache typeInfoCache) {
-		final List<FieldInfo> result = new ArrayList<>();
+	public List<PropertyInfo> getFilteredFields(final Class<?> type, final TypeInfoCache typeInfoCache) {
+		final List<PropertyInfo> result = new ArrayList<>();
 
 		for(Field field : type.getDeclaredFields()) {
 			if(!field.getName().startsWith("this")) {
@@ -57,7 +57,7 @@ class FieldsFilter {
 					includeField = field.getAnnotation(FormattedField.class).value();
 					includeFieldInTransitive = field.getAnnotation(FormattedField.class).transitive();
 				}
-				result.add(new FieldInfo(field, transitiveIncludeOfTarget, includeField, includeFieldInTransitive));
+				result.add(new PropertyInfo(field, transitiveIncludeOfTarget, includeField, includeFieldInTransitive));
 			}
 		}
 

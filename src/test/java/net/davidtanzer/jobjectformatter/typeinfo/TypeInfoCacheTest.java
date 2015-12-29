@@ -95,8 +95,8 @@ public class TypeInfoCacheTest {
 		final FormattedFieldType includeField = FormattedFieldType.DEFAULT;
 		final FormattedFieldType includeFieldInTransitive = FormattedFieldType.DEFAULT;
 		when(fieldsFilter.getFilteredFields(SimpleObject.class, typeInfoCache)).thenReturn(Arrays.asList(
-				new FieldInfo(ObjectWithOtherFields.class.getDeclaredField("field1"), TransitiveInclude.ANNOTADED_FIELDS, includeField, includeFieldInTransitive),
-				new FieldInfo(ObjectWithOtherFields.class.getDeclaredField("field2"), TransitiveInclude.ANNOTADED_FIELDS, includeField, includeFieldInTransitive)
+				new PropertyInfo(ObjectWithOtherFields.class.getDeclaredField("field1"), TransitiveInclude.ANNOTADED_FIELDS, includeField, includeFieldInTransitive),
+				new PropertyInfo(ObjectWithOtherFields.class.getDeclaredField("field2"), TransitiveInclude.ANNOTADED_FIELDS, includeField, includeFieldInTransitive)
 		));
 
 		final TypeInfo typeInfo = typeInfoCache.typeInfoFor(SimpleObject.class);
@@ -140,7 +140,7 @@ public class TypeInfoCacheTest {
 		final TypeInfo typeInfo = typeInfoCache.typeInfoFor(TransitiveAnnotatedBoth.class);
 
 		assertThat(typeInfo.getTransitiveInclude(), is(TransitiveInclude.NO_FIELDS));
-		assertThat(typeInfo.getFormattingBehavior(), is(FormattedInclude.NO_FIELDS));
+		assertThat(typeInfo.getFormattedInclude(), is(FormattedInclude.NO_FIELDS));
 	}
 
 	private class SimpleObject {

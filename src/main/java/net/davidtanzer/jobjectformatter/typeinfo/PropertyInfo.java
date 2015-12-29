@@ -20,35 +20,53 @@ import net.davidtanzer.jobjectformatter.annotations.TransitiveInclude;
 
 import java.lang.reflect.Field;
 
-public class FieldInfo {
+/**
+ * Type information about a property of an object.
+ */
+public class PropertyInfo {
 	private final Field field;
 	private final TransitiveInclude transitiveIncludeOfTarget;
 	private final FormattedFieldType includeFieldInTransitive;
 	private final FormattedFieldType includeField;
 
-	FieldInfo(final Field field, final TransitiveInclude transitiveIncludeOfTarget, final FormattedFieldType includeField, final FormattedFieldType includeFieldInTransitive) {
+	PropertyInfo(final Field field, final TransitiveInclude transitiveIncludeOfTarget, final FormattedFieldType includeField, final FormattedFieldType includeFieldInTransitive) {
 		this.field = field;
 		this.transitiveIncludeOfTarget = transitiveIncludeOfTarget;
 		this.includeFieldInTransitive = includeFieldInTransitive;
 		this.includeField = includeField;
 	}
 
+	/**
+	 * Get the name of the property.
+	 */
 	public String getName() {
 		return field.getName();
 	}
 
+	/**
+	 * Get the type of the property.
+	 */
 	public Class<?> getType() {
 		return field.getType();
 	}
 
+	/**
+	 * Get the transitive include configuration of the target object referenced by the property.
+	 */
 	public TransitiveInclude getTransitiveIncludeOfTarget() {
 		return transitiveIncludeOfTarget;
 	}
 
+	/**
+	 * Get the include configuration of the property.
+	 */
 	public FormattedFieldType getIncludeField() {
 		return includeField;
 	}
 
+	/**
+	 * Get the transitive include configuration of the property.
+	 */
 	public FormattedFieldType getIncludeFieldInTransitive() {
 		return includeFieldInTransitive;
 	}
@@ -63,7 +81,10 @@ public class FieldInfo {
 				'}';
 	}
 
-	public Object getFieldValue(final Object object) {
+	/**
+	 * Get the value of the property.
+	 */
+	public Object getPropertyValue(final Object object) {
 		try {
 			return field.get(object);
 		} catch (IllegalAccessException e) {

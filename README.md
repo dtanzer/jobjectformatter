@@ -14,6 +14,9 @@ If you tweet about jObjectFormatter, please use the hash tag [#jObjectFormatter]
 * [Configuring jObjectFormatter](#ConfiguringJObjectFormatter)
 * [Formatting Options (Annotations)](#FormattingOptions)
 * [Transitive Objects](#TransitiveObjects)
+* [Formatting in toString vs. Where You Need The Value](#FormattingWhereYouNeed)
+* [Using jObjectFormatter with Guice / Spring](#GuiceSpring)
+* [Support](#Support)
 * [Contributing](#Contributing)
 * [License](#License)
 
@@ -108,6 +111,18 @@ TBD
 TBD
 
 ## <a name="TransitiveObjects"> Transitive Objects
+
+TBD
+
+## <a name="FormattingWhereYouNeed">Formatting in toString vs. Where You Need The Value
+
+TBD
+
+## <a name="GuiceSpring"> Using jObjectFormatter with Guice / Spring
+
+TBD
+
+## <a name="Support"> Support
 
 TBD
 

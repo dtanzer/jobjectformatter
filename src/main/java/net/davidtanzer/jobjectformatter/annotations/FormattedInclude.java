@@ -15,7 +15,7 @@
  */
 package net.davidtanzer.jobjectformatter.annotations;
 
-import net.davidtanzer.jobjectformatter.typeinfo.FieldInfo;
+import net.davidtanzer.jobjectformatter.typeinfo.PropertyInfo;
 import net.davidtanzer.jobjectformatter.valuesinfo.GroupedValuesInfo;
 
 /**
@@ -30,8 +30,8 @@ public enum FormattedInclude {
 	 */
 	ALL_FIELDS {
 		@Override
-		public void addFieldValueTo(final GroupedValuesInfo.Builder builder, final FieldInfo fieldInfo, final Object formattedFieldValue) {
-			builder.addFieldValue(fieldInfo.getName(), formattedFieldValue, fieldInfo.getType());
+		public void addFieldValueTo(final GroupedValuesInfo.Builder builder, final PropertyInfo propertyInfo, final Object formattedFieldValue) {
+			builder.addFieldValue(propertyInfo.getName(), formattedFieldValue, propertyInfo.getType());
 		}
 	},
 	/**
@@ -43,9 +43,9 @@ public enum FormattedInclude {
 	 */
 	ANNOTATED_FIELDS {
 		@Override
-		public void addFieldValueTo(final GroupedValuesInfo.Builder builder, final FieldInfo fieldInfo, final Object formattedFieldValue) {
-			if (fieldInfo.getIncludeField().equals(FormattedFieldType.DEFAULT)) {
-				builder.addFieldValue(fieldInfo.getName(), formattedFieldValue, fieldInfo.getType());
+		public void addFieldValueTo(final GroupedValuesInfo.Builder builder, final PropertyInfo propertyInfo, final Object formattedFieldValue) {
+			if (propertyInfo.getIncludeField().equals(FormattedFieldType.DEFAULT)) {
+				builder.addFieldValue(propertyInfo.getName(), formattedFieldValue, propertyInfo.getType());
 			}
 		}
 	},
@@ -54,7 +54,7 @@ public enum FormattedInclude {
 	 */
 	NO_FIELDS {
 		@Override
-		public void addFieldValueTo(final GroupedValuesInfo.Builder builder, final FieldInfo fieldInfo, final Object formattedFieldValue) {
+		public void addFieldValueTo(final GroupedValuesInfo.Builder builder, final PropertyInfo propertyInfo, final Object formattedFieldValue) {
 		}
 	};
 
@@ -62,8 +62,8 @@ public enum FormattedInclude {
 	 * Implements the behavior how the field value should be added based on the value of this enum.
 	 *
 	 * @param builder The {@link net.davidtanzer.jobjectformatter.valuesinfo.GroupedValuesInfo.Builder} where the caller collects the values.
-	 * @param fieldInfo The {@link net.davidtanzer.jobjectformatter.typeinfo.FieldInfo} of the current filed.
+	 * @param propertyInfo The {@link PropertyInfo} of the current filed.
 	 * @param formattedFieldValue The value of the field in the current object (already formatted).
 	 */
-	public abstract void addFieldValueTo(final GroupedValuesInfo.Builder builder, final FieldInfo fieldInfo, final Object formattedFieldValue);
+	public abstract void addFieldValueTo(final GroupedValuesInfo.Builder builder, final PropertyInfo propertyInfo, final Object formattedFieldValue);
 }

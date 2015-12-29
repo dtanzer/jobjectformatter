@@ -78,7 +78,7 @@ public class TypeInfoCache {
 			currentType = currentType.getSuperclass();
 		}
 
-		builder.withFormattingBehavior(formattingBehaviorFor(type), transitiveIncludeFor(type));
+		builder.withFormattingConfiguration(formattingBehaviorFor(type), transitiveIncludeFor(type));
 		return builder.buildTypeInfo();
 	}
 

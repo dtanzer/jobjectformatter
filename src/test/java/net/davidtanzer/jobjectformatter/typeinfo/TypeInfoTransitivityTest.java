@@ -37,12 +37,12 @@ public class TypeInfoTransitivityTest {
 	public void allTypeInfosFromJavaPackagesAreTransitive() {
 		final TypeInfo info = typeInfoCache.typeInfoFor(SimpleObject.class);
 
-		List<FieldInfo> fieldInfos = info.classInfos().get(0).fieldInfos();
-		assertThat(fieldInfos, hasItem(allOf(
+		List<PropertyInfo> propertyInfos = info.classInfos().get(0).fieldInfos();
+		assertThat(propertyInfos, hasItem(allOf(
 				hasProperty("name", is("foo")),
 				hasProperty("transitiveIncludeOfTarget", is(TransitiveInclude.ALL_FIELDS)))));
 
-		assertThat(fieldInfos, hasItem(allOf(
+		assertThat(propertyInfos, hasItem(allOf(
 				hasProperty("name", is("bar")),
 				hasProperty("transitiveIncludeOfTarget", is(TransitiveInclude.ALL_FIELDS)))));
 	}
@@ -51,8 +51,8 @@ public class TypeInfoTransitivityTest {
 	public void typeInfosForOtherDependenciesAreNotTransitiveByDefault() {
 		final TypeInfo info = typeInfoCache.typeInfoFor(DependentObject.class);
 
-		List<FieldInfo> fieldInfos = info.classInfos().get(0).fieldInfos();
-		assertThat(fieldInfos, hasItem(allOf(
+		List<PropertyInfo> propertyInfos = info.classInfos().get(0).fieldInfos();
+		assertThat(propertyInfos, hasItem(allOf(
 				hasProperty("name", is("so")),
 				hasProperty("transitiveIncludeOfTarget", is(TransitiveInclude.NO_FIELDS)))));
 	}
@@ -61,8 +61,8 @@ public class TypeInfoTransitivityTest {
 	public void typeInfosFromJavaPackages_CanBeSetToNonTransitive_ByAnnotation() {
 		final TypeInfo info = typeInfoCache.typeInfoFor(SimpleObject.class);
 
-		List<FieldInfo> fieldInfos = info.classInfos().get(0).fieldInfos();
-		assertThat(fieldInfos, hasItem(allOf(
+		List<PropertyInfo> propertyInfos = info.classInfos().get(0).fieldInfos();
+		assertThat(propertyInfos, hasItem(allOf(
 				hasProperty("name", is("notTransitive")),
 				hasProperty("transitiveIncludeOfTarget", is(TransitiveInclude.NO_FIELDS)))));
 	}
@@ -71,8 +71,8 @@ public class TypeInfoTransitivityTest {
 	public void typeInfosFromOtherPackages_CanBeSetToTransitive_ByAnnotation() {
 		final TypeInfo info = typeInfoCache.typeInfoFor(DependentObject.class);
 
-		List<FieldInfo> fieldInfos = info.classInfos().get(0).fieldInfos();
-		assertThat(fieldInfos, hasItem(allOf(
+		List<PropertyInfo> propertyInfos = info.classInfos().get(0).fieldInfos();
+		assertThat(propertyInfos, hasItem(allOf(
 				hasProperty("name", is("soTransitive")),
 				hasProperty("transitiveIncludeOfTarget", is(TransitiveInclude.ANNOTADED_FIELDS)))));
 	}

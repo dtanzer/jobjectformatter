@@ -22,37 +22,49 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+/**
+ * Type information about a class that can be formatted as string.
+ */
 public class TypeInfo {
 	private final List<ClassInfo> classInfos;
 	private final TransitiveInclude transitiveInclude;
-	private final FormattedInclude formattingBehavior;
+	private final FormattedInclude formattedInclude;
 
-	private TypeInfo(final List<ClassInfo> classInfos, final TransitiveInclude transitiveInclude, final FormattedInclude formattingBehavior) {
+	private TypeInfo(final List<ClassInfo> classInfos, final TransitiveInclude transitiveInclude, final FormattedInclude formattedInclude) {
 		this.classInfos = classInfos;
 		this.transitiveInclude = transitiveInclude;
-		this.formattingBehavior = formattingBehavior;
+		this.formattedInclude = formattedInclude;
 	}
 
+	/**
+	 * Get all {@link net.davidtanzer.jobjectformatter.typeinfo.ClassInfo}s for property information grouped by declaring class.
+	 */
 	public List<ClassInfo> classInfos() {
 		return classInfos;
 	}
 
+	/**
+	 * Get the transitive include configuration of the type.
+	 */
 	public TransitiveInclude getTransitiveInclude() {
 		return transitiveInclude;
 	}
 
-	public FormattedInclude getFormattingBehavior() {
-		return formattingBehavior;
+	/**
+	 * Get the formatting configuration of the type.
+	 */
+	public FormattedInclude getFormattedInclude() {
+		return formattedInclude;
 	}
 
 	TypeInfo withTransitiveBehavior(final TransitiveInclude transitiveInclude) {
-		return new TypeInfo(this.classInfos, transitiveInclude, this.formattingBehavior);
+		return new TypeInfo(this.classInfos, transitiveInclude, this.formattedInclude);
 	}
 
 	static class Builder {
 		private final TypeInfoCache typeInfoCache;
 		private final FieldsFilter fieldsFilter;
-		private FormattedInclude formattingBehavior;
+		private FormattedInclude formattedInclude;
 		private TransitiveInclude transitiveInclude;
 		private List<ClassInfo> classInfos = new ArrayList<>();
 
@@ -62,11 +74,11 @@ public class TypeInfo {
 		}
 
 		public TypeInfo buildTypeInfo() {
-			return new TypeInfo(Collections.unmodifiableList(this.classInfos), this.transitiveInclude, this.formattingBehavior);
+			return new TypeInfo(Collections.unmodifiableList(this.classInfos), this.transitiveInclude, this.formattedInclude);
 		}
 
-		public Builder withFormattingBehavior(final FormattedInclude formattingBehavior, final TransitiveInclude transitiveInclude) {
-			this.formattingBehavior = formattingBehavior;
+		public Builder withFormattingConfiguration(final FormattedInclude formattingBehavior, final TransitiveInclude transitiveInclude) {
+			this.formattedInclude = formattingBehavior;
 			this.transitiveInclude = transitiveInclude;
 			return this;
 		}

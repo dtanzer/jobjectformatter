@@ -26,7 +26,6 @@ import net.davidtanzer.jobjectformatter.valuesinfo.ObjectValuesInfo;
 import net.davidtanzer.jobjectformatter.valuesinfo.ValueInfo;
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.InOrder;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.Matchers.containsString;
@@ -34,12 +33,13 @@ import static org.hamcrest.Matchers.hasProperty;
 import static org.junit.Assert.*;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.argThat;
-import static org.mockito.Mockito.inOrder;
+import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.verify;
 
 public class AbstractObjectStringFormatterTest {
 	private AbstractObjectStringFormatter formatter;
+	private AbstractObjectStringFormatter ungroupedFormatter;
 
 	@Before
 	public void setup() throws Exception {
@@ -59,6 +59,8 @@ public class AbstractObjectStringFormatterTest {
 				result.append(" }");
 			}
 		};
+
+		ungroupedFormatter = new UngroupedObjectStringFormatter();
 	}
 
 	@Test
@@ -117,8 +119,31 @@ public class AbstractObjectStringFormatterTest {
 	}
 
 	@Test
+	public void doesNotAddAnyGroupedInformationWhenGroupingIsNotEnabled() {
+		final AbstractObjectStringFormatter formatterSpy = spy(ungroupedFormatter);
+
+		final TypeInfo typeInfo = new TypeInfoCache().typeInfoFor(ContainedObject.class);
+		final ObjectValuesInfo info = new ObjectValuesCompiler().compileToStringInfo(typeInfo, new ContainedObject());
+		formatterSpy.format(info);
+
+		verify(formatterSpy, never()).startValueGroup(any(), any());
+	}
+
+	@Test
 	public void callsAppendSingleValueForEveryValueFromTheObjectValuesInfo() {
 		final AbstractObjectStringFormatter formatterSpy = spy(formatter);
+
+		final TypeInfo typeInfo = new TypeInfoCache().typeInfoFor(ContainedObject.class);
+		final ObjectValuesInfo info = new ObjectValuesCompiler().compileToStringInfo(typeInfo, new ContainedObject());
+		formatterSpy.format(info);
+
+		verify(formatterSpy).appendSingleValue(any(), argThat(hasProperty("propertyName", is("foo"))));
+		verify(formatterSpy).appendSingleValue(any(), argThat(hasProperty("propertyName", is("bar"))));
+	}
+
+	@Test
+	public void callsAppendSingleValueForEveryValueFromTheObjectValuesInfoWhenGroupingIsNotEnabled() {
+		final AbstractObjectStringFormatter formatterSpy = spy(ungroupedFormatter);
 
 		final TypeInfo typeInfo = new TypeInfoCache().typeInfoFor(ContainedObject.class);
 		final ObjectValuesInfo info = new ObjectValuesCompiler().compileToStringInfo(typeInfo, new ContainedObject());
@@ -158,5 +183,26 @@ public class AbstractObjectStringFormatterTest {
 		private String foobar = "foobar value";
 		@Formatted(transitive = TransitiveInclude.ANNOTADED_FIELDS)
 		private ContainedObject containedObject = new ContainedObject();
+	}
+
+	private class UngroupedObjectStringFormatter extends AbstractObjectStringFormatter {
+		public UngroupedObjectStringFormatter() {
+			super(FormatGrouped.NO);
+		}
+
+		@Override
+		protected void appendSingleValue(final StringBuilder result, final ValueInfo value) {
+			result.append(value.getPropertyName()).append("=").append(value.getValue());
+		}
+
+		@Override
+		protected void startFormattedString(final StringBuilder result, final ObjectValuesInfo info) {
+			result.append("{ ");
+		}
+
+		@Override
+		protected void endFormattedString(final StringBuilder result, final ObjectValuesInfo info) {
+			result.append(" }");
+		}
 	}
 }

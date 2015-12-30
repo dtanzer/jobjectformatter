@@ -41,6 +41,26 @@ import java.util.List;
  * @see net.davidtanzer.jobjectformatter.valuesinfo.ValueInfo
  */
 public abstract class AbstractObjectStringFormatter implements ObjectStringFormatter {
+	private final FormatGrouped formatGrouped;
+
+	/**
+	 * Creates a formatter configured with the default formatting parameters.
+	 */
+	protected AbstractObjectStringFormatter() {
+		this(FormatGrouped.BY_CLASS);
+	}
+
+	/**
+	 * Creates a formatter with the given formatting parameters.
+	 * @param formatGrouped The formatting configuration for how to format groups.
+	 */
+	protected AbstractObjectStringFormatter(final FormatGrouped formatGrouped) {
+		if(formatGrouped == null) {
+			throw new IllegalArgumentException("Parameter formatGrouped must not be null.");
+		}
+		this.formatGrouped = formatGrouped;
+	}
+
 	/**
 	 * Processes all the information in the {@link net.davidtanzer.jobjectformatter.valuesinfo.ObjectValuesInfo}
 	 * and calls protected methods to do the actual formatting.
@@ -55,10 +75,25 @@ public abstract class AbstractObjectStringFormatter implements ObjectStringForma
 	@Override
 	public String format(final ObjectValuesInfo info) {
 		StringBuilder result = new StringBuilder();
-		boolean first = true;
 
 		startFormattedString(result, info);
-		for(GroupedValuesInfo groupedValuesInfo : info.getValuesByClass()) {
+		switch (formatGrouped) {
+			case NO:
+				appendAllValues(result, info.getAllValues());
+				break;
+			case BY_CLASS:
+				formatGroupedValues(result, info.getValuesByClass());
+				break;
+			default:
+				throw new IllegalStateException("Illegal value of formatGrouped: "+formatGrouped);
+		}
+		endFormattedString(result, info);
+		return result.toString();
+	}
+
+	private void formatGroupedValues(final StringBuilder result, final List<GroupedValuesInfo> groupedValues) {
+		boolean first = true;
+		for(GroupedValuesInfo groupedValuesInfo : groupedValues) {
 			if(!first) {
 				result.append(getGroupsSeparator());
 			}
@@ -69,8 +104,6 @@ public abstract class AbstractObjectStringFormatter implements ObjectStringForma
 
 			first = false;
 		}
-		endFormattedString(result, info);
-		return result.toString();
 	}
 
 	private void appendAllValues(final StringBuilder result, final List<ValueInfo> values) {

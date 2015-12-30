@@ -20,8 +20,12 @@ import net.davidtanzer.jobjectformatter.valuesinfo.ObjectValuesInfo;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.util.Arrays;
+
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.*;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 public class JsonObjectStringFormatterTest {
 	private JsonObjectStringFormatter formatter;
@@ -37,8 +41,9 @@ public class JsonObjectStringFormatterTest {
 				.setClassName("Foo")
 				.addFieldValue("foo", "foobar", String.class)
 				.addFieldValue("bar", "123", Integer.class)
-				.buildByClassValuesInfo();
-		final ObjectValuesInfo info = new ObjectValuesInfo.Builder().addClassValues(classInfo).buildToStringInfo();
+				.buildGroupedValuesInfo();
+		final ObjectValuesInfo info = mock(ObjectValuesInfo.class);
+		when(info.getValuesByClass()).thenReturn(Arrays.asList(classInfo));
 
 		String formattedString = formatter.format(info);
 

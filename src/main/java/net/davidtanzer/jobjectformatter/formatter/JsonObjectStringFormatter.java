@@ -53,11 +53,11 @@ public class JsonObjectStringFormatter extends AbstractObjectStringFormatter {
 	@Override
 	protected void appendSingleValue(final StringBuilder result, final ValueInfo value) {
 		result.append("\"").append(value.getPropertyName()).append("\": ");
-		if(!unescapedTypes.contains(value.getFieldClass())) {
+		if(!unescapedTypes.contains(value.getPropertyType())) {
 			result.append("\"");
 		}
 		result.append(value.getValue());
-		if(!unescapedTypes.contains(value.getFieldClass())) {
+		if(!unescapedTypes.contains(value.getPropertyType())) {
 			result.append("\"");
 		}
 	}

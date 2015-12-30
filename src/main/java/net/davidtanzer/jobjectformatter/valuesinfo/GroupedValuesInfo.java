@@ -19,6 +19,9 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+/**
+ * Information about the values of an object, grouped e.g. by declaring class.
+ */
 public class GroupedValuesInfo {
 	private final String groupName;
 	private final List<ValueInfo> values;
@@ -28,27 +31,49 @@ public class GroupedValuesInfo {
 		this.values = values;
 	}
 
+	/**
+	 * Get the name of the group.
+	 */
 	public String getGroupName() {
 		return groupName;
 	}
 
+	/**
+	 * Get all values of the group as {@link net.davidtanzer.jobjectformatter.valuesinfo.ValueInfo}.
+	 */
 	public List<ValueInfo> getValues() {
 		return values;
 	}
 
+	/**
+	 * A builder to create GroupedValuesInfo objects.
+	 */
 	public static class Builder {
 		private String groupName;
 		private final List<ValueInfo> values = new ArrayList<>();
 
-		public GroupedValuesInfo buildByClassValuesInfo() {
+		/**
+		 * Build the grouped values info from the information provided before calling this method.
+		 *
+		 * <strong>Do not use the builder after calling this method!</strong>
+		 *
+		 * @return The newly created GroupedValuesInfo.
+		 */
+		public GroupedValuesInfo buildGroupedValuesInfo() {
 			return new GroupedValuesInfo(groupName, Collections.unmodifiableList(values));
 		}
 
+		/**
+		 * Set the class name for the grouped values info.
+		 */
 		public Builder setClassName(final String className) {
 			this.groupName = className;
 			return this;
 		}
 
+		/**
+		 * Add a field value to the grouped values info.
+		 */
 		public Builder addFieldValue(final String name, final Object formattedFieldValue, final Class<?> fieldClass) {
 			values.add(new ValueInfo(name, formattedFieldValue, fieldClass));
 			return this;

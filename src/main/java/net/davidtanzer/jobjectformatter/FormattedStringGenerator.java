@@ -23,8 +23,9 @@ import net.davidtanzer.jobjectformatter.valuesinfo.ObjectValuesInfo;
 import net.davidtanzer.jobjectformatter.valuesinfo.ObjectValuesCompiler;
 
 /**
+ * Generates a formatted string from an object (together with it's metadata).
  *
- * <strong>FormattedStringGenerator</strong>
+ * <strong>FormattedStringGenerator</strong> functionality (extracted from the tests by agiledox):
  * <ul>
  *     <li>Retrieves type information from type info cache when generating to string.</li>
  *     <li>Uses info compiler to compile values from object and type info.</li>
@@ -36,15 +37,26 @@ public class FormattedStringGenerator {
 	private final ObjectValuesCompiler objectValuesCompiler;
 	private final ObjectStringFormatter toStringFormatter;
 
+	/**
+	 * Creates a new FormattedStringGenerator that uses a {@link net.davidtanzer.jobjectformatter.formatter.SimpleFormatter} to format the string.
+	 *
+	 * @see net.davidtanzer.jobjectformatter.formatter.SimpleFormatter
+	 */
 	public FormattedStringGenerator() {
 		this(new SimpleFormatter(), new TypeInfoCache(), new ObjectValuesCompiler());
 	}
 
+	/**
+	 * Creates a new FormattedStringGenerator with a given {@link net.davidtanzer.jobjectformatter.formatter.ObjectStringFormatter}.
+	 *
+	 * @param toStringFormatter The formatter to use when creating formatted strings.
+	 * @see net.davidtanzer.jobjectformatter.formatter.ObjectStringFormatter
+	 */
 	public FormattedStringGenerator(final ObjectStringFormatter toStringFormatter) {
 		this(toStringFormatter, new TypeInfoCache(), new ObjectValuesCompiler());
 	}
 
-	public FormattedStringGenerator(final ObjectStringFormatter objectStringFormatter, final TypeInfoCache typeInfoCache, final ObjectValuesCompiler objectValuesCompiler) {
+	FormattedStringGenerator(final ObjectStringFormatter objectStringFormatter, final TypeInfoCache typeInfoCache, final ObjectValuesCompiler objectValuesCompiler) {
 		if(objectStringFormatter == null) {
 			throw new IllegalArgumentException("Parameter objectStringFormatter must not be null!");
 		}
@@ -56,6 +68,12 @@ public class FormattedStringGenerator {
 		this.objectValuesCompiler = objectValuesCompiler;
 	}
 
+	/**
+	 * Creates a formatted String representation of an object.
+	 * 
+	 * @param object The object to format.
+	 * @return The formatted String representation.
+	 */
 	public String format(final Object object) {
 		if(object==null) {
 			throw new IllegalArgumentException("Parameter object must not be null!");

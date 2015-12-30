@@ -15,27 +15,39 @@
  */
 package net.davidtanzer.jobjectformatter.valuesinfo;
 
+/**
+ * Information about a single property value.
+ */
 public class ValueInfo {
 	private final String propertyName;
 	private final Object value;
-	private final Class<?> fieldClass;
+	private final Class<?> propertyType;
 
-	public ValueInfo(final String propertyName, final Object value, final Class<?> fieldClass) {
+	public ValueInfo(final String propertyName, final Object value, final Class<?> propertyType) {
 		this.propertyName = propertyName;
 		this.value = value;
-		this.fieldClass = fieldClass;
+		this.propertyType = propertyType;
 	}
 
+	/**
+	 * Get the name of the property.
+	 */
 	public String getPropertyName() {
 		return propertyName;
 	}
 
+	/**
+	 * Get the value of the property.
+	 */
 	public Object getValue() {
 		return value;
 	}
 
-	public Class<?> getFieldClass() {
-		return fieldClass;
+	/**
+	 * Get the type of the property.
+	 */
+	public Class<?> getPropertyType() {
+		return propertyType;
 	}
 
 	@Override

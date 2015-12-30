@@ -18,19 +18,31 @@ package net.davidtanzer.jobjectformatter;
 import java.util.concurrent.atomic.AtomicReference;
 
 /**
+ * Static helper for formatting objects, with a global configuration.
  *
- * <strong>ObjectFormatter</strong>
+ * <strong>ObjectFormatter</strong> functionality (extracted from the tests by agiledox):
  * <ul>
- *     <li>To string of class produces nice output.</li>
+ *     <li>Formatted representation of an object contains all values in the format specified by the configured formatter.</li>
  * </ul>
  */
 public class ObjectFormatter {
 	private static AtomicReference<FormattedStringGenerator> generator = new AtomicReference<>(new FormattedStringGenerator());
 
+	/**
+	 * Configure the {@link net.davidtanzer.jobjectformatter.FormattedStringGenerator} to use when formatting objects.
+	 *
+	 * @param generator The globally configured generator.
+	 */
 	public static void configureGenerator(final FormattedStringGenerator generator) {
 		ObjectFormatter.generator.set(generator);
 	}
 
+	/**
+	 * Format an object with the globally configured {@link net.davidtanzer.jobjectformatter.FormattedStringGenerator}.
+	 *
+	 * @param object The object to format.
+	 * @return The string representation of the object.
+	 */
 	public static String format(final Object object) {
 		return generator.get().format(object);
 	}

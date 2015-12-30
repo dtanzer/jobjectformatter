@@ -57,7 +57,7 @@ public class TypeInfo {
 		return formattedInclude;
 	}
 
-	TypeInfo withTransitiveBehavior(final TransitiveInclude transitiveInclude) {
+	TypeInfo withTransitiveInclude(final TransitiveInclude transitiveInclude) {
 		return new TypeInfo(this.classInfos, transitiveInclude, this.formattedInclude);
 	}
 

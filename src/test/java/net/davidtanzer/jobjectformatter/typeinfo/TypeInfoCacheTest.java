@@ -40,7 +40,30 @@ public class TypeInfoCacheTest {
 	}
 
 	@Test
-	public void addsClassInfo_ForEveryClassInTheHierarchy() {
+	public void createsTypeInfoObjectForClass() {
+		final TypeInfo typeInfo = typeInfoCache.typeInfoFor(ExtendedObject.class);
+
+		assertNotNull(typeInfo);
+	}
+
+	@Test
+	public void usesTypeInfoFromCacheIfAvailable() {
+		final TypeInfo typeInfo1 = typeInfoCache.typeInfoFor(ExtendedObject.class);
+		final TypeInfo typeInfo2 = typeInfoCache.typeInfoFor(ExtendedObject.class);
+
+		assertSame(typeInfo1, typeInfo2);
+	}
+
+	@Test
+	public void typeInfoHasInformationFromTheFormattedAnnotationOnClass() {
+		final TypeInfo typeInfo = typeInfoCache.typeInfoFor(TransitiveAnnotatedBoth.class);
+
+		assertThat(typeInfo.getTransitiveInclude(), is(TransitiveInclude.NO_FIELDS));
+		assertThat(typeInfo.getFormattedInclude(), is(FormattedInclude.NO_FIELDS));
+	}
+
+	@Test
+	public void typeInfoContainsAClassInfoForEveryClassInTheHierarchy() {
 		final TypeInfo typeInfo = typeInfoCache.typeInfoFor(ExtendedObject.class);
 
 		assertThat(typeInfo.classInfos(), contains(
@@ -49,7 +72,7 @@ public class TypeInfoCacheTest {
 	}
 
 	@Test
-	public void classInfosOfTypeInfo_AreInTheCorrectOrder() {
+	public void classInfosOfTypeInfoAreOrderedFromTypeItselfToClassesUpTheCallHierarchy() {
 		final TypeInfo typeInfo = typeInfoCache.typeInfoFor(ExtendedObject.class);
 
 		final ClassInfo extendedObjectInfo = typeInfo.classInfos().get(0);
@@ -57,7 +80,7 @@ public class TypeInfoCacheTest {
 	}
 
 	@Test
-	public void classInfo_ContainsAllFieldsFromTheClass() {
+	public void everyClassInfoContainsFieldsFromTheClass() {
 		final TypeInfo typeInfo = typeInfoCache.typeInfoFor(ExtendedObject.class);
 
 		final ClassInfo extendedObjectInfo = typeInfo.classInfos().get(0);
@@ -69,7 +92,7 @@ public class TypeInfoCacheTest {
 	}
 
 	@Test
-	public void classInfo_DoesNotContainFieldsFromOtherClasses() {
+	public void classInfoDoesNotContainFieldsFromOtherClasses() {
 		final TypeInfo typeInfo = typeInfoCache.typeInfoFor(ExtendedObject.class);
 
 		final ClassInfo extendedObjectInfo = typeInfo.classInfos().get(0);
@@ -80,15 +103,7 @@ public class TypeInfoCacheTest {
 	}
 
 	@Test
-	public void usesClassInfoFromCache_IfAvailable() {
-		final TypeInfo typeInfo1 = typeInfoCache.typeInfoFor(ExtendedObject.class);
-		final TypeInfo typeInfo2 = typeInfoCache.typeInfoFor(ExtendedObject.class);
-
-		assertSame(typeInfo1, typeInfo2);
-	}
-
-	@Test
-	public void usesFieldsFilter_ToActuallyGetTheRelevantFields() throws NoSuchFieldException {
+	public void usesFieldsFilterToActuallyGetTheRelevantFieldsForAClassInfo() throws NoSuchFieldException {
 		final FieldsFilter fieldsFilter = mock(FieldsFilter.class);
 		typeInfoCache = new TypeInfoCache(fieldsFilter);
 
@@ -108,39 +123,31 @@ public class TypeInfoCacheTest {
 	}
 
 	@Test
-	public void transitiveBehaviorForUnannotatedClass_IsDisallowed() {
+	public void transitiveIncludeForUnannotatedClassIsDisallowed() {
 		final TransitiveInclude transitiveInclude = typeInfoCache.transitiveIncludeFor(SimpleObject.class);
 
 		assertThat(transitiveInclude, is(TransitiveInclude.NO_FIELDS));
 	}
 
 	@Test
-	public void transitiveBehaviorForAnnotatedClass_IsDeterminedByAnnotationValue() {
+	public void transitiveIncludeForAnnotatedClassIsDeterminedByAnnotationValue() {
 		final TransitiveInclude transitiveInclude = typeInfoCache.transitiveIncludeFor(TransitiveAnnotatedClass.class);
 
 		assertThat(transitiveInclude, is(TransitiveInclude.ALL_FIELDS));
 	}
 
 	@Test
-	public void transitiveBehaviorForAnnotatedToString_IsDeterminedByAnnotationValue() {
+	public void transitiveIncludeForAnnotatedToStringIsDeterminedByAnnotationValue() {
 		final TransitiveInclude transitiveInclude = typeInfoCache.transitiveIncludeFor(TransitiveAnnotatedToString.class);
 
 		assertThat(transitiveInclude, is(TransitiveInclude.ALL_FIELDS));
 	}
 
 	@Test
-	public void transitiveBehaviorForAnnotatedClass_IsMoreImportantThanAnnotationOnClass() {
+	public void transitiveIncludeForAnnotatedClassIsMoreImportantThanAnnotationOnClass() {
 		final TransitiveInclude transitiveInclude = typeInfoCache.transitiveIncludeFor(TransitiveAnnotatedBoth.class);
 
 		assertThat(transitiveInclude, is(TransitiveInclude.NO_FIELDS));
-	}
-
-	@Test
-	public void typeInfoHasInformationFromTheFormattedAnnotationOnClass() {
-		final TypeInfo typeInfo = typeInfoCache.typeInfoFor(TransitiveAnnotatedBoth.class);
-
-		assertThat(typeInfo.getTransitiveInclude(), is(TransitiveInclude.NO_FIELDS));
-		assertThat(typeInfo.getFormattedInclude(), is(FormattedInclude.NO_FIELDS));
 	}
 
 	private class SimpleObject {

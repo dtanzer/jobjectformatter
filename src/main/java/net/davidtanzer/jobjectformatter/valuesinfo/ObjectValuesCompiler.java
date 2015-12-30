@@ -72,7 +72,7 @@ public class ObjectValuesCompiler {
 			formatFieldValueIfNecessary(typeInfo, object, builder, propertyInfo, includeInTransitive);
 		}
 
-		return builder.buildByClassValuesInfo();
+		return builder.buildGroupedValuesInfo();
 	}
 
 	private void formatFieldValueIfNecessary(final TypeInfo typeInfo, final Object object, final GroupedValuesInfo.Builder builder, final PropertyInfo propertyInfo, final Predicate<FormattedFieldType> includeInTransitive) {
@@ -93,7 +93,7 @@ public class ObjectValuesCompiler {
 	}
 
 	private Boolean hasFormattedAnnotation(final Object fieldValue, final PropertyInfo propertyInfo) {
-		return typeInfoCache.behaviorFor(fieldValue.getClass(), (f) -> true, false)
+		return typeInfoCache.configurationFor(fieldValue.getClass(), (f) -> true, false)
 				|| propertyInfo.getTransitiveIncludeOfTarget().equals(TransitiveInclude.ANNOTADED_FIELDS)
 				|| propertyInfo.getTransitiveIncludeOfTarget().equals(TransitiveInclude.ALL_FIELDS);
 	}

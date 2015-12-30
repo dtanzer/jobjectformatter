@@ -29,7 +29,7 @@ public class ObjectFormatterTest {
 	}
 
 	@Test
-	public void toStringOfClassProducesNiceOutput() {
+	public void formattedRepresentationOfAnObjectContainsAllValuesInTheFormatSpecifiedByTheConfiguredFormatter() {
 		final String formatted = new ExtendedObject().toString();
 
 		assertThat(formatted, is("{\"ExtendedObject\": {\"eFoo\": \"eFoo val\", \"eBar\": false}, \"SimpleObject\": {\"foo\": \"foo val\", \"bar\": 1}}"));

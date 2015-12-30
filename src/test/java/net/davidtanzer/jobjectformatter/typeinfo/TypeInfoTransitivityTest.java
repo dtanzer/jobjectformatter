@@ -58,7 +58,7 @@ public class TypeInfoTransitivityTest {
 	}
 
 	@Test
-	public void typeInfosFromJavaPackages_CanBeSetToNonTransitive_ByAnnotation() {
+	public void typeInfosFromJavaPackagesCanBeSetToNonTransitiveByAnnotation() {
 		final TypeInfo info = typeInfoCache.typeInfoFor(SimpleObject.class);
 
 		List<PropertyInfo> propertyInfos = info.classInfos().get(0).fieldInfos();
@@ -68,7 +68,7 @@ public class TypeInfoTransitivityTest {
 	}
 
 	@Test
-	public void typeInfosFromOtherPackages_CanBeSetToTransitive_ByAnnotation() {
+	public void typeInfosFromOtherPackagesCanBeSetToTransitiveByAnnotation() {
 		final TypeInfo info = typeInfoCache.typeInfoFor(DependentObject.class);
 
 		List<PropertyInfo> propertyInfos = info.classInfos().get(0).fieldInfos();

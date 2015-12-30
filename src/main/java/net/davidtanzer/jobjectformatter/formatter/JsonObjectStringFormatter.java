@@ -84,6 +84,7 @@ public class JsonObjectStringFormatter extends AbstractObjectStringFormatter {
 		this(formatGrouped, DisplayClassName.WHEN_NOT_GROUPED_BY_CLASS);
 	}
 
+
 	/**
 	 * Creates a new JsonObjectStringFormatter with a given grouping configuration and display-class-name configuration.
 	 *

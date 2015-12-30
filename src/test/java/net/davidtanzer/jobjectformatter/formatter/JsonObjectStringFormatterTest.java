@@ -28,15 +28,13 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 public class JsonObjectStringFormatterTest {
-	private JsonObjectStringFormatter formatter;
-
 	@Before
 	public void setup() throws Exception {
-		formatter = new JsonObjectStringFormatter();
 	}
 
 	@Test
 	public void formatsGroupedByClassesCorrectly() {
+		final JsonObjectStringFormatter formatter = new JsonObjectStringFormatter();
 		final GroupedValuesInfo classInfo = new GroupedValuesInfo.Builder()
 				.setClassName("Foo")
 				.addFieldValue("foo", "foobar", String.class)
@@ -48,5 +46,22 @@ public class JsonObjectStringFormatterTest {
 		String formattedString = formatter.format(info);
 
 		assertThat(formattedString, is("{\"Foo\": {\"foo\": \"foobar\", \"bar\": 123}}"));
+	}
+
+	@Test
+	public void doesNotOutputGroupsButOutputsClassNameWhenGroupingIsDisabled() {
+		final JsonObjectStringFormatter formatter = new JsonObjectStringFormatter(FormatGrouped.NO);
+		final GroupedValuesInfo classInfo = new GroupedValuesInfo.Builder()
+				.setClassName("Foo")
+				.addFieldValue("foo", "foobar", String.class)
+				.addFieldValue("bar", "123", Integer.class)
+				.buildGroupedValuesInfo();
+		final ObjectValuesInfo info = mock(ObjectValuesInfo.class);
+		when(info.getAllValues()).thenReturn(classInfo.getValues());
+		when(info.getType()).thenReturn(Object.class);
+
+		String formattedString = formatter.format(info);
+
+		assertThat(formattedString, is("{\"class\": \"Object\", \"foo\": \"foobar\", \"bar\": 123}"));
 	}
 }

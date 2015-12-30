@@ -49,6 +49,59 @@ public class JsonObjectStringFormatter extends AbstractObjectStringFormatter {
 		add(double.class);
 		add(boolean.class);
 	}};
+	private final DisplayClassName displayClassName;
+	private final FormatGrouped formatGrouped;
+
+	/**
+	 * Creates a new JsonObjectStringFormatter with the default configuration.
+	 *
+	 * The default configuraiton is:
+	 * <ul>
+	 *     <li>Group objects by their declaring class.</li>
+	 *     <li>Only display the class name when not grouping objects by their declaring class.</li>
+	 * </ul>
+	 *
+	 * @see net.davidtanzer.jobjectformatter.formatter.FormatGrouped
+	 * @see net.davidtanzer.jobjectformatter.formatter.DisplayClassName
+	 */
+	public JsonObjectStringFormatter() {
+		this(FormatGrouped.BY_CLASS, DisplayClassName.WHEN_NOT_GROUPED_BY_CLASS);
+	}
+
+	/**
+	 * Creates a new JsonObjectStringFormatter with a given grouping configuration, leaving {@link net.davidtanzer.jobjectformatter.formatter.DisplayClassName}
+	 * at the default configuration.
+	 *
+	 * Refer to the documentation of the no-args constructor for the default configuration.
+	 *
+	 * @param formatGrouped The configuration for grouping the values.
+
+	 * @see net.davidtanzer.jobjectformatter.formatter.FormatGrouped
+	 * @see net.davidtanzer.jobjectformatter.formatter.DisplayClassName
+	 * @see JsonObjectStringFormatter#JsonObjectStringFormatter()
+	 */
+	public JsonObjectStringFormatter(final FormatGrouped formatGrouped) {
+		this(formatGrouped, DisplayClassName.WHEN_NOT_GROUPED_BY_CLASS);
+	}
+
+	/**
+	 * Creates a new JsonObjectStringFormatter with a given grouping configuration and display-class-name configuration.
+	 *
+	 * @param formatGrouped The configuration for grouping the values.
+	 * @param displayClassName The configuration for displaying the class name.
+	 *
+	 * @see net.davidtanzer.jobjectformatter.formatter.FormatGrouped
+	 * @see net.davidtanzer.jobjectformatter.formatter.DisplayClassName
+	 */
+	public JsonObjectStringFormatter(final FormatGrouped formatGrouped, final DisplayClassName displayClassName) {
+		super(formatGrouped);
+
+		if(displayClassName == null) {
+			throw new IllegalArgumentException("Parameter displayClassName must not be null.");
+		}
+		this.formatGrouped = formatGrouped;
+		this.displayClassName = displayClassName;
+	}
 
 	@Override
 	protected void appendSingleValue(final StringBuilder result, final ValueInfo value) {
@@ -65,6 +118,10 @@ public class JsonObjectStringFormatter extends AbstractObjectStringFormatter {
 	@Override
 	protected void startFormattedString(final StringBuilder result, final ObjectValuesInfo info) {
 		result.append("{");
+		if(displayClassName == DisplayClassName.ALWAYS ||
+				(displayClassName == DisplayClassName.WHEN_NOT_GROUPED_BY_CLASS) && formatGrouped != FormatGrouped.BY_CLASS) {
+			result.append("\"class\": \"").append(info.getType().getSimpleName()).append("\"").append(getValueSeparator());
+		}
 	}
 
 	@Override

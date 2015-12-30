@@ -177,7 +177,7 @@ protected void appendSingleValue(final StringBuilder result, final ValueInfo val
 	 *
 	 * @return The string to separate two values
 	 */
-	private String getValueSeparator() {
+	protected String getValueSeparator() {
 		return ", ";
 	}
 

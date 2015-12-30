@@ -56,6 +56,7 @@ public class ObjectValuesCompiler {
 
 	private ObjectValuesInfo compileToStringInfo(final TypeInfo typeInfo, final Object object, final Predicate<FormattedFieldType> includeInTransitive) {
 		ObjectValuesInfo.Builder builder = new ObjectValuesInfo.Builder();
+		builder.setType(object.getClass());
 
 		for(ClassInfo classInfo : typeInfo.classInfos()) {
 			builder.addClassValues(compileClassValues(typeInfo, classInfo, object, includeInTransitive));

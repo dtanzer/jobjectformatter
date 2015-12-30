@@ -27,6 +27,10 @@ import net.davidtanzer.jobjectformatter.valuesinfo.ValueInfo;
  * </pre>
  */
 public class SimpleFormatter extends AbstractObjectStringFormatter {
+	public SimpleFormatter() {
+		super(FormatGrouped.NO);
+	}
+
 	@Override
 	protected void startFormattedString(final StringBuilder result, final ObjectValuesInfo info) {
 		result.append("{ ");

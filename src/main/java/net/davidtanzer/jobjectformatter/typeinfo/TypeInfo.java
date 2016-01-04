@@ -38,6 +38,8 @@ public class TypeInfo {
 
 	/**
 	 * Get all {@link net.davidtanzer.jobjectformatter.typeinfo.ClassInfo}s for property information grouped by declaring class.
+	 *
+	 * @return all {@link net.davidtanzer.jobjectformatter.typeinfo.ClassInfo}s for property information grouped by declaring class.
 	 */
 	public List<ClassInfo> classInfos() {
 		return classInfos;
@@ -45,6 +47,8 @@ public class TypeInfo {
 
 	/**
 	 * Get the transitive include configuration of the type.
+	 *
+	 * @return the transitive include configuration of the type.
 	 */
 	public TransitiveInclude getTransitiveInclude() {
 		return transitiveInclude;
@@ -52,6 +56,8 @@ public class TypeInfo {
 
 	/**
 	 * Get the formatting configuration of the type.
+	 *
+	 * @return the formatting configuration of the type.
 	 */
 	public FormattedInclude getFormattedInclude() {
 		return formattedInclude;

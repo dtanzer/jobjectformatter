@@ -11,7 +11,9 @@ If you tweet about jObjectFormatter, please use the hash tag [#jObjectFormatter]
 
 * [Getting Started](#GettingStarted)
 * [Why jObjectFormatter](#WhyJObjectFormatter)
+* [How It Works](#HowItWorks)
 * [Configuring jObjectFormatter](#ConfiguringJObjectFormatter)
+* [Formatters](#Formatters)
 * [Formatting Options (Annotations)](#FormattingOptions)
 * [Transitive Objects](#TransitiveObjects)
 * [Formatting in toString vs. Where You Need The Value](#FormattingWhereYouNeed)
@@ -37,14 +39,14 @@ if you have already configured the central repository correctly, you only have t
 
 **Gradle**
 
-    compile 'net.davidtanzer:jobjectformatter:0.1.0'
+    compile 'net.davidtanzer:jobjectformatter:0.2.0'
 
 **Maven**
 
     <dependency>
       <groupId>net.davidtanzer</groupId>
       <artifactId>jobjectformatter</artifactId>
-      <version>0.1.0</version>
+      <version>0.2.0</version>
     </dependency>
 
 ### Implement toString to Use jObjectFormatter
@@ -100,9 +102,58 @@ formatter from the default configuration does not print the class name or group 
 
 ## <a name="WhyJObjectFormatter"> Why jObjectFormatter
 
-TBD
+In mid-2015, a customer of mine wanted to make sure that all toString methods in a large legacy code base produce their
+output in the same format. So I evaluated ToStringBuilder from [Apache Commons Lang](https://commons.apache.org/proper/commons-lang/) and
+ToStringHelper from [Guava](https://github.com/google/guava), but the team did not like any of them.
+
+We shortly discussed whether they should roll their own reflection-based toString builder. There we already discussed some
+requirements for features that you can now find in jObjectFormatter. The team decided against rolling their own toString
+builder, and used their IDEs to re-create all toString methods (I think that was a good decision back then).
+
+Later that year I had to create a toString method again, in another project. I thought about creating it with my IDE, but
+that has some drawbacks (like, what if I want to change the formatting of the toString methods later?). So I remembered 
+our earlier discussion. So I tried to implement what we discussed back then (but with some changed requirements), and so 
+jObjectFormatter was born.
+
+## <a name="HowItWorks"> How It Works
+
+When asked to format an object, jObjectFormatter does it's work in three phases:
+
+1. It gathers all necessary information about the class of the object. This information is cached,
+   so jObjectFormatter does not have to compute it again when formatting another object of the same class.
+2. It gathers the actual values of all properties of the object.
+3. It creates a string from the gathered property values using an ```ObjectStringFormatter```.
+
+You can configure how phases 1 and 2 do their work with annotations on the objects you want to format. That means, you
+can configure which property values will be printed and how transitive objects are processed using annotations on your
+classes and fields. See [Formatting Options (Annotations)](#FormattingOptions) and [Transitive Objects](#TransitiveObjects) 
+for more details.
+
+In the third phase, jObjectFormatter uses an ```ObjectStringFormatter``` to actually format the values it gathered in
+phase 2. See [Configuring jObjectFormatter](#ConfiguringJObjectFormatter) for more details about how to configure a
+formatter and [Formatters](#Formatters) for details about available formatters and how to write your own formatter.
 
 ## <a name="ConfiguringJObjectFormatter"> Configuring jObjectFormatter
+
+The central class in jObjectFormatter is ```FormattedStringGenerator```. You somehow need access to an object of that class
+to format your objects. You can either configure a global instance in the helper class ```ObjectFormatter```, or you can
+create an instance yourself and pass it to the objects that need that instance (see [Using jObjectFormatter with Guice / Spring](#GuiceSpring) for
+a discussion about that).
+
+```ObjectFormatter``` has a default instance of ```FormattedStringGenerator```. So if you only call ```ObjectFormatter.format(...)```
+without configuring anything, ```ObjectFormatter``` will use that instance to format your object. You can configure another
+```FormattedStringGenerator``` by simply calling the static ```configureGenerator(...)``` method when your application starts
+up:
+
+    ObjectFormatter.configureGenerator(myFormattedStringGenerator);
+
+You can create a ```FormattedStringGenerator``` by simply calling ```new```, but you have to supply a formatter:
+
+    FormattedStringGenerator myFormattedStringGenerator = new FormattedStringGenerator(
+        ConfigurableObjectStringFormatter.GROUPED_CURLY_BRACED_OUTPUT_WITH_CLASS_NAME
+    );
+
+## <a name="Formatters"> Formatters
 
 TBD
 

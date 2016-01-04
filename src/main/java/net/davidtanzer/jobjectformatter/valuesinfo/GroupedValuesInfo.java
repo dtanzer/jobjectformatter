@@ -33,6 +33,8 @@ public class GroupedValuesInfo {
 
 	/**
 	 * Get the name of the group.
+	 *
+	 * @return the name of the group.
 	 */
 	public String getGroupName() {
 		return groupName;
@@ -40,6 +42,8 @@ public class GroupedValuesInfo {
 
 	/**
 	 * Get all values of the group as {@link net.davidtanzer.jobjectformatter.valuesinfo.ValueInfo}.
+	 *
+	 * @return all values of the group as {@link net.davidtanzer.jobjectformatter.valuesinfo.ValueInfo}.
 	 */
 	public List<ValueInfo> getValues() {
 		return values;
@@ -65,6 +69,9 @@ public class GroupedValuesInfo {
 
 		/**
 		 * Set the class name for the grouped values info.
+		 *
+		 * @param className the class name for the grouped values info.
+		 * @return the builder itself.
 		 */
 		public Builder setClassName(final String className) {
 			this.groupName = className;
@@ -73,6 +80,10 @@ public class GroupedValuesInfo {
 
 		/**
 		 * Add a field value to the grouped values info.
+		 * @param name the name of the field.
+		 * @param formattedFieldValue the formatted value of the field.
+		 * @param fieldClass The class of the field.
+		 * @return the builder itself.
 		 */
 		public Builder addFieldValue(final String name, final Object formattedFieldValue, final Class<?> fieldClass) {
 			values.add(new ValueInfo(name, formattedFieldValue, fieldClass));

@@ -33,6 +33,8 @@ public class ClassInfo {
 
 	/**
 	 * Get the class about which this objects stores type information.
+	 *
+	 * @return the class about which this objects stores type information.
 	 */
 	public Class getClazz() {
 		return clazz;
@@ -40,6 +42,8 @@ public class ClassInfo {
 
 	/**
 	 * Get information about all the relevant fields of the class returned from {@link net.davidtanzer.jobjectformatter.typeinfo.ClassInfo#getClazz}.
+	 *
+	 * @return information about all the relevant fields of the class returned from {@link net.davidtanzer.jobjectformatter.typeinfo.ClassInfo#getClazz}.
 	 * @see PropertyInfo
 	 */
 	public List<PropertyInfo> fieldInfos() {

@@ -35,6 +35,8 @@ public class ObjectValuesInfo {
 
 	/**
 	 * Get all values of the object's properties, grouped by their declaring class.
+	 *
+	 * @return all values of the object's properties, grouped by their declaring class.
 	 */
 	public List<GroupedValuesInfo> getValuesByClass() {
 		return valuesByClass;
@@ -42,6 +44,8 @@ public class ObjectValuesInfo {
 
 	/**
 	 * Get all values of the object's properties.
+	 *
+	 * @return all values of the object's properties.
 	 */
 	public List<ValueInfo> getAllValues() {
 		return allValues;
@@ -49,7 +53,8 @@ public class ObjectValuesInfo {
 
 	/**
 	 * Get the type of the object to format.
-	 * @return The type of the object to format.
+	 *
+	 * @return the type of the object to format.
 	 */
 	public Class getType() {
 		return type;

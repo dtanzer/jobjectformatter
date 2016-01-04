@@ -38,6 +38,8 @@ public class PropertyInfo {
 
 	/**
 	 * Get the name of the property.
+	 *
+	 * @return the name of the property.
 	 */
 	public String getName() {
 		return field.getName();
@@ -45,6 +47,8 @@ public class PropertyInfo {
 
 	/**
 	 * Get the type of the property.
+	 *
+	 * @return the type of the property.
 	 */
 	public Class<?> getType() {
 		return field.getType();
@@ -52,6 +56,8 @@ public class PropertyInfo {
 
 	/**
 	 * Get the transitive include configuration of the target object referenced by the property.
+	 *
+	 * @return the transitive include configuration of the target object referenced by the property.
 	 */
 	public TransitiveInclude getTransitiveIncludeOfTarget() {
 		return transitiveIncludeOfTarget;
@@ -59,6 +65,8 @@ public class PropertyInfo {
 
 	/**
 	 * Get the include configuration of the property.
+	 *
+	 * @return the include configuration of the property.
 	 */
 	public FormattedFieldType getIncludeField() {
 		return includeField;
@@ -66,6 +74,8 @@ public class PropertyInfo {
 
 	/**
 	 * Get the transitive include configuration of the property.
+	 *
+	 * @return the transitive include configuration of the property.
 	 */
 	public FormattedFieldType getIncludeFieldInTransitive() {
 		return includeFieldInTransitive;
@@ -83,6 +93,9 @@ public class PropertyInfo {
 
 	/**
 	 * Get the value of the property.
+	 *
+	 * @param object the object from which to get the property.
+	 * @return the value of the property.
 	 */
 	public Object getPropertyValue(final Object object) {
 		try {

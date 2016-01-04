@@ -31,6 +31,8 @@ public class ValueInfo {
 
 	/**
 	 * Get the name of the property.
+	 *
+	 * @return the name of the property.
 	 */
 	public String getPropertyName() {
 		return propertyName;
@@ -38,6 +40,8 @@ public class ValueInfo {
 
 	/**
 	 * Get the value of the property.
+	 *
+	 * @return the value of the property.
 	 */
 	public Object getValue() {
 		return value;
@@ -45,6 +49,8 @@ public class ValueInfo {
 
 	/**
 	 * Get the type of the property.
+	 *
+	 * @return the type of the property.
 	 */
 	public Class<?> getPropertyType() {
 		return propertyType;

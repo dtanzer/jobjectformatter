@@ -11,7 +11,7 @@ targetCompatibility = 1.8
 
 group = "net.davidtanzer"
 archivesBaseName = "jobjectformatter"
-version = '0.1.0'
+version = '0.2.0'
 
 dependencies {
 	testCompile 'org.hamcrest:hamcrest-all:1.3'
@@ -37,12 +37,12 @@ signing {
 	sign configurations.archives
 }
 
+def ossrhUsername = hasProperty('ossrhUsername') ? ossrhUsername : ''
+def ossrhPassword = hasProperty('ossrhPassword') ? ossrhPassword : ''
+
 uploadArchives {
 	repositories {
 		mavenDeployer {
-			def ossrhUsername = hasProperty('ossrhUsername') ? ossrhUsername : ''
-			def ossrhPassword = hasProperty('ossrhPassword') ? ossrhPassword : ''
-
 			beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
 
 			repository(url: "https://oss.sonatype.org/service/local/staging/deploy/maven2/") {

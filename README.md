@@ -155,7 +155,25 @@ You can create a ```FormattedStringGenerator``` by simply calling ```new```, but
 
 ## <a name="Formatters"> Formatters
 
-TBD
+jObjectFormatter comes with several built in formatters:
+
+* ```SimpleFormatter```: The default formatter when you configure nothing else. It has no configuration options. Example:  
+  ```{ firstName=Jane, lastName=Doe, address={ street=Evergreen Terrace }, identification=jdoe, roles=[{ name=admin }] }```
+* ```JsonObjectStringFormatter```: A formatter that tries to output something that is as JSON-like as possible. You can configure
+  it to either display the property values in groups or all together and when to add the class name to the property values.
+  Example:  
+  ```{"Person": {"firstName": "Jane", "lastName": "Doe", "address": "{"Address": {"street": "Evergreen Terrace"}}"}, "Principal": {"identification": "jdoe", "roles": "[{"Role": {"name": "admin"}}]"}}```
+* ```ConfigurableObjectStringFormatter```: A formatter that is totally configurable. You don't have to create objects of
+  this class directly, instead you can use one of the predefined formatters:
+  * ```ConfigurableObjectStringFormatter.GROUPED_CURLY_BRACED_OUTPUT_WITH_CLASS_NAME``` simple format that uses curly braces
+    to group properties, and groups properties by their declaring class. Example:  
+    ```Person{firstName="Jane", lastName="Doe", address="Address{street="Evergreen Terrace"}}"}, Principal{identification="jdoe", roles="[Role{name="admin"}}]"}}```
+  * ```ConfigurableObjectStringFormatter.UNGROUPED_CURLY_BRACED_OUTPUT_WITH_CLASS_NAME``` similar to the format above, but
+    it does not group the properties by their declaring class. Example:  
+    ```Person{firstName="Jane", lastName="Doe", address="Address{street="Evergreen Terrace"}", identification="jdoe", roles="[Role{name="admin"}]"}```
+
+You can also write your own formatter. You just have to implement the interface ```net.davidtanzer.jobjectformatter.formatter.ObjectStringFormatter```,
+but the easier way to create your formatter is to extend the abstract class ```net.davidtanzer.jobjectformatter.formatter.AbstractObjectStringFormatter```.
 
 ## <a name="FormattingOptions"> Formatting Options (Annotations)
 

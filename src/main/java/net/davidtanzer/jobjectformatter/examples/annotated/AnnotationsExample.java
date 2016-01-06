@@ -26,6 +26,9 @@ public class AnnotationsExample {
 
 		System.out.println("Person: " + person);
 		System.out.println("Address: " + address);
+
+		System.out.println("Person (only annotated fields): " + new PersonAnnotatedFields("Jane", "Doe", address));
+		System.out.println("Person (no): " + new PersonNoFields("Jane", "Doe", address));
 	}
 
 	private static class Person {
@@ -42,6 +45,44 @@ public class AnnotationsExample {
 
 		@Override
 		@Formatted(value = FormattedInclude.ALL_FIELDS, transitive = TransitiveInclude.NO_FIELDS)
+		public String toString() {
+			return ObjectFormatter.format(this);
+		}
+	}
+
+	private static class PersonAnnotatedFields {
+		private String firstName;
+		@FormattedField(transitive = FormattedFieldType.DEFAULT)
+		private String lastName;
+		private Address address;
+
+		public PersonAnnotatedFields(final String firstName, final String lastName, final Address address) {
+			this.firstName = firstName;
+			this.lastName = lastName;
+			this.address = address;
+		}
+
+		@Override
+		@Formatted(value = FormattedInclude.ANNOTATED_FIELDS, transitive = TransitiveInclude.NO_FIELDS)
+		public String toString() {
+			return ObjectFormatter.format(this);
+		}
+	}
+
+	private static class PersonNoFields {
+		private String firstName;
+		@FormattedField(transitive = FormattedFieldType.DEFAULT)
+		private String lastName;
+		private Address address;
+
+		public PersonNoFields(final String firstName, final String lastName, final Address address) {
+			this.firstName = firstName;
+			this.lastName = lastName;
+			this.address = address;
+		}
+
+		@Override
+		@Formatted(value = FormattedInclude.NO_FIELDS, transitive = TransitiveInclude.NO_FIELDS)
 		public String toString() {
 			return ObjectFormatter.format(this);
 		}

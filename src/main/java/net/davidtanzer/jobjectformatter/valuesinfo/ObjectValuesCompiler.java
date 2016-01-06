@@ -85,6 +85,9 @@ public class ObjectValuesCompiler {
 
 	private Object formatFieldValue(final Object object, final PropertyInfo propertyInfo) {
 		Object fieldValue = propertyInfo.getPropertyValue(object);
+		if(fieldValue == null) {
+			return null;
+		}
 
 		Boolean hasFormattedAnnotation = hasFormattedAnnotation(fieldValue, propertyInfo);
 		ObjectValuesInfo transitiveValues = this.compileToStringInfo(

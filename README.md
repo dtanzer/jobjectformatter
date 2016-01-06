@@ -177,7 +177,89 @@ but the easier way to create your formatter is to extend the abstract class ```n
 
 ## <a name="FormattingOptions"> Formatting Options (Annotations)
 
-TBD
+You can configure the behavior of jObjectFormatter for every class you want to format using annotations. And you can override
+that configuration in other classes that reference a class with an annotation. And you can configure the behavior of the
+formatter when processing fields.
+
+### Configuring the Behavior for a Class
+
+You can annotate a class (or it's ```toString``` method) with ```@Formatted``` (If you annotate both, the annotation on the
+class overrides the annotation on ```toString```). With this annotation, you can configure how jObjectFormatter will treat 
+objects of the class.
+
+    private static class Person {
+        private String firstName;
+        private String lastName;
+        private Address address;
+
+        @Override
+        @Formatted
+        public String toString() {
+            return ObjectFormatter.format(this);
+        }
+    }
+
+You can configure how objects of the class are formatted when calling ```format``` on them directly with the ```value```
+of the annotation:
+
+* ```FormattedInclude.ALL_FIELDS``` means that all property values of the object will be added to the formatted string. Example:  
+  ```{ firstName=Jane, lastName=Doe, address={ street=Evergreen Terrace } }```
+* ```FormattedInclude.ANNOTATED_FIELDS``` means that only property values of properties with a special annotation will be
+  added to the formatted string. Example:  
+  ```{ lastName=Doe }```
+* ```FormattedInclude.NO_FIELDS``` means that no property values will be added to the formatted string. Example:  
+  ```{  }```
+
+You can also configure which properties to include when the object is referenced transitively through another object. In
+the example above, when you call ```toString()``` on an instance of the class ```Person```, the person's ```address``` is
+a transitive object. You can configure the transitive behavior with the ```transitive``` value of the annotation:
+
+* ```TransitiveInclude.ALL_FIELDS``` means that all property values of the object will be added to the formatted string.
+* ```TransitiveInclude.ANNOTATED_FIELDS``` means that only property values of properties with a special annotation will be
+  added to the formatted string.
+* ```TransitiveInclude.NO_FIELDS``` means that no property values will be added to the formatted string.
+
+For more details about configuring transitivity, see [Transitive Objects](#TransitiveObjects) below. Here is the example
+from above, with both configurations set:
+
+    private static class Person {
+        private String firstName;
+        private String lastName;
+        private Address address;
+
+        @Override
+        @Formatted(value = FormattedInclude.ALL_FIELDS, transitive = TransitiveInclude.NO_FIELDS)
+        public String toString() {
+            return ObjectFormatter.format(this);
+        }
+    }
+
+### Overriding the Annotation on the Class
+
+When one of your classes references an object from another class, and you want to override the configured behavior of that
+class in your current situation, you can just annotate the field with ```@Formatted```. Say you have a class "Address" that
+has a reference back to a Person. But when formatting the address, you want to change the transitive configuration from
+```TransitiveInclude.NO_FIELDS``` (which is configured on the person class) to ```TransitiveInclude.ANNOTADED_FIELDS```.
+Just add the ```@Formatted``` annotation to the ```owner``` field of ```Address```:
+
+    private static class Address {
+        private String street;
+        private String streetNo;
+        @Formatted(transitive = TransitiveInclude.ANNOTADED_FIELDS)
+        private Person owner;
+
+        @Override
+        @Formatted
+        public String toString() {
+            return ObjectFormatter.format(this);
+        }
+    }
+
+When you now call ```toString``` on an instance of ```Address```, the ```owner``` will be formatted with the transitive
+configuration ```TransitiveInclude.ANNOTADED_FIELDS```. When other classes reference a ```Person```, that ```Person``` object
+will be formatted with it's default transitive configuration (```TransitiveInclude.NO_FIELDS```).
+
+### Configure Formatting of Fields
 
 ## <a name="TransitiveObjects"> Transitive Objects
 
@@ -197,7 +279,17 @@ TBD
 
 ## <a name="Contributing"> Contributing
 
-TBD
+I'm always happy to receive pull requests with new features, bug fixes or improvements to the code. If you send a pull 
+request please consider the following:
+
+* Please write unit tests.
+* Make sure all tests pass - Run ```./gradlew check``` to make sure the build passes before submitting the pull request.
+* Indent your code with tabs, not spaces.
+* Don't mix tabs and spaces - Tabs come at the beginning of the line, before the first non-whitespace character. After the
+  first non-whitespace character, tabs are not allowed anymore.
+* If you want to implement a new feature, let's discuss it first. Just add an issue to the issue tracker here on github. In
+  the issue, describe the feature you want and also indicate that you would want to implement it yourself.
+* Please don't add any dependencies to the build without discussing it first. Just create an issue for the discussion.
 
 ## <a name="License"> License
 

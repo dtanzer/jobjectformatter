@@ -11,7 +11,7 @@ targetCompatibility = 1.8
 
 group = "net.davidtanzer"
 archivesBaseName = "jobjectformatter"
-version = '0.2.0'
+version = '0.2.1'
 
 dependencies {
 	testCompile 'org.hamcrest:hamcrest-all:1.3'

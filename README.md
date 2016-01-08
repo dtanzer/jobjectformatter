@@ -14,10 +14,9 @@ If you tweet about jObjectFormatter, please use the hash tag [#jObjectFormatter]
 * [How It Works](#HowItWorks)
 * [Configuring jObjectFormatter](#ConfiguringJObjectFormatter)
 * [Formatters](#Formatters)
-* [Formatting Options (Annotations)](#FormattingOptions)
 * [Transitive Objects](#TransitiveObjects)
-* [Formatting in toString vs. Where You Need The Value](#FormattingWhereYouNeed)
-* [Using jObjectFormatter with Guice / Spring](#GuiceSpring)
+* [Formatting Options (Annotations)](#FormattingOptions)
+* [Design Considerations](#DesignConsiderations)
 * [Support](#Support)
 * [Contributing](#Contributing)
 * [License](#License)
@@ -39,14 +38,14 @@ if you have already configured the central repository correctly, you only have t
 
 **Gradle**
 
-    compile 'net.davidtanzer:jobjectformatter:0.2.0'
+    compile 'net.davidtanzer:jobjectformatter:0.2.1'
 
 **Maven**
 
     <dependency>
       <groupId>net.davidtanzer</groupId>
       <artifactId>jobjectformatter</artifactId>
-      <version>0.2.0</version>
+      <version>0.2.1</version>
     </dependency>
 
 ### Implement toString to Use jObjectFormatter
@@ -175,6 +174,38 @@ jObjectFormatter comes with several built in formatters:
 You can also write your own formatter. You just have to implement the interface ```net.davidtanzer.jobjectformatter.formatter.ObjectStringFormatter```,
 but the easier way to create your formatter is to extend the abstract class ```net.davidtanzer.jobjectformatter.formatter.AbstractObjectStringFormatter```.
 
+## <a name="TransitiveObjects"> Transitive Objects
+
+In it's default configuration, jObjectFormatter does not format transitive objects. So, if you have a class "Person" that
+has a field "Address", and you format a person object, the Address will not be formatted:
+
+    private static class Person {
+        private String firstName;
+        private String lastName;
+        private Address address;
+
+        ...
+    }
+
+    private static class Address {
+        private String street;
+        private String streetNo;
+
+        ...
+    }
+
+The output will be like this:
+
+    person.toString() -> { firstName=Jane, lastName=Doe, address=[not null] }
+    address.toString() -> { street=Evergreen Terrace, streetNo=12b }
+
+The idea is to keep the formatted output as minimal as possible, and also to avoid cyclic dependencies by default. But you 
+can change this behavior using annotations ([see below](#FormattingOptions)). 
+
+When you configure the formatter to also format transitive objects, make sure to avoid formatting objects with cyclic dependencies.
+Say you have a ```Person``` that has an ```Address```, and the address has an owner which is again a ```Person```, formatting
+everything transitively will result in a stack overflow exception.
+
 ## <a name="FormattingOptions"> Formatting Options (Annotations)
 
 You can configure the behavior of jObjectFormatter for every class you want to format using annotations. And you can override
@@ -261,21 +292,93 @@ will be formatted with it's default transitive configuration (```TransitiveInclu
 
 ### Configure Formatting of Fields
 
-## <a name="TransitiveObjects"> Transitive Objects
+You can add the ```@FormattedField``` annotation on fields to configure how those fields are formatted when the object is
+configured as ```FormattedInclude.ANNOTATED_FIELDS``` or ```TransitiveInclude.ANNOTADED_FIELDS```. With the ```@FormattedField```
+annotation, you can configure how the field is formatted when formatting the object directly ("```value```") and how the
+field is formatted when the object is formatted transitively ("```transitive```"). Both configurations can have three values:
 
-TBD
+* ```FormattedFieldType.DEFAULT```: Include the field in the formatted output. This is the default value for directly formatting objects.
+* ```FormattedFieldType.VERBOSE```: Include the field in the formatted output, but only when the output is set to "verbose" (
+  Note: Verbose output is not yet supported).
+* ```FormattedFieldType.NEVER```: Do not include the field in the formatted output. This is the default value for transitively
+  formatting objects.
 
-## <a name="FormattingWhereYouNeed">Formatting in toString vs. Where You Need The Value
+For example, formatting objects of these two classes:
 
-TBD
+    private static class Person {
+        private String firstName;
+        @FormattedField(transitive = FormattedFieldType.DEFAULT)
+        private String lastName;
+        private Address address;
 
-## <a name="GuiceSpring"> Using jObjectFormatter with Guice / Spring
+        ...
+        
+        @Override
+        @Formatted(value = FormattedInclude.ALL_FIELDS, transitive = TransitiveInclude.NO_FIELDS)
+        public String toString() {
+            return ObjectFormatter.format(this);
+        }
+    }
 
-TBD
+    private static class Address {
+        @FormattedField(transitive = FormattedFieldType.DEFAULT)
+        private String street;
+        private String streetNo;
+        @Formatted(transitive = TransitiveInclude.ANNOTADED_FIELDS)
+        private Person owner;
+
+        ...
+        
+        @Override
+        @Formatted(value= FormattedInclude.ALL_FIELDS, transitive = TransitiveInclude.ANNOTADED_FIELDS)
+        public String toString() {
+            return ObjectFormatter.format(this);
+        }
+    }
+
+Will produce an output like this:
+
+    Person: { firstName=Jane, lastName=Doe, address={ street=Evergreen Terrace } }
+    Address: { street=Evergreen Terrace, streetNo=12b, owner={ lastName=Doe } }
+
+## <a name="DesignConsiderations">Design Considerations
+
+Using jObjectFormatter is really simple: Just add a line of code to your toString. Anyway, here are some things you might
+want to consider:
+
+### Formatting in toString vs. Where You Need The Value
+
+Is it really a good idea to rely on every object to have a nice, usable ```toString``` method? I am not entirely sure.
+Maybe instead of writing
+
+    log.info("User logged in: {}", user);
+
+it would be better to write:
+
+    log.info("User logged in: {}", format(user));
+
+Then you have complete control over when and how objects should be formatted.
+
+### Using jObjectFormatter with Guice / Spring
+
+I think in most real-world projects, I would not like the fact that there is the global ```ObjectFormatter``` that is used
+everywhere to format objects. So maybe it would be better to configure a singleton instance of ```FormattedStringGenerator```
+in a dependency injection ("DI") container like Guice or Spring and use that instance to format objects.
+
+This will not work very well when you want to implement your toString methods with jObjectFormatter: You will have some
+objects (Entities, DTOs, ...) where you want to override toString, but which you cannot create using Guice or Spring.
+
+If you, OTOH, format your objects where you need the formatted value (as described above), that approach might work very
+well: You will probably create all the Services, Controllers and Components that want to log something with your DI container.
+So you will have access to the ```FormattedStringGenerator``` instance in every class that logs something.
 
 ## <a name="Support"> Support
 
-TBD
+* Stay in touch and get news about jObjectFormatter: Follow [David Tanzer (@dtanzer)](https://twitter.com/dtanzer) on Twitter.  
+* If you tweet about jObjectFormatter, please use the hash tag [#jObjectFormatter](https://twitter.com/search?f=tweets&q=%23jObjectFormatter).
+* If you have found a defect or want to request a new feature, please open an issue here at GitHub.
+* Ask technical questions ("How can I ...?") at StackOverflow. If I don't answer them within a few days, please nudge me on Twitter.
+* Ask open-ended questions through my ["Ask me anything"](http://davidtanzer.net/contact) form.
 
 ## <a name="Contributing"> Contributing
 

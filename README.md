@@ -3,7 +3,7 @@
 ![Build Status](https://travis-ci.org/dtanzer/jobjectformatter.svg?branch=master)
 
 jObjectFormatter is a library for implementing toString at runtime. It is easy to use, yet fully configurable and very
-flexible. You can decide which fields to include in toString using Java annotations - And you can configure a different
+flexible. You can decide which fields to include in toString using Java annotations - and you can configure a different
 behavior for transitive objects.
 
 Stay in touch and get news about jObjectFormatter: Follow [David Tanzer (@dtanzer)](https://twitter.com/dtanzer) on Twitter.  
@@ -85,7 +85,7 @@ toString to use jObjectFormatter, which will take care of the rest.
         }
     }
 
-In it's default configuration, jObjectFormatter will use a very simple toString style. Let's try to print a person and
+In its default configuration, jObjectFormatter will use a very simple toString style. Let's try to print a person and
 an address:
 
     Address address = new Address("Evergreen Terrace", "12b");
@@ -96,7 +96,7 @@ The output of your toString from above will look like this:
     person.toString() -> { firstName=Jane, lastName=Doe, address=[not null] }
     address.toString() -> { street=Evergreen Terrace, streetNo=12b }
 
-As you can see, jObjectFormatter does not transitively print objects in it's default configuration. Also, the string
+As you can see, jObjectFormatter does not transitively print objects in its default configuration. Also, the string
 formatter from the default configuration does not print the class name or group values.
 
 ## <a name="WhyJObjectFormatter"> Why jObjectFormatter
@@ -107,7 +107,7 @@ ToStringHelper from [Guava](https://github.com/google/guava), but the team did n
 
 We shortly discussed whether they should roll their own reflection-based toString builder. There we already discussed some
 requirements for features that you can now find in jObjectFormatter. The team decided against rolling their own toString
-builder, and used their IDEs to re-create all toString methods (I think that was a good decision back then).
+builder, and used their IDEs to recreate all toString methods (I think that was a good decision back then).
 
 Later that year I had to create a toString method again, in another project. I thought about creating it with my IDE, but
 that has some drawbacks (like, what if I want to change the formatting of the toString methods later?). So I remembered 
@@ -116,7 +116,7 @@ jObjectFormatter was born.
 
 ## <a name="HowItWorks"> How It Works
 
-When asked to format an object, jObjectFormatter does it's work in three phases:
+When asked to format an object, jObjectFormatter does its work in three phases:
 
 1. It gathers all necessary information about the class of the object. This information is cached,
    so jObjectFormatter does not have to compute it again when formatting another object of the same class.
@@ -176,8 +176,8 @@ but the easier way to create your formatter is to extend the abstract class ```n
 
 ## <a name="TransitiveObjects"> Transitive Objects
 
-In it's default configuration, jObjectFormatter does not format transitive objects. So, if you have a class "Person" that
-has a field "Address", and you format a person object, the Address will not be formatted:
+In its default configuration, jObjectFormatter does not format transitive objects. So, if you have a class ```Person``` that
+has a field ```Address```, and you format a person object, the ```Address``` will not be formatted:
 
     private static class Person {
         private String firstName;
@@ -214,7 +214,7 @@ formatter when processing fields.
 
 ### Configuring the Behavior for a Class
 
-You can annotate a class (or it's ```toString``` method) with ```@Formatted``` (If you annotate both, the annotation on the
+You can annotate a class (or its ```toString``` method) with ```@Formatted``` (If you annotate both, the annotation on the
 class overrides the annotation on ```toString```). With this annotation, you can configure how jObjectFormatter will treat 
 objects of the class.
 
@@ -268,8 +268,8 @@ from above, with both configurations set:
 ### Overriding the Annotation on the Class
 
 When one of your classes references an object from another class, and you want to override the configured behavior of that
-class in your current situation, you can just annotate the field with ```@Formatted```. Say you have a class "Address" that
-has a reference back to a Person. But when formatting the address, you want to change the transitive configuration from
+class in your current situation, you can just annotate the field with ```@Formatted```. Say you have a class ```Address``` that
+has a reference back to a ```Person```. But when formatting the address, you want to change the transitive configuration from
 ```TransitiveInclude.NO_FIELDS``` (which is configured on the person class) to ```TransitiveInclude.ANNOTADED_FIELDS```.
 Just add the ```@Formatted``` annotation to the ```owner``` field of ```Address```:
 
@@ -288,7 +288,7 @@ Just add the ```@Formatted``` annotation to the ```owner``` field of ```Address`
 
 When you now call ```toString``` on an instance of ```Address```, the ```owner``` will be formatted with the transitive
 configuration ```TransitiveInclude.ANNOTADED_FIELDS```. When other classes reference a ```Person```, that ```Person``` object
-will be formatted with it's default transitive configuration (```TransitiveInclude.NO_FIELDS```).
+will be formatted with its default transitive configuration (```TransitiveInclude.NO_FIELDS```).
 
 ### Configure Formatting of Fields
 

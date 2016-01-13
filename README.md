@@ -10,6 +10,8 @@ Stay in touch and get news about jObjectFormatter: Follow [David Tanzer (@dtanze
 If you tweet about jObjectFormatter, please use the hash tag [#jObjectFormatter](https://twitter.com/search?f=tweets&q=%23jObjectFormatter).  
 On StackOverflow, please use the tag [jobjectformatter](http://stackoverflow.com/questions/tagged/jobjectformatter).  
 
+**[Read the JavaDoc online (no frames)](http://dtanzer.github.io/jobjectformatter/javadoc/overview-summary.html)**
+
 * [Getting Started](#GettingStarted)
 * [Why jObjectFormatter](#WhyJObjectFormatter)
 * [How It Works](#HowItWorks)

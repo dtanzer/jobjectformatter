@@ -8,6 +8,7 @@ behavior for transitive objects.
 
 Stay in touch and get news about jObjectFormatter: Follow [David Tanzer (@dtanzer)](https://twitter.com/dtanzer) on Twitter.  
 If you tweet about jObjectFormatter, please use the hash tag [#jObjectFormatter](https://twitter.com/search?f=tweets&q=%23jObjectFormatter).
+On StackOverflow, please use the tag [jobjectformatter](http://stackoverflow.com/questions/tagged/jobjectformatter).
 
 * [Getting Started](#GettingStarted)
 * [Why jObjectFormatter](#WhyJObjectFormatter)
@@ -377,8 +378,19 @@ So you will have access to the ```FormattedStringGenerator``` instance in every 
 * Stay in touch and get news about jObjectFormatter: Follow [David Tanzer (@dtanzer)](https://twitter.com/dtanzer) on Twitter.  
 * If you tweet about jObjectFormatter, please use the hash tag [#jObjectFormatter](https://twitter.com/search?f=tweets&q=%23jObjectFormatter).
 * If you have found a defect or want to request a new feature, please open an issue here at GitHub.
-* Ask technical questions ("How can I ...?") at StackOverflow. If I don't answer them within a few days, please nudge me on Twitter.
+* Ask technical questions ("How can I ...?") at StackOverflow. Please use the tag
+  [jobjectformatter](http://stackoverflow.com/questions/tagged/jobjectformatter) when asking the question.
+  If I don't answer them within a few days, please nudge me on Twitter.
 * Ask open-ended questions through my ["Ask me anything"](http://davidtanzer.net/contact) form.
+
+**Note:** I am working on jObjectFormatter entirely in my free time. So I have limited time to answer your questions, help
+you with problems, implement new features and fix defects. I will do my best to help you out, but family and paid work will
+always be a priority for me. This means that it might take some time until you get an answer or a fix for your defect.
+
+If you need a better **Service Level Agreement** or a commercial license, or if you are interested in **training or coaching**
+or a code review, please contact me at [business@davidtanzer.net](mailto:Business@DavidTanzer.net?Subject=jObjectFormatter%3A%20Commercial%20Support).
+We will find a way for working together. Here is some more info about working with me: [Working With Me](http://davidtanzer.net/working_with_me),
+my [Services](http://davidtanzer.net/about_detailed#services).
 
 ## <a name="Contributing"> Contributing
 

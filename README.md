@@ -12,6 +12,8 @@ On StackOverflow, please use the tag [jobjectformatter](http://stackoverflow.com
 
 **[Read the JavaDoc online (no frames)](http://dtanzer.github.io/jobjectformatter/javadoc/overview-summary.html)**
 
+## Table of Contents
+
 * [Getting Started](#GettingStarted)
 * [Why jObjectFormatter](#WhyJObjectFormatter)
 * [How It Works](#HowItWorks)

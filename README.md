@@ -7,8 +7,8 @@ flexible. You can decide which fields to include in toString using Java annotati
 behavior for transitive objects.
 
 Stay in touch and get news about jObjectFormatter: Follow [David Tanzer (@dtanzer)](https://twitter.com/dtanzer) on Twitter.  
-If you tweet about jObjectFormatter, please use the hash tag [#jObjectFormatter](https://twitter.com/search?f=tweets&q=%23jObjectFormatter).
-On StackOverflow, please use the tag [jobjectformatter](http://stackoverflow.com/questions/tagged/jobjectformatter).
+If you tweet about jObjectFormatter, please use the hash tag [#jObjectFormatter](https://twitter.com/search?f=tweets&q=%23jObjectFormatter).  
+On StackOverflow, please use the tag [jobjectformatter](http://stackoverflow.com/questions/tagged/jobjectformatter).  
 
 * [Getting Started](#GettingStarted)
 * [Why jObjectFormatter](#WhyJObjectFormatter)
